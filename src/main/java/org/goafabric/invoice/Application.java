@@ -1,6 +1,5 @@
 package org.goafabric.invoice;
 
-import org.goafabric.invoice.process.InvoiceProcess;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,7 +20,7 @@ public class Application {
 
     @Bean
     public CommandLineRunner init(ApplicationContext context) {
-        context.getBean(InvoiceProcess.class).run();
+        //context.getBean(InvoiceProcess.class).run();
         
         return args -> {if ((args.length > 0) && ("-check-integrity".equals(args[0]))) {SpringApplication.exit(context, () -> 0);}};
     }
