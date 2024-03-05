@@ -37,3 +37,9 @@ logging.level.org.hibernate.SQL: "INFO"
 
 #vthreads
 spring.threads.virtual.enabled: "true"
+
+#adapter
+adapter:
+  timeout: 10000
+  organizationservice:
+    url: http://localhost:50800

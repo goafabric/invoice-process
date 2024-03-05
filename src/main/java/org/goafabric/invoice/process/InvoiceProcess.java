@@ -1,5 +1,6 @@
 package org.goafabric.invoice.process;
 
+import org.goafabric.invoice.process.steps.LockStep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -9,20 +10,25 @@ import org.springframework.stereotype.Component;
 public class InvoiceProcess implements CommandLineRunner {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    @Override
-    public void run(String... args) throws Exception {
-        acquireLock();
-        checkAuthorization();
-        retrieveRecords();
-        checkFile();
-        encryptFile();
-        sendFile();
-        storeFile();
+    private final LockStep lockStep;
+
+    public InvoiceProcess(LockStep lockStep) {
+        this.lockStep = lockStep;
     }
 
-
-    public void acquireLock() {
-        log.info("acquire lock");
+    @Override
+    public void run(String... args) throws Exception {
+        var lock = lockStep.acquireLock();
+        try {
+            checkAuthorization();
+            retrieveRecords();
+            checkFile();
+            encryptFile();
+            sendFile();
+            storeFile();
+        } finally {
+            lockStep.removeLock(lock);
+        }
     }
 
     public void checkAuthorization() {
