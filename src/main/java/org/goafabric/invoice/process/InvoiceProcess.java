@@ -1,16 +1,16 @@
 package org.goafabric.invoice.process;
 
-import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-public class InvoiceProcess {
+public class InvoiceProcess implements CommandLineRunner {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    @PostConstruct
-    public void run() {
+    @Override
+    public void run(String... args) throws Exception {
         acquireLock();
         checkAuthorization();
         retrieveRecords();
@@ -19,6 +19,7 @@ public class InvoiceProcess {
         sendFile();
         storeFile();
     }
+
 
     public void acquireLock() {
         log.info("acquire lock");
@@ -47,4 +48,5 @@ public class InvoiceProcess {
     public void storeFile() {
         log.info("storing file");
     }
+
 }
