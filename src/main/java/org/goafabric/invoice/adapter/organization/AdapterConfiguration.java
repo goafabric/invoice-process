@@ -24,10 +24,10 @@ public class AdapterConfiguration {
     }
 
     @Bean
-    public LockAdapter userAdapter(//ReactorLoadBalancerExchangeFilterFunction lbFunction,
+    public UserAdapter userAdapter(//ReactorLoadBalancerExchangeFilterFunction lbFunction,
                                    RestClient.Builder builder,
                                    @Value("${adapter.organizationservice.url}") String url, @Value("${adapter.timeout}") Long timeout, @Value("${adapter.maxlifetime:-1}") Long maxLifeTime) {
-        return createAdapter(LockAdapter.class, builder, url, timeout, maxLifeTime);
+        return createAdapter(UserAdapter.class, builder, url, timeout, maxLifeTime);
     }
 
     public static <A> A createAdapter(Class<A> adapterType, RestClient.Builder builder, String url, Long timeout, Long maxLifeTime) {

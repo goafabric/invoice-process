@@ -26,6 +26,10 @@ public class InvoiceProcess implements CommandLineRunner {
             return;
         }
 
+        run();
+    }
+
+    boolean run() {
         var lock = lockStep.acquireLock();
         try {
             checkAuthorization();
@@ -37,6 +41,7 @@ public class InvoiceProcess implements CommandLineRunner {
         } finally {
             lockStep.removeLock(lock);
         }
+        return true;
     }
 
     public void checkAuthorization() {
