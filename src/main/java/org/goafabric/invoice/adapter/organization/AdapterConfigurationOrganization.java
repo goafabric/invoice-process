@@ -14,8 +14,8 @@ import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
 @Configuration
-@ImportRuntimeHints(OrganizationAdapterConfiguration.AdapterRuntimeHints.class)
-public class OrganizationAdapterConfiguration {
+@ImportRuntimeHints(AdapterConfigurationOrganization.AdapterRuntimeHints.class)
+public class AdapterConfigurationOrganization {
     @Bean
     public LockAdapter lockAdapter(//ReactorLoadBalancerExchangeFilterFunction lbFunction,
                                                      RestClient.Builder builder,

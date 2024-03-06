@@ -55,9 +55,6 @@ public class InvoiceProcess implements CommandLineRunner {
         if (!userAdapter.hasPermission(HttpInterceptor.getUserName(), PermissionCategory.PROCESS, PermissionType.INVOICE)) {
             throw new IllegalStateException("User is not allowed to execute process");
         }
-        if (!userAdapter.hasPermission(HttpInterceptor.getUserName(), PermissionCategory.PROCESS, PermissionType.INVOICE)) {
-            throw new IllegalStateException("User is not allowed to execute process");
-        }
     }
 
     public void retrieveRecords() {

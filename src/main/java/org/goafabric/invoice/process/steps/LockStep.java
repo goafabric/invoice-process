@@ -19,8 +19,7 @@ public class LockStep {
     public Lock acquireLock() {
         log.info("acquire lock");
         var lock = lockAdapter.acquireLockByKey("invoice");
-        if (lock.isLocked()) { throw new IllegalStateException("process is already locked"); }
-        return lock;
+        if (lock.isLocked()) { throw new IllegalStateException("process is already locked"); } else { return lock; }
     }
 
     public void removeLock(Lock lock) {

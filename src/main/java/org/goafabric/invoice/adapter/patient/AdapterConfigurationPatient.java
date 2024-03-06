@@ -8,7 +8,7 @@ import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
 @Configuration
-public class PatientAdapterConfiguration {
+public class AdapterConfigurationPatient {
     /*
     @Bean
     public LockAdapter lockAdapter(//ReactorLoadBalancerExchangeFilterFunction lbFunction,
