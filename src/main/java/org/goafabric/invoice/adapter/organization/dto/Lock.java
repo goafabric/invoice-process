@@ -1,4 +1,4 @@
-package org.goafabric.invoice.adapter.dto;
+package org.goafabric.invoice.adapter.organization.dto;
 
 import java.time.LocalDateTime;
 

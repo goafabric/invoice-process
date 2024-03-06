@@ -1,5 +1,6 @@
 package org.goafabric.invoice.process;
 
+import org.goafabric.invoice.adapter.organization.UserAdapter;
 import org.goafabric.invoice.process.steps.LockStep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,8 +13,11 @@ public class InvoiceProcess implements CommandLineRunner {
 
     private final LockStep lockStep;
 
-    public InvoiceProcess(LockStep lockStep) {
+    private final UserAdapter userAdapter;
+
+    public InvoiceProcess(LockStep lockStep, UserAdapter userAdapter) {
         this.lockStep = lockStep;
+        this.userAdapter = userAdapter;
     }
 
     @Override
@@ -37,6 +41,7 @@ public class InvoiceProcess implements CommandLineRunner {
 
     public void checkAuthorization() {
         log.info("check authorization");
+        //if (userAdapter.)
     }
 
     public void retrieveRecords() {

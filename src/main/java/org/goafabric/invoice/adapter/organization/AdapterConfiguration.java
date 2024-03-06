@@ -1,5 +1,6 @@
-package org.goafabric.invoice.adapter;
+package org.goafabric.invoice.adapter.organization;
 
+import org.goafabric.invoice.extensions.HttpInterceptor;
 import org.springframework.aot.hint.MemberCategory;
 import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
@@ -15,12 +16,17 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 @Configuration
 @ImportRuntimeHints(AdapterConfiguration.AdapterRuntimeHints.class)
 public class AdapterConfiguration {
-    private static final String JWT_USER1 = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwicHJlZmVycmVkX3VzZXJuYW1lIjoidXNlcjEiLCJpYXQiOjE1MTYyMzkwMjJ9.-JxynqYw5AhNqgwJV8yeKSCOOfYF0oMsO2arF2b4a5E";
-
     @Bean
-    public LockAdapter calleeServiceAdapter(//ReactorLoadBalancerExchangeFilterFunction lbFunction,
+    public LockAdapter lockAdapter(//ReactorLoadBalancerExchangeFilterFunction lbFunction,
                                                      RestClient.Builder builder,
             @Value("${adapter.organizationservice.url}") String url, @Value("${adapter.timeout}") Long timeout, @Value("${adapter.maxlifetime:-1}") Long maxLifeTime) {
+        return createAdapter(LockAdapter.class, builder, url, timeout, maxLifeTime);
+    }
+
+    @Bean
+    public LockAdapter userAdapter(//ReactorLoadBalancerExchangeFilterFunction lbFunction,
+                                   RestClient.Builder builder,
+                                   @Value("${adapter.organizationservice.url}") String url, @Value("${adapter.timeout}") Long timeout, @Value("${adapter.maxlifetime:-1}") Long maxLifeTime) {
         return createAdapter(LockAdapter.class, builder, url, timeout, maxLifeTime);
     }
 
@@ -30,9 +36,9 @@ public class AdapterConfiguration {
         requestFactory.setReadTimeout(timeout.intValue());
         builder.baseUrl(url)
                 .defaultHeaders(httpHeaders -> {
-                    httpHeaders.add("X-Access-Token", JWT_USER1);
-                    //httpHeaders.add("X-TenantId", HttpInterceptor.getTenantId());
-                    //httpHeaders.add("X-OrganizationId", HttpInterceptor.getTenantId());
+                    httpHeaders.add("X-Access-Token", HttpInterceptor.getToken());
+                    httpHeaders.add("X-TenantId", HttpInterceptor.getTenantId());
+                    httpHeaders.add("X-OrganizationId", HttpInterceptor.getOrganizationId());
                 })
                 .requestFactory(requestFactory);
         return HttpServiceProxyFactory.builderFor(RestClientAdapter.create(builder.build())).build()

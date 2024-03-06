@@ -1,7 +1,7 @@
 package org.goafabric.invoice.process.steps;
 
-import org.goafabric.invoice.adapter.LockAdapter;
-import org.goafabric.invoice.adapter.dto.Lock;
+import org.goafabric.invoice.adapter.organization.LockAdapter;
+import org.goafabric.invoice.adapter.organization.dto.Lock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

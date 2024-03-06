@@ -1,7 +1,7 @@
-package org.goafabric.invoice.adapter;
+package org.goafabric.invoice.adapter.organization;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import org.goafabric.invoice.adapter.dto.Lock;
+import org.goafabric.invoice.adapter.organization.dto.Lock;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.service.annotation.DeleteExchange;
 import org.springframework.web.service.annotation.GetExchange;
