@@ -17,15 +17,13 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 @ImportRuntimeHints(AdapterConfigurationOrganization.AdapterRuntimeHints.class)
 public class AdapterConfigurationOrganization {
     @Bean
-    public LockAdapter lockAdapter(//ReactorLoadBalancerExchangeFilterFunction lbFunction,
-                                                     RestClient.Builder builder,
+    public LockAdapter lockAdapter(RestClient.Builder builder,
             @Value("${adapter.organizationservice.url}") String url, @Value("${adapter.timeout}") Long timeout, @Value("${adapter.maxlifetime:-1}") Long maxLifeTime) {
         return createAdapter(LockAdapter.class, builder, url, timeout, maxLifeTime);
     }
 
     @Bean
-    public UserAdapter userAdapter(//ReactorLoadBalancerExchangeFilterFunction lbFunction,
-                                   RestClient.Builder builder,
+    public UserAdapter userAdapter(RestClient.Builder builder,
                                    @Value("${adapter.organizationservice.url}") String url, @Value("${adapter.timeout}") Long timeout, @Value("${adapter.maxlifetime:-1}") Long maxLifeTime) {
         return createAdapter(UserAdapter.class, builder, url, timeout, maxLifeTime);
     }

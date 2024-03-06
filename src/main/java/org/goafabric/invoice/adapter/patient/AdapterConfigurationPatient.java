@@ -9,16 +9,6 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
 @Configuration
 public class AdapterConfigurationPatient {
-    /*
-    @Bean
-    public LockAdapter lockAdapter(//ReactorLoadBalancerExchangeFilterFunction lbFunction,
-                                   RestClient.Builder builder,
-                                   @Value("${adapter.organizationservice.url}") String url, @Value("${adapter.timeout}") Long timeout, @Value("${adapter.maxlifetime:-1}") Long maxLifeTime) {
-        return createAdapter(LockAdapter.class, builder, url, timeout, maxLifeTime);
-    }
-
-     */
-
 
     public static <A> A createAdapter(Class<A> adapterType, RestClient.Builder builder, String url, Long timeout, Long maxLifeTime) {
         var requestFactory = new SimpleClientHttpRequestFactory();
