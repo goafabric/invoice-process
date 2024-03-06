@@ -44,7 +44,8 @@ dependencies {
 
 	//crosscuting
 	implementation("org.springframework.boot:spring-boot-starter-security")
-
+	implementation("com.github.ben-manes.caffeine:caffeine"); implementation("org.springframework.boot:spring-boot-starter-cache");
+	
 	//adapter
 	implementation("io.github.resilience4j:resilience4j-spring-boot3")
 
