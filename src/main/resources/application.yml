@@ -15,7 +15,7 @@ management:
           include: "health,prometheus,heapdump"
 
 #tracing
-spring.application.name: callee-service
+spring.application.name: invoice-process
 management.tracing.sampling.probability: "1.0"
 logging.level.io.opentelemetry.exporter: "OFF"
 management.otlp.tracing.endpoint: "http://localhost:4318/v1/traces"
