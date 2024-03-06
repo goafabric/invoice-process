@@ -3,3 +3,5 @@ adapter:
   timeout: 10000
   organizationservice:
     url: http://localhost:0
+
+test.mode: true
