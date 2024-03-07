@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ReadStep {
+public class RecordReadStep {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     public void retrieveRecords() {

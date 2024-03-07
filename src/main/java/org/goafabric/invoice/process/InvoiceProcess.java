@@ -1,8 +1,8 @@
 package org.goafabric.invoice.process;
 
 import org.goafabric.invoice.process.steps.AccessStep;
-import org.goafabric.invoice.process.steps.FileStep;
-import org.goafabric.invoice.process.steps.ReadStep;
+import org.goafabric.invoice.process.steps.InvoiceStep;
+import org.goafabric.invoice.process.steps.RecordReadStep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,15 +17,15 @@ public class InvoiceProcess implements CommandLineRunner {
 
     private final AccessStep accessStep;
 
-    private final FileStep fileStep;
+    private final InvoiceStep invoiceStep;
 
-    private final ReadStep readStep;
+    private final RecordReadStep recordReadStep;
 
 
-    public InvoiceProcess(AccessStep accessStep, FileStep fileStep, ReadStep readStep) {
+    public InvoiceProcess(AccessStep accessStep, InvoiceStep invoiceStep, RecordReadStep recordReadStep) {
         this.accessStep = accessStep;
-        this.fileStep = fileStep;
-        this.readStep = readStep;
+        this.invoiceStep = invoiceStep;
+        this.recordReadStep = recordReadStep;
     }
 
     @Override
@@ -41,11 +41,14 @@ public class InvoiceProcess implements CommandLineRunner {
         var lock = accessStep.acquireLock();
         try {
             accessStep.checkAuthorization();
-            readStep.retrieveRecords();
-            fileStep.checkFile();
-            fileStep.encryptFile();
-            fileStep.sendFile();
-            fileStep.storeFile();
+            recordReadStep.retrieveRecords();
+
+            var invoice = invoiceStep.create();
+                invoiceStep.check(invoice);
+                    var encryptedInvoice = invoiceStep.encrypt(invoice);
+                        invoiceStep.send(encryptedInvoice);
+                        invoiceStep.store(encryptedInvoice);
+
         } finally {
             accessStep.removeLock(lock);
         }
