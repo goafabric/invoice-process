@@ -37,7 +37,7 @@ public class AccessStep {
     public void checkAuthorization() {
         log.info("check authorization");
         if (!userAdapter.hasPermission(HttpInterceptor.getUserName(), PermissionCategory.PROCESS, PermissionType.INVOICE)) {
-            throw new IllegalStateException("User is not allowed to execute process");
+            throw new IllegalStateException("User " + HttpInterceptor.getUserName() + " is not allowed to execute process");
         }
     }
 
