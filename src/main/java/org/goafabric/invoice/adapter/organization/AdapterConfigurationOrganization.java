@@ -34,7 +34,7 @@ public class AdapterConfigurationOrganization {
         requestFactory.setReadTimeout(timeout.intValue());
         builder.baseUrl(url)
                 .defaultHeaders(httpHeaders -> {
-                    httpHeaders.add("X-Access-Token", HttpInterceptor.getToken());
+                    httpHeaders.add("Authorization", HttpInterceptor.getToken());
                     httpHeaders.add("X-TenantId", HttpInterceptor.getTenantId());
                     httpHeaders.add("X-OrganizationId", HttpInterceptor.getOrganizationId());
                 })
