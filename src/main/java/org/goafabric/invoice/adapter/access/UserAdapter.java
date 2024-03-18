@@ -1,8 +1,8 @@
-package org.goafabric.invoice.adapter.organization;
+package org.goafabric.invoice.adapter.access;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import org.goafabric.invoice.adapter.organization.dto.PermissionCategory;
-import org.goafabric.invoice.adapter.organization.dto.PermissionType;
+import org.goafabric.invoice.adapter.access.dto.PermissionCategory;
+import org.goafabric.invoice.adapter.access.dto.PermissionType;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.RequestParam;

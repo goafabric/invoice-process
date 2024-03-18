@@ -1,10 +1,10 @@
 package org.goafabric.invoice.process.steps;
 
-import org.goafabric.invoice.adapter.organization.LockAdapter;
-import org.goafabric.invoice.adapter.organization.UserAdapter;
-import org.goafabric.invoice.adapter.organization.dto.Lock;
-import org.goafabric.invoice.adapter.organization.dto.PermissionCategory;
-import org.goafabric.invoice.adapter.organization.dto.PermissionType;
+import org.goafabric.invoice.adapter.access.LockAdapter;
+import org.goafabric.invoice.adapter.access.UserAdapter;
+import org.goafabric.invoice.adapter.access.dto.Lock;
+import org.goafabric.invoice.adapter.access.dto.PermissionCategory;
+import org.goafabric.invoice.adapter.access.dto.PermissionType;
 import org.goafabric.invoice.extensions.TenantContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

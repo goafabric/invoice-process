@@ -1,4 +1,4 @@
-package org.goafabric.invoice.adapter.organization;
+package org.goafabric.invoice.adapter.access;
 
 import org.goafabric.invoice.extensions.TenantContext;
 import org.springframework.aot.hint.MemberCategory;

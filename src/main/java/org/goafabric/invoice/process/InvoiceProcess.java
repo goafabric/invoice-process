@@ -2,7 +2,7 @@ package org.goafabric.invoice.process;
 
 import org.goafabric.invoice.process.steps.AccessStep;
 import org.goafabric.invoice.process.steps.InvoiceStep;
-import org.goafabric.invoice.process.steps.RecordReadStep;
+import org.goafabric.invoice.process.steps.PatientStep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,13 +19,13 @@ public class InvoiceProcess implements CommandLineRunner {
 
     private final InvoiceStep invoiceStep;
 
-    private final RecordReadStep recordReadStep;
+    private final PatientStep patientStep;
 
 
-    public InvoiceProcess(AccessStep accessStep, InvoiceStep invoiceStep, RecordReadStep recordReadStep) {
+    public InvoiceProcess(AccessStep accessStep, InvoiceStep invoiceStep, PatientStep patientStep) {
         this.accessStep = accessStep;
         this.invoiceStep = invoiceStep;
-        this.recordReadStep = recordReadStep;
+        this.patientStep = patientStep;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class InvoiceProcess implements CommandLineRunner {
         accessStep.checkAuthorization();
         var lock = accessStep.acquireLock();
         try {
-            recordReadStep.retrieveRecords();
+            patientStep.retrieveRecords();
                 var invoice = invoiceStep.create();
                     invoiceStep.check(invoice);
                         var encryptedInvoice = invoiceStep.encrypt(invoice);
