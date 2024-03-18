@@ -1,6 +1,6 @@
 package org.goafabric.invoice.adapter.patient;
 
-import org.goafabric.invoice.extensions.HttpInterceptor;
+import org.goafabric.invoice.extensions.TenantContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
@@ -15,10 +15,9 @@ public class AdapterConfigurationPatient {
         requestFactory.setConnectTimeout(timeout.intValue());
         requestFactory.setReadTimeout(timeout.intValue());
         builder.baseUrl(url)
-                .defaultHeaders(httpHeaders -> {
-                    httpHeaders.add("X-Access-Token", HttpInterceptor.getToken());
-                    httpHeaders.add("X-TenantId", HttpInterceptor.getTenantId());
-                    httpHeaders.add("X-OrganizationId", HttpInterceptor.getOrganizationId());
+                .requestInterceptor((request, body, execution) -> {
+                    TenantContext.getAdapterHeaderMap().forEach((key, value) -> request.getHeaders().set(key, value));
+                    return execution.execute(request, body);
                 })
                 .requestFactory(requestFactory);
         return HttpServiceProxyFactory.builderFor(RestClientAdapter.create(builder.build())).build()

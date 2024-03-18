@@ -38,16 +38,15 @@ public class InvoiceProcess implements CommandLineRunner {
     }
 
     boolean run() {
+        accessStep.checkAuthorization();
         var lock = accessStep.acquireLock();
         try {
-            accessStep.checkAuthorization();
             recordReadStep.retrieveRecords();
-
-            var invoice = invoiceStep.create();
-            invoiceStep.check(invoice);
-            var encryptedInvoice = invoiceStep.encrypt(invoice);
-            invoiceStep.send(encryptedInvoice);
-            invoiceStep.store(encryptedInvoice);
+                var invoice = invoiceStep.create();
+                    invoiceStep.check(invoice);
+                        var encryptedInvoice = invoiceStep.encrypt(invoice);
+                            invoiceStep.send(encryptedInvoice);
+                                invoiceStep.store(encryptedInvoice);
         }
         catch (Exception e) {
             log.error("error during process {}", e.getMessage());

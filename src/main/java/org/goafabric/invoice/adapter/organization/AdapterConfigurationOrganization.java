@@ -1,6 +1,6 @@
 package org.goafabric.invoice.adapter.organization;
 
-import org.goafabric.invoice.extensions.HttpInterceptor;
+import org.goafabric.invoice.extensions.TenantContext;
 import org.springframework.aot.hint.MemberCategory;
 import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
@@ -33,10 +33,9 @@ public class AdapterConfigurationOrganization {
         requestFactory.setConnectTimeout(timeout.intValue());
         requestFactory.setReadTimeout(timeout.intValue());
         builder.baseUrl(url)
-                .defaultHeaders(httpHeaders -> {
-                    httpHeaders.add("X-Access-Token", HttpInterceptor.getToken());
-                    httpHeaders.add("X-TenantId", HttpInterceptor.getTenantId());
-                    httpHeaders.add("X-OrganizationId", HttpInterceptor.getOrganizationId());
+                .requestInterceptor((request, body, execution) -> {
+                    TenantContext.getAdapterHeaderMap().forEach((key, value) -> request.getHeaders().set(key, value));
+                    return execution.execute(request, body);
                 })
                 .requestFactory(requestFactory);
         return HttpServiceProxyFactory.builderFor(RestClientAdapter.create(builder.build())).build()

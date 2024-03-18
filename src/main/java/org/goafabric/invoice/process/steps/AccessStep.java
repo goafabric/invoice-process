@@ -5,7 +5,7 @@ import org.goafabric.invoice.adapter.organization.UserAdapter;
 import org.goafabric.invoice.adapter.organization.dto.Lock;
 import org.goafabric.invoice.adapter.organization.dto.PermissionCategory;
 import org.goafabric.invoice.adapter.organization.dto.PermissionType;
-import org.goafabric.invoice.extensions.HttpInterceptor;
+import org.goafabric.invoice.extensions.TenantContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -36,8 +36,8 @@ public class AccessStep {
 
     public void checkAuthorization() {
         log.info("check authorization");
-        if (!userAdapter.hasPermission(HttpInterceptor.getUserName(), PermissionCategory.PROCESS, PermissionType.INVOICE)) {
-            throw new IllegalStateException("User " + HttpInterceptor.getUserName() + " is not allowed to execute process");
+        if (!userAdapter.hasPermission(TenantContext.getUserName(), PermissionCategory.PROCESS, PermissionType.INVOICE)) {
+            throw new IllegalStateException("User " + TenantContext.getUserName() + " is not allowed to execute process");
         }
     }
 

@@ -58,8 +58,8 @@ public class InvoiceProcessIT {
         when(userAdapter.hasPermission(anyString(), eq(PermissionCategory.PROCESS), eq(PermissionType.INVOICE)))
                 .thenReturn(false);
 
-        //assertThatThrownBy(() -> invoiceProcess.run()).isInstanceOf(IllegalStateException.class);
-        invoiceProcess.run();
+        assertThatThrownBy(() -> invoiceProcess.run()).isInstanceOf(IllegalStateException.class);
+        //invoiceProcess.run();
     }
 
 }
