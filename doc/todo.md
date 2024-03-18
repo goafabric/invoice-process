@@ -1,6 +1,4 @@
 # Todo
-- authorization implementation
-
 - patient record data
 - retry
 - fluent api
@@ -9,6 +7,7 @@
 - web application
 - web socket notification
 
+- authorization implementation
 
 - docker
 - kotlin
