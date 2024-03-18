@@ -24,7 +24,7 @@ public class AdapterConfigurationOrganization {
 
     @Bean
     public UserAdapter userAdapter(RestClient.Builder builder,
-                                   @Value("${adapter.organizationservice.url}") String url, @Value("${adapter.timeout}") Long timeout, @Value("${adapter.maxlifetime:-1}") Long maxLifeTime) {
+                                   @Value("${adapter.organization-service.url}") String url, @Value("${adapter.timeout}") Long timeout, @Value("${adapter.maxlifetime:-1}") Long maxLifeTime) {
         return createAdapter(UserAdapter.class, builder, url, timeout, maxLifeTime);
     }
 

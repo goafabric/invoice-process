@@ -20,23 +20,7 @@ public class Application {
 
     @Bean
     public CommandLineRunner init(ApplicationContext context) {
-        //context.getBean(InvoiceProcess.class).run();
-        
         return args -> {if ((args.length > 0) && ("-check-integrity".equals(args[0]))) {SpringApplication.exit(context, () -> 0);}};
     }
-
-    /*
-    @Bean
-    @ConditionalOnMissingClass("org.springframework.security.oauth2.client.OAuth2AuthorizationContext")
-    public SecurityFilterChain filterChain(HttpSecurity http, @Value("${security.authentication.enabled:true}") Boolean isAuthenticationEnabled, HandlerMappingIntrospector introspector) throws Exception {
-        return isAuthenticationEnabled
-                ? http.authorizeHttpRequests(auth -> auth.requestMatchers(new MvcRequestMatcher(introspector, "/actuator/**")).permitAll().anyRequest().authenticated())
-                .httpBasic(httpBasic -> {}).csrf(AbstractHttpConfigurer::disable).build()
-                : http.authorizeHttpRequests(auth -> auth.anyRequest().permitAll()).httpBasic(httpBasic -> {}).csrf(AbstractHttpConfigurer::disable).build();
-    }
-
-    @Bean
-    ObservationPredicate disableHttpServerObservationsFromName() { return (name, context) -> !(name.startsWith("spring.security.") || (context instanceof ServerRequestObservationContext && ((ServerRequestObservationContext) context).getCarrier().getRequestURI().startsWith("/actuator"))); }
-     */
 
 }

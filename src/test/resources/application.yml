@@ -1,7 +1,7 @@
 #adapter
 adapter:
   timeout: 10000
-  organizationservice:
+  organization-service:
     url: http://localhost:0
 
 test.mode: true
