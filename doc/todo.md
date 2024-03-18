@@ -7,7 +7,7 @@
 - web application
 - web socket notification
 
-- authorization implementation
+- authorization implementation + aspect
 
 - docker
 - kotlin
