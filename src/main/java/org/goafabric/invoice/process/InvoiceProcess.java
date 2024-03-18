@@ -44,12 +44,15 @@ public class InvoiceProcess implements CommandLineRunner {
             recordReadStep.retrieveRecords();
 
             var invoice = invoiceStep.create();
-                invoiceStep.check(invoice);
-                    var encryptedInvoice = invoiceStep.encrypt(invoice);
-                        invoiceStep.send(encryptedInvoice);
-                        invoiceStep.store(encryptedInvoice);
-
-        } finally {
+            invoiceStep.check(invoice);
+            var encryptedInvoice = invoiceStep.encrypt(invoice);
+            invoiceStep.send(encryptedInvoice);
+            invoiceStep.store(encryptedInvoice);
+        }
+        catch (Exception e) {
+            log.error("error during process {}", e.getMessage());
+        }
+        finally {
             accessStep.removeLock(lock);
         }
         return true;

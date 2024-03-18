@@ -8,7 +8,7 @@ public class HttpInterceptor {
     }
 
     public static String getUserName() {
-        return "user1";
+        return "user";
     }
 
     public static String getTenantId() {
