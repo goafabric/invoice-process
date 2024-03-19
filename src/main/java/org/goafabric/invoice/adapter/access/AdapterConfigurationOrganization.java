@@ -1,34 +1,29 @@
 package org.goafabric.invoice.adapter.access;
 
 import org.goafabric.invoice.extensions.TenantContext;
-import org.springframework.aot.hint.MemberCategory;
-import org.springframework.aot.hint.RuntimeHints;
-import org.springframework.aot.hint.RuntimeHintsRegistrar;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportRuntimeHints;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
 @Configuration
-@ImportRuntimeHints(AdapterConfigurationOrganization.AdapterRuntimeHints.class)
 public class AdapterConfigurationOrganization {
     @Bean
     public LockAdapter lockAdapter(RestClient.Builder builder,
-            @Value("${adapter.organizationservice.url}") String url, @Value("${adapter.timeout}") Long timeout, @Value("${adapter.maxlifetime:-1}") Long maxLifeTime) {
-        return createAdapter(LockAdapter.class, builder, url, timeout, maxLifeTime);
+            @Value("${adapter.organizationservice.url}") String url, @Value("${adapter.timeout}") Long timeout) {
+        return createAdapter(LockAdapter.class, builder, url, timeout);
     }
 
     @Bean
     public UserAdapter userAdapter(RestClient.Builder builder,
-                                   @Value("${adapter.organization-service.url}") String url, @Value("${adapter.timeout}") Long timeout, @Value("${adapter.maxlifetime:-1}") Long maxLifeTime) {
-        return createAdapter(UserAdapter.class, builder, url, timeout, maxLifeTime);
+                                   @Value("${adapter.organization-service.url}") String url, @Value("${adapter.timeout}") Long timeout) {
+        return createAdapter(UserAdapter.class, builder, url, timeout);
     }
 
-    public static <A> A createAdapter(Class<A> adapterType, RestClient.Builder builder, String url, Long timeout, Long maxLifeTime) {
+    public static <A> A createAdapter(Class<A> adapterType, RestClient.Builder builder, String url, Long timeout) {
         var requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setConnectTimeout(timeout.intValue());
         requestFactory.setReadTimeout(timeout.intValue());
@@ -40,14 +35,6 @@ public class AdapterConfigurationOrganization {
                 .requestFactory(requestFactory);
         return HttpServiceProxyFactory.builderFor(RestClientAdapter.create(builder.build())).build()
                 .createClient(adapterType);
-    }
-
-    static class AdapterRuntimeHints implements RuntimeHintsRegistrar {
-        @Override
-        public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
-            hints.reflection().registerType(io.github.resilience4j.spring6.circuitbreaker.configure.CircuitBreakerAspect.class,
-                    builder -> builder.withMembers(MemberCategory.INVOKE_DECLARED_METHODS));
-        }
     }
 
 }
