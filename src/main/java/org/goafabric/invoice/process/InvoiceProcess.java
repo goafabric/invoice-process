@@ -1,10 +1,8 @@
 package org.goafabric.invoice.process;
 
-import org.goafabric.invoice.process.steps.AccessStep;
-import org.goafabric.invoice.process.steps.InvoiceStep;
-import org.goafabric.invoice.process.steps.PatientStep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -15,45 +13,34 @@ public class InvoiceProcess implements CommandLineRunner {
 
     @Value("${test.mode:false}") Boolean testMode;
 
-    private final AccessStep accessStep;
+    @Autowired
+    InvoiceProcessFactory invoiceProcessFactory;
 
-    private final InvoiceStep invoiceStep;
-
-    private final PatientStep patientStep;
-
-
-    public InvoiceProcess(AccessStep accessStep, InvoiceStep invoiceStep, PatientStep patientStep) {
-        this.accessStep = accessStep;
-        this.invoiceStep = invoiceStep;
-        this.patientStep = patientStep;
-    }
 
     @Override
     public void run(String... args) {
         if ( ((args.length > 0) && ("-check-integrity".equals(args[0]))) || (testMode) ){
             return;
         }
-
         run();
     }
 
     boolean run() {
-        accessStep.checkAuthorization();
-        var lock = accessStep.acquireLock();
+        var invoiceProcess = invoiceProcessFactory.create();
+
         try {
-            patientStep.retrieveRecords();
-                var invoice = invoiceStep.create();
-                    invoiceStep.check(invoice);
-                        var encryptedInvoice = invoiceStep.encrypt(invoice);
-                            invoiceStep.send(encryptedInvoice);
-                                invoiceStep.store(encryptedInvoice);
+            invoiceProcess
+                    .checkAuthorization()
+                    .acquireLock()
+                    .retrieveRecords()
+                    .checkInvoice()
+                    .encryptInvoice()
+                    .sendInvoice()
+                    .storeInvoice();
+        } finally {
+            invoiceProcess.releaseLock();
         }
-        catch (Exception e) {
-            log.error("error during process {}", e.getMessage());
-        }
-        finally {
-            accessStep.removeLock(lock);
-        }
+
         return true;
     }
 
