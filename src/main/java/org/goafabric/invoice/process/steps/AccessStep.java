@@ -29,8 +29,8 @@ public class AccessStep {
         if (lock.isLocked()) { throw new IllegalStateException("process is already locked"); } else { return lock; }
     }
 
-    public void removeLock(Lock lock) {
-        log.info("remove lock");
+    public void releaseLock(Lock lock) {
+        log.info("release lock");
         lockAdapter.removeLockById(lock.id());
     }
 

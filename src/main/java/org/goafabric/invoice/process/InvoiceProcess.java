@@ -52,7 +52,7 @@ public class InvoiceProcess implements CommandLineRunner {
             log.error("error during process {}", e.getMessage());
         }
         finally {
-            accessStep.removeLock(lock);
+            accessStep.releaseLock(lock);
         }
         return true;
     }

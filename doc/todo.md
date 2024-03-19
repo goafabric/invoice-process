@@ -1,4 +1,7 @@
 # Todo
+- web application
+- authorization implementation + aspect
+- 
 - patient record data
 - retry
 - fluent api
