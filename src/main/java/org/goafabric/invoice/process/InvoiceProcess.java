@@ -48,9 +48,7 @@ public class InvoiceProcess {
                             invoiceStep.send(encryptedInvoice);
                                 invoiceStep.store(encryptedInvoice);
                                     log.info("sleeping");
-                                    try {
-                                        Thread.sleep(2000);
-                                    } catch (InterruptedException e) {}
+                                    try { Thread.sleep(2000); } catch (InterruptedException e) {}
         }
         catch (Exception e) {
             log.error("error during process: {}", e.getMessage());
