@@ -49,12 +49,8 @@ resilience4j:
       default:
         maxAttempts: 3
         waitDuration: 2s
-        retryExceptions:
-          - java.lang.Exception
-        
-
-
-
+        enableExponentialBackoff: true
+        exponentialBackoffMultiplier: 2
 
 #logging
 logging.pattern.level: "%5p tenantId=%X{tenantId:-}" #"%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}] tenantId=%X{tenantId:-}"
