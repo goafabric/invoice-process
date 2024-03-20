@@ -36,7 +36,6 @@ public class ProcessLauncher implements CommandLineRunner {
 
         if (processAutoStart) {
             applicationContext.getBean(InvoiceProcess.class).run().get();
-            applicationContext.getBean(InvoiceProcess.class).shutdown(); //mmh that's fishy ...
             SpringApplication.exit(applicationContext, () -> 0);
         }
 

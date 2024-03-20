@@ -1,5 +1,6 @@
 package org.goafabric.invoice.process;
 
+import jakarta.annotation.PreDestroy;
 import org.goafabric.invoice.adapter.access.dto.Lock;
 import org.goafabric.invoice.process.steps.AccessStep;
 import org.goafabric.invoice.process.steps.InvoiceStep;
@@ -61,7 +62,8 @@ public class InvoiceProcess {
         return true;
     }
 
-    public void shutdown() {
+    @PreDestroy
+    private void shutdown() {
         executor.shutdown();
     }
 

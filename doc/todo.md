@@ -1,5 +1,4 @@
 # Todo
-- web application
 - authorization implementation + aspect
 - 
 - patient record data
@@ -7,7 +6,6 @@
 - fluent api
 - thread spawn
 
-- web application
 - web socket notification
 
 - authorization implementation + aspect
