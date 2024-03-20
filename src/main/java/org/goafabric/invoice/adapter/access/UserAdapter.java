@@ -1,7 +1,6 @@
 package org.goafabric.invoice.adapter.access;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.github.resilience4j.retry.annotation.Retry;
 import org.goafabric.invoice.adapter.access.dto.PermissionCategory;
 import org.goafabric.invoice.adapter.access.dto.PermissionType;
 import org.springframework.cache.annotation.CacheConfig;
@@ -9,7 +8,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.service.annotation.GetExchange;
 
-@Retry(name = "userAdapter")
+//@Retry(name = "userAdapter")
 @CircuitBreaker(name = "userAdapter")
 @CacheConfig(cacheNames = "userAdapter")
 public interface UserAdapter {
