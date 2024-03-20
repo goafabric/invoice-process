@@ -30,8 +30,10 @@ public class AccessStep {
     }
 
     public void releaseLock(Lock lock) {
-        log.info("release lock");
-        lockAdapter.removeLockById(lock.id());
+        if (lock != null) {
+            log.info("release lock");
+            lockAdapter.removeLockById(lock.id());
+        }
     }
 
     public void checkAuthorization() {

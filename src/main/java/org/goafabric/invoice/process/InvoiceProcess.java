@@ -1,5 +1,6 @@
 package org.goafabric.invoice.process;
 
+import org.goafabric.invoice.adapter.access.dto.Lock;
 import org.goafabric.invoice.process.steps.AccessStep;
 import org.goafabric.invoice.process.steps.InvoiceStep;
 import org.goafabric.invoice.process.steps.PatientStep;
@@ -36,9 +37,10 @@ public class InvoiceProcess {
     }
 
     private Boolean innerLoop() {
-        accessStep.checkAuthorization();
-        var lock = accessStep.acquireLock();
+        Lock lock = null;
         try {
+            accessStep.checkAuthorization();
+            lock = accessStep.acquireLock();
             patientStep.retrieveRecords();
                 var invoice = invoiceStep.create();
                     invoiceStep.check(invoice);
@@ -46,16 +48,23 @@ public class InvoiceProcess {
                             invoiceStep.send(encryptedInvoice);
                                 invoiceStep.store(encryptedInvoice);
                                     log.info("sleeping");
-                                    Thread.sleep(2000);
+                                    try {
+                                        Thread.sleep(2000);
+                                    } catch (InterruptedException e) {}
         }
         catch (Exception e) {
-            log.error("error during process {}", e.getMessage());
+            log.error("error during process: {}", e.getMessage());
+            throw e;
         }
         finally {
             accessStep.releaseLock(lock);
             log.info("finished ...");
         }
         return true;
+    }
+
+    public void shutdown() {
+        executor.shutdown();
     }
 
 }
