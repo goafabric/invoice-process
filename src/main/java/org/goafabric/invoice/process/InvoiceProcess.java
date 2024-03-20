@@ -45,7 +45,7 @@ public class InvoiceProcess {
                         var encryptedInvoice = invoiceStep.encrypt(invoice);
                             invoiceStep.send(encryptedInvoice);
                                 invoiceStep.store(encryptedInvoice);
-                                    log.info("sleeping ...");
+                                    log.info("sleeping");
                                     Thread.sleep(2000);
         }
         catch (Exception e) {
@@ -53,6 +53,7 @@ public class InvoiceProcess {
         }
         finally {
             accessStep.releaseLock(lock);
+            log.info("finished ...");
         }
         return true;
     }
