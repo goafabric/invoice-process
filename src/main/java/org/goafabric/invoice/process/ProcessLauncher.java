@@ -22,8 +22,10 @@ public class ProcessLauncher implements CommandLineRunner {
     }
 
     @GetMapping("start")
-    public void start() {
+    public String start() {
         applicationContext.getBean(InvoiceProcess.class).run();
+        System.err.println("out");
+        return "launched";
     }
 
     @Override

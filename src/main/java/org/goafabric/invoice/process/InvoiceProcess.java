@@ -42,7 +42,7 @@ public class InvoiceProcess {
                         var encryptedInvoice = invoiceStep.encrypt(invoice);
                             invoiceStep.send(encryptedInvoice);
                                 invoiceStep.store(encryptedInvoice);
-                                    //Thread.sleep(5000);
+                                    Thread.sleep(5000);
         }
         catch (Exception e) {
             log.error("error during process {}", e.getMessage());
