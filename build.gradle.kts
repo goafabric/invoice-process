@@ -34,7 +34,7 @@ dependencies {
 
 dependencies {
 	//web
-	implementation("org.springframework.boot:spring-boot-starter")
+	implementation("org.springframework.boot:spring-boot-starter-web")
 
 	//monitoring
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
