@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.service.annotation.DeleteExchange;
 import org.springframework.web.service.annotation.GetExchange;
 
-@Retry(name = "lockadapter")
-@CircuitBreaker(name = "lockadapter")
+@Retry(name = "lockAdapter")
+@CircuitBreaker(name = "lockAdapter")
 public interface LockAdapter {
     @GetExchange("locks/acquireLockByKey")
     Lock acquireLockByKey(@RequestParam String lockKey);
