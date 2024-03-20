@@ -34,6 +34,8 @@ public class InvoiceProcess {
     Future<Boolean> run() { return run(true); }
 
     Future<Boolean> run(boolean virtual) {
+        //innerLoop();
+        //return new CompletableFuture<>()
         return executor.submit(this::innerLoop);
     }
 

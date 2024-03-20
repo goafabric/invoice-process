@@ -12,7 +12,7 @@ management:
     endpoints:
       web:
         exposure:
-          include: "health,prometheus,heapdump"
+          include: "health,prometheus,heapdump,circuitbreakers"
 
 #tracing
 spring.application.name: invoice-process
@@ -33,16 +33,27 @@ adapter:
     url: http://localhost:50800
 
 #resilience4j
-resilience4j.circuitbreaker:
-  configs:
-    default:
-      registerHealthIndicator: true
-      slowCallDurationThreshold: ${adapter.timeout} #Effectively the timeout
-      slowCallRateThreshold: 100 #Percentage of calls that that need be registered a slow for the CB to transitions from close to open
-      failureRateThreshold: 50 #Failure rate when the Circuit Breaker transitions from closed to open
-      waitDurationInOpenState: 30s #Time the CircuitBreaker should wait before transitioning back from open to half-open.
-      minimumNumberOfCalls: 5 #The minimum number of calls which are required before the CircuitBreaker can calculate the error rate.
-      permittedNumberOfCallsInHalfOpenState: 10 #Number of permitted calls when the CircuitBreaker is half open.
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        registerHealthIndicator: true
+        slowCallDurationThreshold: ${adapter.timeout} #Effectively the timeout
+        slowCallRateThreshold: 100 #Percentage of calls that that need be registered a slow for the CB to transitions from close to open
+        failureRateThreshold: 50 #Failure rate when the Circuit Breaker transitions from closed to open
+        waitDurationInOpenState: 30s #Time the CircuitBreaker should wait before transitioning back from open to half-open.
+        minimumNumberOfCalls: 5 #The minimum number of calls which are required before the CircuitBreaker can calculate the error rate.
+        permittedNumberOfCallsInHalfOpenState: 10 #Number of permitted calls when the CircuitBreaker is half open.
+  retry:
+    configs:
+      default:
+        maxAttempts: 3
+        waitDuration: 2s
+        retryExceptions:
+          - java.lang.Exception
+        
+
+
 
 
 #logging
@@ -58,5 +69,5 @@ logging.level.org.hibernate.SQL: "INFO"
 #vthreads
 spring.threads.virtual.enabled: "true"
 
-process.autostart: "true"
+#process.autostart: "true"
 
