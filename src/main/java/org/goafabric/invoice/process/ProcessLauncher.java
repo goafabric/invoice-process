@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProcessLauncher implements CommandLineRunner {
     private @Value("${test.mode:false}") Boolean testMode;
+    private @Value("${process.autostart:false}") Boolean processAutoStart;
 
     private final ApplicationContext applicationContext;
 
@@ -18,12 +19,14 @@ public class ProcessLauncher implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        if ( ((args.length > 0) && ("-check-integrity".equals(args[0]))) || (testMode) ){
-            return;
+        if ( ((args.length > 0) && ("-check-integrity".equals(args[0]))) ) {
+            SpringApplication.exit(applicationContext, () -> 0);
         }
 
-        applicationContext.getBean(InvoiceProcess.class).run();
-        SpringApplication.exit(applicationContext, () -> 0);
+        if (processAutoStart) {
+            applicationContext.getBean(InvoiceProcess.class).run().get();
+            SpringApplication.exit(applicationContext, () -> 0);
+        }
 
     }
 }

@@ -20,12 +20,6 @@ management.tracing.sampling.probability: "1.0"
 logging.level.io.opentelemetry.exporter: "OFF"
 management.otlp.tracing.endpoint: "http://localhost:4318/v1/traces"
 
-#security
-security.authentication.enabled: true
-spring.security.user.name: "admin"
-spring.security.user.password: "admin"
-
-
 #adapter
 adapter:
   timeout: 10000
@@ -57,4 +51,6 @@ logging.level.org.hibernate.SQL: "INFO"
 
 #vthreads
 spring.threads.virtual.enabled: "true"
+
+process.autostart: "true"
 

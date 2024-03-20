@@ -32,22 +32,22 @@ public class InvoiceProcessIT {
     private InvoiceProcess invoiceProcess;
 
     @Test
-    public void run() {
+    public void run() throws Exception {
         when(lockAdapter.acquireLockByKey("invoice"))
                 .thenReturn(new Lock("0", false, "key", LocalDateTime.now(), "user"));
 
         when(userAdapter.hasPermission(anyString(), eq(PermissionCategory.PROCESS), eq(PermissionType.INVOICE)))
                 .thenReturn(true);
 
-        assertThat(invoiceProcess.run()).isTrue();
+        assertThat(invoiceProcess.run().get()).isTrue();
     }
 
     @Test
-    public void alreadyLocked() {
+    public void alreadyLocked() throws Exception{
         when(lockAdapter.acquireLockByKey("invoice"))
                 .thenReturn(new Lock("0", true, "key", LocalDateTime.now(), "user"));
 
-        assertThatThrownBy(() -> invoiceProcess.run()).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(() -> invoiceProcess.run().get()).cause().isInstanceOf(IllegalStateException.class);
     }
 
     @Test
@@ -58,7 +58,7 @@ public class InvoiceProcessIT {
         when(userAdapter.hasPermission(anyString(), eq(PermissionCategory.PROCESS), eq(PermissionType.INVOICE)))
                 .thenReturn(false);
 
-        assertThatThrownBy(() -> invoiceProcess.run()).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(() -> invoiceProcess.run().get()).cause().isInstanceOf(IllegalStateException.class);
         //invoiceProcess.run();
     }
 

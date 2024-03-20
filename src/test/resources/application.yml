@@ -4,4 +4,4 @@ adapter:
   organization-service:
     url: http://localhost:0
 
-test.mode: true
+process.autostart: false
