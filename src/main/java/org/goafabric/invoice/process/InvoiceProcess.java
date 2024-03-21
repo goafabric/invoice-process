@@ -1,6 +1,7 @@
 package org.goafabric.invoice.process;
 
 import jakarta.annotation.PreDestroy;
+import jakarta.annotation.security.RolesAllowed;
 import org.goafabric.invoice.adapter.access.dto.Lock;
 import org.goafabric.invoice.process.steps.AccessStep;
 import org.goafabric.invoice.process.steps.InvoiceStep;
@@ -31,16 +32,17 @@ public class InvoiceProcess {
         executor = virtual ? Executors.newVirtualThreadPerTaskExecutor() : Executors.newFixedThreadPool(3);
     }
 
-    Future<Boolean> run() { return run(true); }
+    @RolesAllowed("INVOICE")
+    public Future<Boolean> run() { return run(true); }
 
-    Future<Boolean> run(boolean virtual) {
+    private Future<Boolean> run(boolean virtual) {
         return executor.submit(this::innerLoop);
     }
 
     private Boolean innerLoop() {
         Lock lock = null;
         try {
-            accessStep.checkAuthorization();
+            //accessStep.checkAuthorization();
             lock = accessStep.acquireLock();
             patientStep.retrieveRecords();
                 var invoice = invoiceStep.create();
