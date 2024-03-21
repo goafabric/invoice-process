@@ -44,6 +44,7 @@ dependencies {
 
 	//crosscuting
 	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("com.nimbusds:nimbus-jose-jwt:9.24.4")
 	implementation("com.github.ben-manes.caffeine:caffeine"); implementation("org.springframework.boot:spring-boot-starter-cache");
 	
 	//adapter
