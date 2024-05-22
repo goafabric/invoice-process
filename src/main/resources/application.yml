@@ -31,6 +31,8 @@ adapter:
   timeout: 10000
   organizationservice:
     url: http://localhost:50800
+    user.name: "admin"
+    user.password: "admin"
 
 #resilience4j
 resilience4j:
@@ -65,5 +67,5 @@ logging.level.org.hibernate.SQL: "INFO"
 #vthreads
 spring.threads.virtual.enabled: "true"
 
-process.autostart: "true"
+process.autostart: "false"
 

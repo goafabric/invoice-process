@@ -7,8 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.stream.IntStream;
+
 @RestController
 @RequestMapping(value = "processes", produces = MediaType.APPLICATION_JSON_VALUE)
+@RolesAllowed("INVOICE")
 public class ProcessController {
     private final InvoiceProcess invoiceProcess;
 
@@ -17,9 +20,20 @@ public class ProcessController {
     }
 
     @GetMapping("start")
-    @RolesAllowed("INVOICE")
     public String start() {
         invoiceProcess.run();
+        return "launched";
+    }
+
+    @GetMapping("loop")
+    public String loop() {
+        IntStream.range(0, 10).forEach(i -> {
+            try {
+                invoiceProcess.run().get();
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        });
         return "launched";
     }
 

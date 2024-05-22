@@ -13,6 +13,9 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
 @Configuration
 public class AdapterConfiguration {
+    private @Value("${adapter.organizationservice.user.name:}") String userName;
+    private @Value("${adapter.organizationservice.user.password:}") String password;
+
     @Bean
     public LockAdapter lockAdapter(RestClient.Builder builder,
                                    @Value("${adapter.organizationservice.url}") String url, @Value("${adapter.timeout}") Long timeout) {
@@ -25,12 +28,13 @@ public class AdapterConfiguration {
         return createAdapter(UserAdapter.class, builder, url, timeout);
     }
 
-    public static <A> A createAdapter(Class<A> adapterType, RestClient.Builder builder, String url, Long timeout) {
+    public <A> A createAdapter(Class<A> adapterType, RestClient.Builder builder, String url, Long timeout) {
         var requestFactory = new SimpleClientHttpRequestFactory();
         requestFactory.setConnectTimeout(timeout.intValue());
         requestFactory.setReadTimeout(timeout.intValue());
         builder.baseUrl(url)
                 .requestInterceptor((request, body, execution) -> {
+                    request.getHeaders().setBasicAuth(userName, password);
                     TenantContext.getAdapterHeaderMap().forEach((key, value) -> request.getHeaders().set(key, value));
                     return execution.execute(request, body);
                 })
