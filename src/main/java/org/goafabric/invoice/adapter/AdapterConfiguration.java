@@ -2,6 +2,8 @@ package org.goafabric.invoice.adapter;
 
 import org.goafabric.invoice.adapter.access.LockAdapter;
 import org.goafabric.invoice.adapter.access.UserAdapter;
+import org.goafabric.invoice.adapter.catalog.ChargeItemAdapter;
+import org.goafabric.invoice.adapter.catalog.ConditionAdapter;
 import org.goafabric.invoice.adapter.patient.EncounterAdapter;
 import org.goafabric.invoice.adapter.patient.PatientAdapter;
 import org.goafabric.invoice.extensions.TenantContext;
@@ -40,6 +42,18 @@ public class AdapterConfiguration {
     public EncounterAdapter encounterAdapter(RestClient.Builder builder,
                                            @Value("${adapter.coreservice.url}") String url, @Value("${adapter.timeout}") Long timeout) {
         return createAdapter(EncounterAdapter.class, builder, url, timeout);
+    }
+
+    @Bean
+    public ChargeItemAdapter chargeItemAdapter(RestClient.Builder builder,
+                                               @Value("${adapter.catalogservice.url}") String url, @Value("${adapter.timeout}") Long timeout) {
+        return createAdapter(ChargeItemAdapter.class, builder, url, timeout);
+    }
+
+    @Bean
+    public ConditionAdapter conditionAdapter(RestClient.Builder builder,
+                                              @Value("${adapter.catalogservice.url}") String url, @Value("${adapter.timeout}") Long timeout) {
+        return createAdapter(ConditionAdapter.class, builder, url, timeout);
     }
 
     public <A> A createAdapter(Class<A> adapterType, RestClient.Builder builder, String url, Long timeout) {

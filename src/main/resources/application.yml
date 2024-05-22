@@ -33,6 +33,8 @@ adapter:
     url: http://localhost:50800
     user.name: "admin"
     user.password: "admin"
+  catalogservice:
+    url: http://localhost:50600
 
 #resilience4j
 resilience4j:

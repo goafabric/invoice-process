@@ -5,6 +5,8 @@ import org.goafabric.invoice.adapter.access.UserAdapter;
 import org.goafabric.invoice.adapter.access.dto.Lock;
 import org.goafabric.invoice.adapter.access.dto.PermissionCategory;
 import org.goafabric.invoice.adapter.access.dto.PermissionType;
+import org.goafabric.invoice.adapter.catalog.ChargeItemAdapter;
+import org.goafabric.invoice.adapter.catalog.ConditionAdapter;
 import org.goafabric.invoice.adapter.patient.EncounterAdapter;
 import org.goafabric.invoice.adapter.patient.PatientAdapter;
 import org.junit.jupiter.api.Test;
@@ -36,6 +38,11 @@ public class InvoiceProcessIT {
     @MockBean
     private EncounterAdapter encounterAdapter;
 
+    @MockBean
+    private ChargeItemAdapter chargeItemAdapter;
+
+    @MockBean
+    private ConditionAdapter conditionAdapter;
 
     @Autowired
     private InvoiceProcess invoiceProcess;
