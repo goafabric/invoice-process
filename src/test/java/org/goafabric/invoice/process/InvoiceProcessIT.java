@@ -52,7 +52,7 @@ public class InvoiceProcessIT {
         when(userAdapter.hasPermission(anyString(), eq(PermissionCategory.PROCESS), eq(PermissionType.INVOICE)))
                 .thenReturn(true);
 
-        when(lockAdapter.acquireLockByKey("invoice"))
+        when(lockAdapter.acquireLockByKey("invoice-0"))
                 .thenReturn(new Lock("0", false, "key", LocalDateTime.now(), "user"));
 
         assertThat(invoiceProcess.run().get()).isTrue();
@@ -63,7 +63,7 @@ public class InvoiceProcessIT {
         when(userAdapter.hasPermission(anyString(), eq(PermissionCategory.PROCESS), eq(PermissionType.INVOICE)))
                 .thenReturn(true);
 
-        when(lockAdapter.acquireLockByKey("invoice"))
+        when(lockAdapter.acquireLockByKey("invoice-0"))
                 .thenReturn(new Lock("0", true, "key", LocalDateTime.now(), "user"));
 
         assertThatThrownBy(() -> invoiceProcess.run().get()).cause().isInstanceOf(IllegalStateException.class);
