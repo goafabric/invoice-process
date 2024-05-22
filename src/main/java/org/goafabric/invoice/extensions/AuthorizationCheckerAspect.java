@@ -18,8 +18,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Aspect
-@ImportRuntimeHints(AuthorizationChecker.ApplicationRuntimeHints.class)
-public class AuthorizationChecker {
+@ImportRuntimeHints(AuthorizationCheckerAspect.ApplicationRuntimeHints.class)
+public class AuthorizationCheckerAspect {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
@@ -29,7 +29,7 @@ public class AuthorizationChecker {
     public Object checkRoles(ProceedingJoinPoint joinPoint, RolesAllowed rolesAllowed) throws Throwable {
         var permission = rolesAllowed.value()[0];
         if (!userAdapter.hasPermission(TenantContext.getUserName(), PermissionCategory.PROCESS, PermissionType.valueOf(permission))) {
-            throw new SecurityException("Access denied. User does not have required permissions.");
+            throw new SecurityException("Access denied. User " + TenantContext.getUserName() + " does not have required permissions.");
         }
         return joinPoint.proceed();
     }
@@ -37,7 +37,7 @@ public class AuthorizationChecker {
     static class ApplicationRuntimeHints implements RuntimeHintsRegistrar {
         @Override
         public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
-            hints.reflection().registerType(AuthorizationChecker.class, MemberCategory.INVOKE_DECLARED_METHODS);
+            hints.reflection().registerType(AuthorizationCheckerAspect.class, MemberCategory.INVOKE_DECLARED_METHODS);
         }
     }
 

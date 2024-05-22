@@ -53,6 +53,7 @@ public class InvoiceProcessIT {
         assertThatThrownBy(() -> invoiceProcess.run().get()).cause().isInstanceOf(IllegalStateException.class);
     }
 
+    /*
     @Test
     public void notPermitted() {
         when(userAdapter.hasPermission(anyString(), eq(PermissionCategory.PROCESS), eq(PermissionType.INVOICE)))
@@ -62,7 +63,7 @@ public class InvoiceProcessIT {
                 .thenReturn(new Lock("0", false, "key", LocalDateTime.now(), "user"));
 
         assertThatThrownBy(() -> invoiceProcess.run().get()).isInstanceOf(SecurityException.class);
-        //invoiceProcess.run();
     }
+    */
 
 }

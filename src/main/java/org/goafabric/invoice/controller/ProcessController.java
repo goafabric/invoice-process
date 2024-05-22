@@ -1,0 +1,26 @@
+package org.goafabric.invoice.controller;
+
+import jakarta.annotation.security.RolesAllowed;
+import org.goafabric.invoice.process.InvoiceProcess;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping(value = "processes", produces = MediaType.APPLICATION_JSON_VALUE)
+public class ProcessController {
+    private final InvoiceProcess invoiceProcess;
+
+    public ProcessController(InvoiceProcess invoiceProcess) {
+        this.invoiceProcess = invoiceProcess;
+    }
+
+    @GetMapping("start")
+    @RolesAllowed("INVOICE")
+    public String start() {
+        invoiceProcess.run();
+        return "launched";
+    }
+
+}
