@@ -13,18 +13,18 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
 @Configuration
 public class AdapterConfiguration {
-    private @Value("${adapter.organizationservice.user.name:}") String userName;
-    private @Value("${adapter.organizationservice.user.password:}") String password;
+    private @Value("${adapter.coreservice.user.name:}") String userName;
+    private @Value("${adapter.coreservice.user.password:}") String password;
 
     @Bean
     public LockAdapter lockAdapter(RestClient.Builder builder,
-                                   @Value("${adapter.organizationservice.url}") String url, @Value("${adapter.timeout}") Long timeout) {
+                                   @Value("${adapter.coreservice.url}") String url, @Value("${adapter.timeout}") Long timeout) {
         return createAdapter(LockAdapter.class, builder, url, timeout);
     }
 
     @Bean
     public UserAdapter userAdapter(RestClient.Builder builder,
-                                   @Value("${adapter.organization-service.url}") String url, @Value("${adapter.timeout}") Long timeout) {
+                                   @Value("${adapter.coreservice.url}") String url, @Value("${adapter.timeout}") Long timeout) {
         return createAdapter(UserAdapter.class, builder, url, timeout);
     }
 

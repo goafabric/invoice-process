@@ -29,7 +29,7 @@ spring.security.user.password: "admin"
 #adapter
 adapter:
   timeout: 10000
-  organizationservice:
+  coreservice:
     url: http://localhost:50800
     user.name: "admin"
     user.password: "admin"
