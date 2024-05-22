@@ -4,10 +4,13 @@ import org.goafabric.invoice.adapter.catalog.ChargeItemAdapter;
 import org.goafabric.invoice.adapter.catalog.ConditionAdapter;
 import org.goafabric.invoice.adapter.patient.EncounterAdapter;
 import org.goafabric.invoice.adapter.patient.PatientAdapter;
+import org.goafabric.invoice.adapter.patient.dto.Encounter;
 import org.goafabric.invoice.adapter.patient.dto.MedicalRecordType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class PatientStep {
@@ -33,13 +36,29 @@ public class PatientStep {
         var patients = patientAdapter.findPatientNamesByFamilyName(familyName);
         if (!patients.isEmpty()) {
             var encounters = encounterAdapter.findByPatientIdAndDisplay(patients.getFirst().id(), "");
-            encounters.getFirst().medicalRecords().stream()
-                    .filter(record -> record.type().equals(MedicalRecordType.CHARGEITEM))
-                    .forEach(chargeItem -> {
-                        log.info(chargeItem.toString());
-                        log.info(chargeItemAdapter.findByDisplay(chargeItem.code()).toString());
-                    });
+            logChargeItems(encounters);
+            logConditions(encounters);
         }
+    }
+
+    private void logChargeItems(List<Encounter> encounters) {
+        log.info("chargeitems");
+        encounters.getFirst().medicalRecords().stream()
+                .filter(record -> record.type().equals(MedicalRecordType.CHARGEITEM))
+                .forEach(chargeItem -> {
+                    log.info(chargeItem.toString());
+                    log.info(chargeItemAdapter.findByDisplay(chargeItem.code()).toString());
+                });
+    }
+
+    private void logConditions(List<Encounter> encounters) {
+        log.info("conditions");
+        encounters.getFirst().medicalRecords().stream()
+                .filter(record -> record.type().equals(MedicalRecordType.CONDITION))
+                .forEach(condition -> {
+                    log.info(condition.toString());
+                    log.info(conditionAdapter.findByDisplay(condition.code()).toString());
+                });
     }
 
 }
