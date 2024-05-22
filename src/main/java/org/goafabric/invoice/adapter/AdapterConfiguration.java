@@ -2,6 +2,8 @@ package org.goafabric.invoice.adapter;
 
 import org.goafabric.invoice.adapter.access.LockAdapter;
 import org.goafabric.invoice.adapter.access.UserAdapter;
+import org.goafabric.invoice.adapter.patient.EncounterAdapter;
+import org.goafabric.invoice.adapter.patient.PatientAdapter;
 import org.goafabric.invoice.extensions.TenantContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +28,18 @@ public class AdapterConfiguration {
     public UserAdapter userAdapter(RestClient.Builder builder,
                                    @Value("${adapter.coreservice.url}") String url, @Value("${adapter.timeout}") Long timeout) {
         return createAdapter(UserAdapter.class, builder, url, timeout);
+    }
+
+    @Bean
+    public PatientAdapter patientAdapter(RestClient.Builder builder,
+                                      @Value("${adapter.coreservice.url}") String url, @Value("${adapter.timeout}") Long timeout) {
+        return createAdapter(PatientAdapter.class, builder, url, timeout);
+    }
+
+    @Bean
+    public EncounterAdapter encounterAdapter(RestClient.Builder builder,
+                                           @Value("${adapter.coreservice.url}") String url, @Value("${adapter.timeout}") Long timeout) {
+        return createAdapter(EncounterAdapter.class, builder, url, timeout);
     }
 
     public <A> A createAdapter(Class<A> adapterType, RestClient.Builder builder, String url, Long timeout) {

@@ -5,6 +5,8 @@ import org.goafabric.invoice.adapter.access.UserAdapter;
 import org.goafabric.invoice.adapter.access.dto.Lock;
 import org.goafabric.invoice.adapter.access.dto.PermissionCategory;
 import org.goafabric.invoice.adapter.access.dto.PermissionType;
+import org.goafabric.invoice.adapter.patient.EncounterAdapter;
+import org.goafabric.invoice.adapter.patient.PatientAdapter;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,6 +29,13 @@ public class InvoiceProcessIT {
 
     @MockBean
     private UserAdapter userAdapter;
+
+    @MockBean
+    private PatientAdapter patientAdapter;
+
+    @MockBean
+    private EncounterAdapter encounterAdapter;
+
 
     @Autowired
     private InvoiceProcess invoiceProcess;

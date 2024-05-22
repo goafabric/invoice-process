@@ -1,7 +1,7 @@
 package org.goafabric.invoice.adapter.patient.dto;
 
-public interface PatientNamesOnly {
-    String getId();
-    String getGivenName();
-    String getFamilyName();
-}
+public record PatientNamesOnly (
+    String id,
+    String givenName,
+    String familyName
+) {}
