@@ -25,7 +25,7 @@ public class AccessStep {
 
     public Lock acquireLock() {
         log.info("acquire lock");
-        var lock = lockAdapter.acquireLockByKey("invoice");
+        var lock = lockAdapter.acquireLockByKey("invoice" + TenantContext.getTenantId());
         if (lock.isLocked()) { throw new IllegalStateException("process is already locked"); } else { return lock; }
     }
 
