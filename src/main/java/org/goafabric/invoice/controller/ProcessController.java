@@ -11,7 +11,6 @@ import java.util.stream.IntStream;
 
 @RestController
 @RequestMapping(value = "processes", produces = MediaType.APPLICATION_JSON_VALUE)
-@RolesAllowed("INVOICE")
 public class ProcessController {
     private final InvoiceProcess invoiceProcess;
 
@@ -20,6 +19,7 @@ public class ProcessController {
     }
 
     @GetMapping("start")
+    @RolesAllowed("INVOICE")
     public String start() {
         invoiceProcess.run();
         return "launched";

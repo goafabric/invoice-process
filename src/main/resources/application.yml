@@ -69,5 +69,5 @@ logging.level.org.hibernate.SQL: "INFO"
 #vthreads
 spring.threads.virtual.enabled: "true"
 
-process.autostart: "true"
+process.autostart: "false"
 
