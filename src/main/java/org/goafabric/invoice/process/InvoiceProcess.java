@@ -42,7 +42,7 @@ public class InvoiceProcess {
         try {
             //accessStep.checkAuthorization();
             lock = accessStep.acquireLock();
-            //patientStep.retrieveRecords("Burns");
+            patientStep.retrieveRecords("Burns");
                 var invoice = invoiceStep.create();
                     invoiceStep.check(invoice);
                         var encryptedInvoice = invoiceStep.encrypt(invoice);
