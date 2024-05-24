@@ -48,7 +48,11 @@ public class PatientStep {
                 .filter(record -> record.type().equals(MedicalRecordType.CHARGEITEM))
                 .forEach(chargeItem -> {
                     log.info(chargeItem.toString());
-                    log.info(!catalogServiceUrl.isEmpty() ? chargeItemAdapter.findByCode(chargeItem.code()).toString() : "");
+                    try {
+                        log.info(!catalogServiceUrl.isEmpty() ? chargeItemAdapter.findByCode(chargeItem.code()).toString() : "");
+                    } catch (Exception e) {
+                        log.warn(e.getMessage() + " : " + chargeItem.code());
+                    }
                 });
     }
 
@@ -59,7 +63,11 @@ public class PatientStep {
                 .filter(record -> !record.code().equals("none"))
                 .forEach(condition -> {
                     log.info(condition.toString());
-                    log.info(!catalogServiceUrl.isEmpty() ? conditionAdapter.findByCode(condition.code()).toString() : "");
+                    try {
+                        log.info(!catalogServiceUrl.isEmpty() ? conditionAdapter.findByCode(condition.code()).toString() : "");
+                    } catch (Exception e) {
+                        log.warn(e.getMessage() + " : " + condition.code());
+                    }
                 });
     }
 
