@@ -11,6 +11,6 @@ import java.util.List;
 @CircuitBreaker(name = "conditionAdapter")
 @CacheConfig(cacheNames = "conditionAdapter")
 public interface ConditionAdapter {
-    @GetExchange("diagnosis/findByDisplay")
+    @GetExchange("conditions/findByDisplay")
     List<ChargeItemEo> findByDisplay(@RequestParam("display") String display);
 }
