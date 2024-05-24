@@ -1,6 +1,5 @@
 package org.goafabric.invoice.controller;
 
-import jakarta.annotation.security.RolesAllowed;
 import org.goafabric.invoice.process.InvoiceProcess;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +18,7 @@ public class ProcessController {
     }
 
     @GetMapping("start")
-    @RolesAllowed("INVOICE")
+    //@RolesAllowed("INVOICE")
     public String start() {
         invoiceProcess.run();
         return "launched";

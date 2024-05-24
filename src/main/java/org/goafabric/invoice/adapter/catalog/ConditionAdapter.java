@@ -1,16 +1,16 @@
 package org.goafabric.invoice.adapter.catalog;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import org.goafabric.invoice.adapter.catalog.dto.ChargeItemEo;
+import io.github.resilience4j.retry.annotation.Retry;
+import org.goafabric.invoice.adapter.catalog.dto.ConditionEo;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.service.annotation.GetExchange;
 
-import java.util.List;
-
+@Retry(name = "conditionAdapter")
 @CircuitBreaker(name = "conditionAdapter")
 @CacheConfig(cacheNames = "conditionAdapter")
 public interface ConditionAdapter {
-    @GetExchange("conditions/findByDisplay")
-    List<ChargeItemEo> findByDisplay(@RequestParam("display") String display);
+    @GetExchange("conditions/findByCode")
+    ConditionEo findByCode(@RequestParam("code") String code);
 }

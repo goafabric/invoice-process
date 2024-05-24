@@ -46,13 +46,13 @@ public class AdapterConfiguration {
 
     @Bean
     public ChargeItemAdapter chargeItemAdapter(RestClient.Builder builder,
-                                               @Value("${adapter.catalogservice.url}") String url, @Value("${adapter.timeout}") Long timeout) {
+                                               @Value("${adapter.catalogservice.url:}") String url, @Value("${adapter.timeout}") Long timeout) {
         return createAdapter(ChargeItemAdapter.class, builder, url, timeout);
     }
 
     @Bean
     public ConditionAdapter conditionAdapter(RestClient.Builder builder,
-                                              @Value("${adapter.catalogservice.url}") String url, @Value("${adapter.timeout}") Long timeout) {
+                                              @Value("${adapter.catalogservice.url:}") String url, @Value("${adapter.timeout}") Long timeout) {
         return createAdapter(ConditionAdapter.class, builder, url, timeout);
     }
 

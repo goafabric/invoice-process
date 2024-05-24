@@ -8,6 +8,7 @@ import org.goafabric.invoice.adapter.patient.dto.Encounter;
 import org.goafabric.invoice.adapter.patient.dto.MedicalRecordType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -16,13 +17,13 @@ import java.util.List;
 public class PatientStep {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    private final PatientAdapter patientAdapter;
-
-    private final EncounterAdapter encounterAdapter;
-
+    private final PatientAdapter    patientAdapter;
+    private final EncounterAdapter  encounterAdapter;
+    private final ConditionAdapter  conditionAdapter;
     private final ChargeItemAdapter chargeItemAdapter;
 
-    private final ConditionAdapter conditionAdapter;
+    @Value("${adapter.catalogservice.url:}")
+    private String catalogServiceUrl;
 
     public PatientStep(PatientAdapter patientAdapter, EncounterAdapter encounterAdapter, ChargeItemAdapter chargeItemAdapter, ConditionAdapter conditionAdapter) {
         this.patientAdapter = patientAdapter;
@@ -47,7 +48,7 @@ public class PatientStep {
                 .filter(record -> record.type().equals(MedicalRecordType.CHARGEITEM))
                 .forEach(chargeItem -> {
                     log.info(chargeItem.toString());
-                    log.info(chargeItemAdapter.findByDisplay(chargeItem.code()).toString());
+                    log.info(!catalogServiceUrl.isEmpty() ? chargeItemAdapter.findByCode(chargeItem.code()).toString() : "");
                 });
     }
 
@@ -55,9 +56,10 @@ public class PatientStep {
         log.info("conditions");
         encounters.getFirst().medicalRecords().stream()
                 .filter(record -> record.type().equals(MedicalRecordType.CONDITION))
+                .filter(record -> !record.code().equals("none"))
                 .forEach(condition -> {
                     log.info(condition.toString());
-                    log.info(conditionAdapter.findByDisplay(condition.code()).toString());
+                    log.info(!catalogServiceUrl.isEmpty() ? conditionAdapter.findByCode(condition.code()).toString() : "");
                 });
     }
 
