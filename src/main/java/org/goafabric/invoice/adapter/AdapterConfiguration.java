@@ -1,7 +1,7 @@
 package org.goafabric.invoice.adapter;
 
-import org.goafabric.invoice.adapter.access.LockAdapter;
-import org.goafabric.invoice.adapter.access.UserAdapter;
+import org.goafabric.invoice.adapter.authorization.LockAdapter;
+import org.goafabric.invoice.adapter.authorization.PermissionAdapter;
 import org.goafabric.invoice.adapter.catalog.ChargeItemAdapter;
 import org.goafabric.invoice.adapter.catalog.ConditionAdapter;
 import org.goafabric.invoice.adapter.patient.EncounterAdapter;
@@ -27,9 +27,9 @@ public class AdapterConfiguration {
     }
 
     @Bean
-    public UserAdapter userAdapter(RestClient.Builder builder,
-                                   @Value("${adapter.coreservice.url}") String url, @Value("${adapter.timeout}") Long timeout) {
-        return createAdapter(UserAdapter.class, builder, url, timeout);
+    public PermissionAdapter userAdapter(RestClient.Builder builder,
+                                         @Value("${adapter.coreservice.url}") String url, @Value("${adapter.timeout}") Long timeout) {
+        return createAdapter(PermissionAdapter.class, builder, url, timeout);
     }
 
     @Bean

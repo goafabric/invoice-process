@@ -1,26 +1,26 @@
 package org.goafabric.invoice.process.steps;
 
-import org.goafabric.invoice.adapter.access.LockAdapter;
-import org.goafabric.invoice.adapter.access.UserAdapter;
-import org.goafabric.invoice.adapter.access.dto.Lock;
-import org.goafabric.invoice.adapter.access.dto.PermissionCategory;
-import org.goafabric.invoice.adapter.access.dto.PermissionType;
+import org.goafabric.invoice.adapter.authorization.LockAdapter;
+import org.goafabric.invoice.adapter.authorization.PermissionAdapter;
+import org.goafabric.invoice.adapter.authorization.dto.Lock;
+import org.goafabric.invoice.adapter.authorization.dto.PermissionCategory;
+import org.goafabric.invoice.adapter.authorization.dto.PermissionType;
 import org.goafabric.invoice.extensions.TenantContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AccessStep {
+public class AuthorizationStep {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final LockAdapter lockAdapter;
 
-    private final UserAdapter userAdapter;
+    private final PermissionAdapter permissionAdapter;
 
-    public AccessStep(LockAdapter lockAdapter, UserAdapter userAdapter) {
+    public AuthorizationStep(LockAdapter lockAdapter, PermissionAdapter permissionAdapter) {
         this.lockAdapter = lockAdapter;
-        this.userAdapter = userAdapter;
+        this.permissionAdapter = permissionAdapter;
     }
 
     public Lock acquireLock() {
@@ -38,7 +38,7 @@ public class AccessStep {
 
     public void checkAuthorization() {
         log.info("check authorization");
-        if (!userAdapter.hasPermission(TenantContext.getUserName(), PermissionCategory.PROCESS, PermissionType.INVOICE)) {
+        if (!permissionAdapter.hasPermission(TenantContext.getUserName(), PermissionCategory.PROCESS, PermissionType.INVOICE)) {
             throw new IllegalStateException("User " + TenantContext.getUserName() + " is not allowed to execute process");
         }
     }

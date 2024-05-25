@@ -1,8 +1,8 @@
 package org.goafabric.invoice.process;
 
 import jakarta.annotation.PreDestroy;
-import org.goafabric.invoice.adapter.access.dto.Lock;
-import org.goafabric.invoice.process.steps.AccessStep;
+import org.goafabric.invoice.adapter.authorization.dto.Lock;
+import org.goafabric.invoice.process.steps.AuthorizationStep;
 import org.goafabric.invoice.process.steps.InvoiceStep;
 import org.goafabric.invoice.process.steps.PatientStep;
 import org.slf4j.Logger;
@@ -17,13 +17,13 @@ import java.util.concurrent.Future;
 public class InvoiceProcess {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    private final AccessStep accessStep;
+    private final AuthorizationStep authorizationStep;
     private final InvoiceStep invoiceStep;
     private final PatientStep patientStep;
     private final ExecutorService executor;
 
-    public InvoiceProcess(AccessStep accessStep, InvoiceStep invoiceStep, PatientStep patientStep) {
-        this.accessStep = accessStep;
+    public InvoiceProcess(AuthorizationStep authorizationStep, InvoiceStep invoiceStep, PatientStep patientStep) {
+        this.authorizationStep = authorizationStep;
         this.invoiceStep = invoiceStep;
         this.patientStep = patientStep;
 
@@ -40,8 +40,7 @@ public class InvoiceProcess {
     private Boolean innerLoop() {
         Lock lock = null;
         try {
-            //accessStep.checkAuthorization();
-            lock = accessStep.acquireLock();
+            lock = authorizationStep.acquireLock();
             patientStep.retrieveRecords("Burns");
                 var invoice = invoiceStep.create();
                     invoiceStep.check(invoice);
@@ -56,7 +55,7 @@ public class InvoiceProcess {
             throw e;
         }
         finally {
-            accessStep.releaseLock(lock);
+            authorizationStep.releaseLock(lock);
             log.info("finished ...");
         }
         return true;

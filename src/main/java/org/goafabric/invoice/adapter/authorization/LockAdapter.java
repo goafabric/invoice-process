@@ -1,8 +1,8 @@
-package org.goafabric.invoice.adapter.access;
+package org.goafabric.invoice.adapter.authorization;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
-import org.goafabric.invoice.adapter.access.dto.Lock;
+import org.goafabric.invoice.adapter.authorization.dto.Lock;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.service.annotation.DeleteExchange;
 import org.springframework.web.service.annotation.GetExchange;

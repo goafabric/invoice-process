@@ -1,10 +1,10 @@
 package org.goafabric.invoice.process;
 
-import org.goafabric.invoice.adapter.access.LockAdapter;
-import org.goafabric.invoice.adapter.access.UserAdapter;
-import org.goafabric.invoice.adapter.access.dto.Lock;
-import org.goafabric.invoice.adapter.access.dto.PermissionCategory;
-import org.goafabric.invoice.adapter.access.dto.PermissionType;
+import org.goafabric.invoice.adapter.authorization.LockAdapter;
+import org.goafabric.invoice.adapter.authorization.PermissionAdapter;
+import org.goafabric.invoice.adapter.authorization.dto.Lock;
+import org.goafabric.invoice.adapter.authorization.dto.PermissionCategory;
+import org.goafabric.invoice.adapter.authorization.dto.PermissionType;
 import org.goafabric.invoice.adapter.catalog.ChargeItemAdapter;
 import org.goafabric.invoice.adapter.catalog.ConditionAdapter;
 import org.goafabric.invoice.adapter.patient.EncounterAdapter;
@@ -30,7 +30,7 @@ public class InvoiceProcessIT {
     private LockAdapter lockAdapter;
 
     @MockBean
-    private UserAdapter userAdapter;
+    private PermissionAdapter permissionAdapter;
 
     @MockBean
     private PatientAdapter patientAdapter;
@@ -49,7 +49,7 @@ public class InvoiceProcessIT {
 
     @Test
     public void run() throws Exception {
-        when(userAdapter.hasPermission(anyString(), eq(PermissionCategory.PROCESS), eq(PermissionType.INVOICE)))
+        when(permissionAdapter.hasPermission(anyString(), eq(PermissionCategory.PROCESS), eq(PermissionType.INVOICE)))
                 .thenReturn(true);
 
         when(lockAdapter.acquireLockByKey("invoice-0"))
@@ -60,7 +60,7 @@ public class InvoiceProcessIT {
 
     @Test
     public void alreadyLocked() throws Exception{
-        when(userAdapter.hasPermission(anyString(), eq(PermissionCategory.PROCESS), eq(PermissionType.INVOICE)))
+        when(permissionAdapter.hasPermission(anyString(), eq(PermissionCategory.PROCESS), eq(PermissionType.INVOICE)))
                 .thenReturn(true);
 
         when(lockAdapter.acquireLockByKey("invoice-0"))

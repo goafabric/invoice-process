@@ -1,4 +1,4 @@
-package org.goafabric.invoice.adapter.access.dto;
+package org.goafabric.invoice.adapter.authorization.dto;
 
 public enum PermissionType {
     PATIENT("Patient"),
