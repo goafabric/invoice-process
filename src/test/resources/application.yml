@@ -1,7 +1,0 @@
-#adapter
-adapter:
-  timeout: 10000
-  organization-service:
-    url: http://localhost:0
-
-process.autostart: false

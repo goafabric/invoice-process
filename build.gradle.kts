@@ -17,6 +17,9 @@ plugins {
 
 	id("com.google.cloud.tools.jib") version "3.4.2"
 	id("net.researchgate.release") version "3.0.2"
+
+	kotlin("jvm") version "2.0.0"
+	kotlin("plugin.spring") version "2.0.0"
 }
 
 repositories {
@@ -45,15 +48,19 @@ dependencies {
 	implementation("io.opentelemetry:opentelemetry-exporter-otlp")
 
 	//crosscuting
-	//implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("com.github.ben-manes.caffeine:caffeine"); implementation("org.springframework.boot:spring-boot-starter-cache");
 	
 	//adapter
-	implementation("io.github.resilience4j:resilience4j-spring-boot3")
+	implementation("io.github.resilience4j:resilience4j-spring-boot3") {exclude ("io.github.resilience4j", "resilience4j-micrometer")} // has to be excluded because of aot processor problem with kotlin
 	implementation("org.springframework.boot:spring-boot-starter-aop")
 
 	//test
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+	//kotlin
+	implementation("org.jetbrains.kotlin:kotlin-reflect")
+	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 }
 
 tasks.withType<Test> {
