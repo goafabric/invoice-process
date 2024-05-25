@@ -1,6 +1,6 @@
 package org.goafabric.invoice.process.steps
 
-import org.goafabric.invoice.controller.extensions.TenantContext
+import org.goafabric.calleeservice.extensions.TenantContext
 import org.goafabric.invoice.process.adapter.authorization.LockAdapter
 import org.goafabric.invoice.process.adapter.authorization.PermissionAdapter
 import org.goafabric.invoice.process.adapter.authorization.dto.Lock
@@ -16,7 +16,7 @@ class AuthorizationStep(private val lockAdapter: LockAdapter, private val permis
 
     fun acquireLock(): Lock {
         log.info("acquire lock")
-        val lock = lockAdapter.acquireLockByKey("invoice-" + TenantContext.getTenantId())
+        val lock = lockAdapter.acquireLockByKey("invoice-" + TenantContext.tenantId)
         check(!lock.isLocked) { "process is already locked" }
         return lock
     }
@@ -32,10 +32,10 @@ class AuthorizationStep(private val lockAdapter: LockAdapter, private val permis
         log.info("check authorization")
         check(
             permissionAdapter.hasPermission(
-                TenantContext.getUserName(),
+                TenantContext.userName,
                 PermissionCategory.PROCESS,
                 PermissionType.INVOICE
             )
-        ) { "User " + TenantContext.getUserName() + " is not allowed to execute process" }
+        ) { "User " + TenantContext.userName + " is not allowed to execute process" }
     }
 }

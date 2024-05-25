@@ -24,7 +24,7 @@ class PatientStep(
     @Value("\${adapter.catalogservice.url:}")
     private val catalogServiceUrl: String? = null
 
-    fun retrieveRecords(familyName: String?) {
+    fun retrieveRecords(familyName: String) {
         log.info("retrieve records")
         val patients = patientAdapter.findPatientNamesByFamilyName(familyName)
         if (!patients.isEmpty()) {

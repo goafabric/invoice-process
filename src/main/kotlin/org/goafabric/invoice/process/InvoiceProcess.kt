@@ -30,17 +30,14 @@ class InvoiceProcess(
         var lock: Lock? = null
         try {
             lock = authorizationStep.acquireLock()
-            patientStep.retrieveRecords("Burns")
-            val invoice = invoiceStep.create()
-            invoiceStep.check(invoice)
-            val encryptedInvoice = invoiceStep.encrypt(invoice)
-            invoiceStep.send(encryptedInvoice)
-            invoiceStep.store(encryptedInvoice)
-            log.info("sleeping")
-            try {
-                Thread.sleep(1000)
-            } catch (e: InterruptedException) {
-            }
+                patientStep.retrieveRecords("Burns")
+                    val invoice = invoiceStep.create()
+                        invoiceStep.check(invoice)
+                            val encryptedInvoice = invoiceStep.encrypt(invoice)
+                                invoiceStep.send(encryptedInvoice)
+                                invoiceStep.store(encryptedInvoice)
+                                    log.info("sleeping")
+                                    Thread.sleep(1000)
         } catch (e: Exception) {
             log.error("error during process: {}", e.message)
             throw e
