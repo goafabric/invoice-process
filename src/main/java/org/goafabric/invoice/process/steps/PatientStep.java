@@ -1,11 +1,11 @@
 package org.goafabric.invoice.process.steps;
 
-import org.goafabric.invoice.adapter.catalog.ChargeItemAdapter;
-import org.goafabric.invoice.adapter.catalog.ConditionAdapter;
-import org.goafabric.invoice.adapter.patient.EncounterAdapter;
-import org.goafabric.invoice.adapter.patient.PatientAdapter;
-import org.goafabric.invoice.adapter.patient.dto.Encounter;
-import org.goafabric.invoice.adapter.patient.dto.MedicalRecordType;
+import org.goafabric.invoice.process.adapter.catalog.ChargeItemAdapter;
+import org.goafabric.invoice.process.adapter.catalog.ConditionAdapter;
+import org.goafabric.invoice.process.adapter.patient.EncounterAdapter;
+import org.goafabric.invoice.process.adapter.patient.PatientAdapter;
+import org.goafabric.invoice.process.adapter.patient.dto.Encounter;
+import org.goafabric.invoice.process.adapter.patient.dto.MedicalRecordType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

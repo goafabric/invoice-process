@@ -1,7 +1,7 @@
 package org.goafabric.invoice.process;
 
 import jakarta.annotation.PreDestroy;
-import org.goafabric.invoice.adapter.authorization.dto.Lock;
+import org.goafabric.invoice.process.adapter.authorization.dto.Lock;
 import org.goafabric.invoice.process.steps.AuthorizationStep;
 import org.goafabric.invoice.process.steps.InvoiceStep;
 import org.goafabric.invoice.process.steps.PatientStep;
@@ -26,14 +26,10 @@ public class InvoiceProcess {
         this.authorizationStep = authorizationStep;
         this.invoiceStep = invoiceStep;
         this.patientStep = patientStep;
-
-        boolean virtual = false;
-        executor = virtual ? Executors.newVirtualThreadPerTaskExecutor() : Executors.newFixedThreadPool(3);
+        executor = Executors.newFixedThreadPool(3);
     }
 
-    public Future<Boolean> run() { return run(true); }
-
-    private Future<Boolean> run(boolean virtual) {
+    public Future<Boolean> run() {
         return executor.submit(this::innerLoop);
     }
 

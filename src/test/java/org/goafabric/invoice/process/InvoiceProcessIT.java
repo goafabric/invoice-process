@@ -1,14 +1,14 @@
 package org.goafabric.invoice.process;
 
-import org.goafabric.invoice.adapter.authorization.LockAdapter;
-import org.goafabric.invoice.adapter.authorization.PermissionAdapter;
-import org.goafabric.invoice.adapter.authorization.dto.Lock;
-import org.goafabric.invoice.adapter.authorization.dto.PermissionCategory;
-import org.goafabric.invoice.adapter.authorization.dto.PermissionType;
-import org.goafabric.invoice.adapter.catalog.ChargeItemAdapter;
-import org.goafabric.invoice.adapter.catalog.ConditionAdapter;
-import org.goafabric.invoice.adapter.patient.EncounterAdapter;
-import org.goafabric.invoice.adapter.patient.PatientAdapter;
+import org.goafabric.invoice.process.adapter.authorization.LockAdapter;
+import org.goafabric.invoice.process.adapter.authorization.PermissionAdapter;
+import org.goafabric.invoice.process.adapter.authorization.dto.Lock;
+import org.goafabric.invoice.process.adapter.authorization.dto.PermissionCategory;
+import org.goafabric.invoice.process.adapter.authorization.dto.PermissionType;
+import org.goafabric.invoice.process.adapter.catalog.ChargeItemAdapter;
+import org.goafabric.invoice.process.adapter.catalog.ConditionAdapter;
+import org.goafabric.invoice.process.adapter.patient.EncounterAdapter;
+import org.goafabric.invoice.process.adapter.patient.PatientAdapter;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

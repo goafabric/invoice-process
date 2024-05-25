@@ -1,11 +1,11 @@
 package org.goafabric.invoice.process.steps;
 
-import org.goafabric.invoice.adapter.authorization.LockAdapter;
-import org.goafabric.invoice.adapter.authorization.PermissionAdapter;
-import org.goafabric.invoice.adapter.authorization.dto.Lock;
-import org.goafabric.invoice.adapter.authorization.dto.PermissionCategory;
-import org.goafabric.invoice.adapter.authorization.dto.PermissionType;
-import org.goafabric.invoice.extensions.TenantContext;
+import org.goafabric.invoice.process.adapter.authorization.LockAdapter;
+import org.goafabric.invoice.process.adapter.authorization.PermissionAdapter;
+import org.goafabric.invoice.process.adapter.authorization.dto.Lock;
+import org.goafabric.invoice.process.adapter.authorization.dto.PermissionCategory;
+import org.goafabric.invoice.process.adapter.authorization.dto.PermissionType;
+import org.goafabric.invoice.controller.extensions.TenantContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

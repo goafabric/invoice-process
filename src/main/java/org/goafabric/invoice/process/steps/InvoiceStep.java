@@ -1,7 +1,7 @@
 package org.goafabric.invoice.process.steps;
 
-import org.goafabric.invoice.adapter.invoice.InvoiceMockAdapter;
-import org.goafabric.invoice.adapter.invoice.dto.Invoice;
+import org.goafabric.invoice.process.adapter.invoice.InvoiceMockAdapter;
+import org.goafabric.invoice.process.adapter.invoice.dto.Invoice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
