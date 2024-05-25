@@ -1,6 +1,5 @@
-package org.goafabric.invoice.controller;
+package org.goafabric.invoice.process;
 
-import org.goafabric.invoice.process.InvoiceProcess;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

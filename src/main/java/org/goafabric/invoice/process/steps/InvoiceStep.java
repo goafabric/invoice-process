@@ -1,6 +1,6 @@
 package org.goafabric.invoice.process.steps;
 
-import org.goafabric.invoice.adapter.invoice.InvoiceAdapter;
+import org.goafabric.invoice.adapter.invoice.InvoiceMockAdapter;
 import org.goafabric.invoice.adapter.invoice.dto.Invoice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component;
 public class InvoiceStep {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    private final InvoiceAdapter invoiceAdapter;
+    private final InvoiceMockAdapter invoiceAdapter;
 
-    public InvoiceStep(InvoiceAdapter invoiceAdapter) {
+    public InvoiceStep(InvoiceMockAdapter invoiceAdapter) {
         this.invoiceAdapter = invoiceAdapter;
     }
 
