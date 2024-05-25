@@ -1,6 +1,3 @@
-![Coverage](.github/badges/jacoco.svg)
-![Branches](.github/badges/branches.svg)
-
 # docker compose
 go to /src/deploy/docker and do "./stack up" or "./stack up -native"
 
