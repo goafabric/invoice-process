@@ -1,0 +1,71 @@
+services:
+
+  postgres:
+    container_name: ${_Values_root_name}-postgres
+    image: postgres:16.0
+    restart: 'no'
+    ports:
+      - 50810:5432
+    environment:
+      TZ: "Europe/Berlin"
+      POSTGRES_DB: "core"
+
+      #secrets
+      POSTGRES_USER: "core-service"
+      POSTGRES_PASSWORD: "core-service"
+
+    command: postgres -c 'shared_buffers=64MB' -c 'max_connections=30' -c 'shared_preload_libraries=pg_stat_statements'
+
+    healthcheck:
+      test: "sh -c pg_isready"
+      interval: 1s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - ${_Values_root_name}-net
+
+  s3minio:
+    container_name: s3minio
+    command: server /data --console-address ':9001'
+    image: quay.io/minio/minio:RELEASE.2023-08-23T10-07-06Z
+    restart: 'no'
+    ports:
+      - 9100:9000
+      - 9101:9001
+    volumes:
+      - miniodata:/data
+    networks:
+      - ${_Values_root_name}-net
+    environment:
+      TZ: "Europe/Berlin"
+
+  nginx:
+    container_name: ${_Values_root_name}-nginx
+    image: nginx:1.22.1
+    restart: 'no'
+    ports:
+      - 8080:80
+    networks:
+      - ${_Values_root_name}-net
+    volumes:
+      - ./nginx/nginx${_Values_nginx_oidc}.conf:/etc/nginx/nginx.conf
+    depends_on:
+      application:
+        condition: service_started
+
+volumes:
+    tmp:
+    applogs:
+    tmp_catalog:
+    applogs_catalog:
+    tmp_invoice:
+    applogs_invoice:
+    pgdata:
+    kcdata:
+    miniodata:
+
+networks:
+  core-service-net:
+    driver: bridge
