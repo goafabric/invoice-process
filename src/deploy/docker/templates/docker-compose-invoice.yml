@@ -40,7 +40,7 @@ services:
       management.otlp.tracing.endpoint: "http://host.docker.internal:4318/v1/traces"
 
       #adapter
-      adapter.coreservice.url: "http://application:50800"
+      adapter.coreservice.url: "http://core-service-application:50800"
       adapter.catalogservice.url: "http://catalog-service-application:8080"
 
       #log levels

@@ -52,7 +52,7 @@ services:
     volumes:
       - ./nginx/nginx${_Values_nginx_oidc}.conf:/etc/nginx/nginx.conf
     depends_on:
-      application:
+      core-service-application:
         condition: service_started
 
 volumes:

@@ -1,6 +1,6 @@
 services:
-  application:
-    container_name: ${_Values_root_name}-application
+  core-service-application:
+    container_name: core-service-application
     image:  ${_Values_image_repository}-native${_Values_server_arch}:3.3.0
     restart: 'no'
     #    ports:
@@ -8,7 +8,7 @@ services:
     command: ["-Xmx${_Values_resources_requests_memory}"]
 
     healthcheck:
-      test: "curl -f http://localhost:${_Values_service_port}/actuator/health || exit 1"
+      test: "curl -f http://localhost:8080/actuator/health || exit 1"
       disable: ${_Values_health_check_disabled} #disabled for native images because of no curl
       interval: 5s
       timeout: 10s
@@ -23,7 +23,7 @@ services:
     environment:
       #application
       TZ: Europe/Berlin
-      server.port: "${_Values_service_port}"
+      server.port: "8080"
       server.tomcat.threads.max: "20"
       server.forward-headers-strategy: FRAMEWORK
 
