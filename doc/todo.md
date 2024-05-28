@@ -3,3 +3,4 @@
 - fluent api
 - web socket notification
 - s3 storage
+- redis
