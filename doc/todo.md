@@ -1,9 +1,6 @@
 # Todo
-- authorization implementation + aspect
-- 
-- patient record data
 - fluent api
 - web socket notification
-
-- docker
-- kotlin
+- s3 storage
+- redis
+- authorization implementation + aspect

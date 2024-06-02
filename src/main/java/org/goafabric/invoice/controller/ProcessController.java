@@ -25,6 +25,7 @@ public class ProcessController {
     }
 
     @GetMapping("loop")
+    //@RolesAllowed("INVOICE")
     public String loop() {
         IntStream.range(0, 10).forEach(i -> {
             try {

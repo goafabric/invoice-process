@@ -1,14 +1,14 @@
 package org.goafabric.invoice.process;
 
-import org.goafabric.invoice.adapter.access.LockAdapter;
-import org.goafabric.invoice.adapter.access.UserAdapter;
-import org.goafabric.invoice.adapter.access.dto.Lock;
-import org.goafabric.invoice.adapter.access.dto.PermissionCategory;
-import org.goafabric.invoice.adapter.access.dto.PermissionType;
-import org.goafabric.invoice.adapter.catalog.ChargeItemAdapter;
-import org.goafabric.invoice.adapter.catalog.ConditionAdapter;
-import org.goafabric.invoice.adapter.patient.EncounterAdapter;
-import org.goafabric.invoice.adapter.patient.PatientAdapter;
+import org.goafabric.invoice.process.adapter.authorization.LockAdapter;
+import org.goafabric.invoice.process.adapter.authorization.PermissionAdapter;
+import org.goafabric.invoice.process.adapter.authorization.dto.Lock;
+import org.goafabric.invoice.process.adapter.authorization.dto.PermissionCategory;
+import org.goafabric.invoice.process.adapter.authorization.dto.PermissionType;
+import org.goafabric.invoice.process.adapter.catalog.ChargeItemAdapter;
+import org.goafabric.invoice.process.adapter.catalog.ConditionAdapter;
+import org.goafabric.invoice.process.adapter.patient.EncounterAdapter;
+import org.goafabric.invoice.process.adapter.patient.PatientAdapter;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,7 +30,7 @@ public class InvoiceProcessIT {
     private LockAdapter lockAdapter;
 
     @MockBean
-    private UserAdapter userAdapter;
+    private PermissionAdapter permissionAdapter;
 
     @MockBean
     private PatientAdapter patientAdapter;
@@ -49,7 +49,7 @@ public class InvoiceProcessIT {
 
     @Test
     public void run() throws Exception {
-        when(userAdapter.hasPermission(anyString(), eq(PermissionCategory.PROCESS), eq(PermissionType.INVOICE)))
+        when(permissionAdapter.hasPermission(anyString(), eq(PermissionCategory.PROCESS), eq(PermissionType.INVOICE)))
                 .thenReturn(true);
 
         when(lockAdapter.acquireLockByKey("invoice-0"))
@@ -60,7 +60,7 @@ public class InvoiceProcessIT {
 
     @Test
     public void alreadyLocked() throws Exception{
-        when(userAdapter.hasPermission(anyString(), eq(PermissionCategory.PROCESS), eq(PermissionType.INVOICE)))
+        when(permissionAdapter.hasPermission(anyString(), eq(PermissionCategory.PROCESS), eq(PermissionType.INVOICE)))
                 .thenReturn(true);
 
         when(lockAdapter.acquireLockByKey("invoice-0"))
