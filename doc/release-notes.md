@@ -1,4 +1,5 @@
 # 3.3.1
+- basic auth with spring security added
 
 # 3.3.0
 - upgrade to Spring Boot 3.3.0
