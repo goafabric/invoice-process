@@ -1,3 +1,5 @@
+# 3.3.2
+
 # 3.3.1
 - basic auth with spring security added
 
