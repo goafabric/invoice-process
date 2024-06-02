@@ -45,7 +45,7 @@ dependencies {
 	implementation("io.opentelemetry:opentelemetry-exporter-otlp")
 
 	//crosscuting
-	//implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("com.github.ben-manes.caffeine:caffeine"); implementation("org.springframework.boot:spring-boot-starter-cache");
 	
 	//adapter
