@@ -1,6 +1,7 @@
 package org.goafabric.invoice;
 
 import org.goafabric.invoice.process.InvoiceProcess;
+import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -14,6 +15,7 @@ import org.springframework.context.annotation.Bean;
  */
 
 @SpringBootApplication
+@RegisterReflectionForBinding(org.springframework.web.client.ResourceAccessException.class)
 public class Application {
 
     public static void main(String[] args){
