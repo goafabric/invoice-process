@@ -71,3 +71,5 @@ spring.threads.virtual.enabled: "true"
 
 process.autostart: true
 
+spring.profiles.active: "caffeine" #redis
+

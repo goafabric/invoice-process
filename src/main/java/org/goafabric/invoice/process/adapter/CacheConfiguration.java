@@ -14,7 +14,12 @@ import org.springframework.cache.interceptor.SimpleKey;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportRuntimeHints;
+import org.springframework.context.annotation.Profile;
+import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializationContext;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 //implementation("com.github.ben-manes.caffeine:caffeine"); implementation("org.springframework.boot:spring-boot-starter-cache");
@@ -29,12 +34,22 @@ public class CacheConfiguration implements CachingConfigurer {
     private Long cacheExpiry = 10l;
 
     @Bean
+    @Profile("caffeine")
     public CacheManager cacheManager() {
         final CaffeineCacheManager cacheManager = new CaffeineCacheManager();
         cacheManager.setCaffeine(Caffeine.newBuilder()
                 .maximumSize(cacheMaxSize)
                 .expireAfterAccess(cacheExpiry, TimeUnit.MINUTES));
         return cacheManager;
+    }
+
+    @Bean
+    @Profile("redis")
+    public RedisCacheConfiguration cacheConfiguration() {
+        return RedisCacheConfiguration.defaultCacheConfig()
+                .entryTtl(Duration.ofMinutes(cacheExpiry))
+                .disableCachingNullValues()
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
     }
 
     @Bean
