@@ -5,3 +5,4 @@ adapter:
     url: http://localhost:0
 
 process.autostart: false
+spring.profiles.active: "caffeine" #redis

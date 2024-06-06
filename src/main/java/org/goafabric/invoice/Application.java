@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
@@ -15,7 +14,7 @@ import org.springframework.context.annotation.Bean;
  * Created by amautsch on 26.06.2015.
  */
 
-@SpringBootApplication(exclude = RedisAutoConfiguration.class)
+@SpringBootApplication//(exclude = RedisAutoConfiguration.class)
 @RegisterReflectionForBinding(org.springframework.web.client.ResourceAccessException.class)
 public class Application {
 
