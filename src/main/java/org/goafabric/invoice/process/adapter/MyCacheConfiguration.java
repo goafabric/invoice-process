@@ -26,8 +26,8 @@ import java.util.concurrent.TimeUnit;
 
 @Configuration
 @EnableCaching
-@ImportRuntimeHints(CacheConfiguration.CacheRuntimeHints.class)
-public class CacheConfiguration implements CachingConfigurer {
+@ImportRuntimeHints(MyCacheConfiguration.CacheRuntimeHints.class)
+public class MyCacheConfiguration implements CachingConfigurer {
 
     private Long cacheMaxSize = 1000l;
 
@@ -42,6 +42,7 @@ public class CacheConfiguration implements CachingConfigurer {
                 .expireAfterAccess(cacheExpiry, TimeUnit.MINUTES));
         return cacheManager;
     }
+
 
     @Bean
     @Profile("redis")
@@ -69,4 +70,5 @@ public class CacheConfiguration implements CachingConfigurer {
             }
         }
     }
+
 }
