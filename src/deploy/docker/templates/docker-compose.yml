@@ -47,6 +47,10 @@ services:
     ports:
       - 6379:6379
       - 16379:16379
+    networks:
+      - ${_Values_root_name}-net
+    environment:
+      TZ: "Europe/Berlin"
 
   nginx:
     container_name: ${_Values_root_name}-nginx
