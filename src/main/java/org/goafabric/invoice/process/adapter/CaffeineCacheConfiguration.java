@@ -21,13 +21,9 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
-//implementation("com.github.ben-manes.caffeine:caffeine"); implementation("org.springframework.boot:spring-boot-starter-cache");
-
 @Configuration
 @EnableCaching
 @ImportRuntimeHints(CaffeineCacheConfiguration.CacheRuntimeHints.class)
-//@Profile("caffeine")
-//@Import(RedisAutoConfiguration.class)
 public class CaffeineCacheConfiguration implements CachingConfigurer {
 
     private Long cacheMaxSize = 1000l;
