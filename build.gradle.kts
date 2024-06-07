@@ -93,3 +93,7 @@ configure<net.researchgate.release.ReleaseExtension> {
 	buildTasks.set(listOf("build", "test", "jib", "dockerImageNative"))
 	tagTemplate.set("v${version}".replace("-SNAPSHOT", ""))
 }
+
+tasks.withType<org.springframework.boot.gradle.tasks.aot.ProcessAot>().configureEach {
+	args("--spring.profiles.active=redis")
+}
