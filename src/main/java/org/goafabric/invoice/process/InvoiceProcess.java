@@ -47,7 +47,7 @@ public class InvoiceProcess {
                                     try { Thread.sleep(1000); } catch (InterruptedException e) {}
         }
         catch (Exception e) {
-            log.error("error during process: {}", e.getMessage());
+            log.error("error during process: {}", e.getMessage(), e);
             throw e;
         }
         finally {
