@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Bean;
  * Created by amautsch on 26.06.2015.
  */
 
-@SpringBootApplication//(exclude = RedisAutoConfiguration.class)
+@SpringBootApplication//(exclude = RedisHealthContributorAutoConfiguration.class)
 @RegisterReflectionForBinding(org.springframework.web.client.ResourceAccessException.class)
 public class Application {
 
