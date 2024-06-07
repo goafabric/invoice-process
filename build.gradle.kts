@@ -46,7 +46,12 @@ dependencies {
 
 	//crosscuting
 	implementation("org.springframework.boot:spring-boot-starter-security")
-	implementation("com.github.ben-manes.caffeine:caffeine"); implementation("org.springframework.boot:spring-boot-starter-cache");
+
+	//cache
+	implementation("org.springframework.boot:spring-boot-starter-cache");
+	implementation("com.github.ben-manes.caffeine:caffeine");
+	implementation("org.springframework.boot:spring-boot-starter-data-redis");
+	implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
 	
 	//adapter
 	implementation("io.github.resilience4j:resilience4j-spring-boot3")
@@ -87,4 +92,8 @@ tasks.named<BootBuildImage>("bootBuildImage") {
 configure<net.researchgate.release.ReleaseExtension> {
 	buildTasks.set(listOf("build", "test", "jib", "dockerImageNative"))
 	tagTemplate.set("v${version}".replace("-SNAPSHOT", ""))
+}
+
+tasks.withType<org.springframework.boot.gradle.tasks.aot.ProcessAot>().configureEach {
+	args("--spring.profiles.active=redis")
 }

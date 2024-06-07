@@ -34,6 +34,6 @@ public class InvoiceStep {
 
     public void store(Invoice invoice) {
         log.info("storing invoice");
-
+        invoiceAdapter.store(invoice);
     }
 }

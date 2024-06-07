@@ -14,27 +14,38 @@ import org.springframework.cache.interceptor.SimpleKey;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportRuntimeHints;
+import org.springframework.context.annotation.Profile;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.RedisSerializationContext;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
-
-//implementation("com.github.ben-manes.caffeine:caffeine"); implementation("org.springframework.boot:spring-boot-starter-cache");
 
 @Configuration
 @EnableCaching
-@ImportRuntimeHints(CacheConfiguration.CacheRuntimeHints.class)
-public class CacheConfiguration implements CachingConfigurer {
+@ImportRuntimeHints(MyCacheConfiguration.CacheRuntimeHints.class)
+public class MyCacheConfiguration implements CachingConfigurer {
 
     private Long cacheMaxSize = 1000l;
-
     private Long cacheExpiry = 10l;
 
     @Bean
+    @Profile("caffeine")
     public CacheManager cacheManager() {
         final CaffeineCacheManager cacheManager = new CaffeineCacheManager();
         cacheManager.setCaffeine(Caffeine.newBuilder()
                 .maximumSize(cacheMaxSize)
                 .expireAfterAccess(cacheExpiry, TimeUnit.MINUTES));
         return cacheManager;
+    }
+
+    @Bean
+    @Profile("redis")
+    public org.springframework.data.redis.cache.RedisCacheConfiguration cacheConfiguration() {
+        return org.springframework.data.redis.cache.RedisCacheConfiguration.defaultCacheConfig()
+                .entryTtl(Duration.ofMinutes(cacheExpiry))
+                .disableCachingNullValues()
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
     }
 
     @Bean
@@ -54,4 +65,5 @@ public class CacheConfiguration implements CachingConfigurer {
             }
         }
     }
+
 }
