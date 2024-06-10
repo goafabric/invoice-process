@@ -64,6 +64,14 @@ resilience4j:
         enableExponentialBackoff: true
         exponentialBackoffMultiplier: 2
 
+#s3
+#spring.cloud.aws.s3.endpoint: "http://localhost:9100"
+spring.cloud.aws.s3.path-style-access-enabled: "true"
+spring.cloud.aws.credentials.access-key: "minioadmin"
+spring.cloud.aws.credentials.secret-key: "minioadmin"
+spring.cloud.aws.region.static: "eu"
+multi-tenancy.schema-prefix: "invoice_"
+
 #logging
 logging.pattern.level: "%5p tenantId=%X{tenantId:-}" #"%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}] tenantId=%X{tenantId:-}"
 

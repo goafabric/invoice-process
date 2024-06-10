@@ -57,6 +57,9 @@ dependencies {
 	implementation("io.github.resilience4j:resilience4j-spring-boot3")
 	implementation("org.springframework.boot:spring-boot-starter-aop")
 
+	//s3
+	implementation("am.ik.s3:simple-s3-client:0.2.1") {exclude("org.springframework", "spring-web")}
+
 	//test
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
