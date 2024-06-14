@@ -4,6 +4,7 @@ import org.goafabric.invoice.process.InvoiceProcess;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.stream.IntStream;
@@ -34,6 +35,13 @@ public class ProcessController {
                 throw new RuntimeException(e);
             }
         });
+        return "launched";
+    }
+
+    @GetMapping("load")
+    //@RolesAllowed("INVOICE")
+    public String load(@RequestParam("range") Integer range) {
+        IntStream.range(0, 10).forEach(i -> invoiceProcess.load(range));
         return "launched";
     }
 
