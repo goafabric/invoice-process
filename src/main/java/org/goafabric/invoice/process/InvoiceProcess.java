@@ -61,7 +61,7 @@ public class InvoiceProcess {
     }
 
     @Autowired
-    CacheManager cacheManager;
+    private CacheManager cacheManager;
     public Future<Boolean> load(Integer range) {
         return executor.submit(() -> {
             try {
