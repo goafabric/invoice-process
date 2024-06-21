@@ -69,11 +69,8 @@ public class InvoiceProcess {
             try {
                 IntStream.range(0, range).forEach(i -> {
                     log.info("process started #{}", i);
-                    var id = patientStep.retrieveRecords("Burns");
-                    if (id != null) {
-                        updatePatient(id);
-                        cacheManager.getCacheNames().forEach(name -> cacheManager.getCache(name).clear());
-                    }
+                    updatePatient(patientStep.retrieveRecords("Burns"));
+                    cacheManager.getCacheNames().forEach(name -> cacheManager.getCache(name).clear());
                 });
             } catch (Exception e) {
                 log.error("error during process: {}", e.getMessage(), e);
@@ -84,10 +81,12 @@ public class InvoiceProcess {
     }
 
     private synchronized void updatePatient(String id) {
-        var pat = patientStep.getPatient(id);
-        patientStep.updatePatient(
-            new Patient(pat.id(), pat.version(), pat.givenName(), pat.familyName(), pat.gender(), LocalDate.now(), pat.address(), pat.contactPoint())
-        );
+        if (id != null) {
+            var pat = patientStep.getPatient(id);
+            patientStep.updatePatient(
+                    new Patient(pat.id(), pat.version(), pat.givenName(), pat.familyName(), pat.gender(), LocalDate.now(), pat.address(), pat.contactPoint())
+            );
+        }
     }
 
     @PreDestroy
