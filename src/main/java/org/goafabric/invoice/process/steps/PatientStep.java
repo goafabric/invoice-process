@@ -6,6 +6,7 @@ import org.goafabric.invoice.process.adapter.patient.EncounterAdapter;
 import org.goafabric.invoice.process.adapter.patient.PatientAdapter;
 import org.goafabric.invoice.process.adapter.patient.dto.Encounter;
 import org.goafabric.invoice.process.adapter.patient.dto.MedicalRecordType;
+import org.goafabric.invoice.process.adapter.patient.dto.Patient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,7 +33,7 @@ public class PatientStep {
         this.conditionAdapter = conditionAdapter;
     }
 
-    public void retrieveRecords(String familyName) {
+    public String retrieveRecords(String familyName) {
         log.info("retrieve records");
         var patients = patientAdapter.findPatientNamesByFamilyName(familyName);
         if (!patients.isEmpty()) {
@@ -40,7 +41,11 @@ public class PatientStep {
             logChargeItems(encounters);
             logConditions(encounters);
         }
+        return patients.getFirst().id();
     }
+
+    public Patient getPatient(String id) { return patientAdapter.getById(id); }
+    public void updatePatient(Patient patient) { patientAdapter.save(patient); }
 
     private void logChargeItems(List<Encounter> encounters) {
         log.info("chargeitems");

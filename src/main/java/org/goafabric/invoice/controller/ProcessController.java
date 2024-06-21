@@ -29,11 +29,7 @@ public class ProcessController {
     //@RolesAllowed("INVOICE")
     public String loop() {
         IntStream.range(0, 10).forEach(i -> {
-            try {
-                invoiceProcess.run().get();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+            try { invoiceProcess.run().get(); } catch (Exception e) { throw new RuntimeException(e);}
         });
         return "launched";
     }
@@ -41,7 +37,10 @@ public class ProcessController {
     @GetMapping("load")
     //@RolesAllowed("INVOICE")
     public String load(@RequestParam("range") Integer range) {
-        IntStream.range(0, 10).forEach(i -> invoiceProcess.load(range));
+        var processes = IntStream.range(0, 10).mapToObj(i -> invoiceProcess.load(range)).toList();
+        processes.forEach(process -> {
+            try { process.get(); } catch (Exception e) { throw new RuntimeException(e);}
+        });
         return "launched";
     }
 

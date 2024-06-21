@@ -2,6 +2,7 @@ package org.goafabric.invoice.process;
 
 import jakarta.annotation.PreDestroy;
 import org.goafabric.invoice.process.adapter.authorization.dto.Lock;
+import org.goafabric.invoice.process.adapter.patient.dto.Patient;
 import org.goafabric.invoice.process.steps.AuthorizationStep;
 import org.goafabric.invoice.process.steps.InvoiceStep;
 import org.goafabric.invoice.process.steps.PatientStep;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -29,7 +31,7 @@ public class InvoiceProcess {
         this.authorizationStep = authorizationStep;
         this.invoiceStep = invoiceStep;
         this.patientStep = patientStep;
-        executor = Executors.newFixedThreadPool(3);
+        executor = Executors.newFixedThreadPool(10);
     }
 
     public Future<Boolean> run() {
@@ -66,7 +68,10 @@ public class InvoiceProcess {
         return executor.submit(() -> {
             try {
                 IntStream.range(0, range).forEach(i -> {
-                    patientStep.retrieveRecords("Burns");
+                    log.info("process started #{}", i);
+                    var id = patientStep.retrieveRecords("Burns");
+
+                    updatePatient(id);
                     cacheManager.getCacheNames().forEach(name -> cacheManager.getCache(name).clear());
                 });
             } catch (Exception e) {
@@ -76,6 +81,14 @@ public class InvoiceProcess {
             return true;
         });
     }
+
+    private synchronized void updatePatient(String id) {
+        var pat = patientStep.getPatient(id);
+        patientStep.updatePatient(
+            new Patient(pat.id(), pat.version(), pat.givenName(), pat.familyName(), pat.gender(), LocalDate.now(), pat.address(), pat.contactPoint())
+        );
+    }
+
     @PreDestroy
     private void shutdown() {
         executor.shutdown();
