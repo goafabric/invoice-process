@@ -70,9 +70,10 @@ public class InvoiceProcess {
                 IntStream.range(0, range).forEach(i -> {
                     log.info("process started #{}", i);
                     var id = patientStep.retrieveRecords("Burns");
-
-                    updatePatient(id);
-                    cacheManager.getCacheNames().forEach(name -> cacheManager.getCache(name).clear());
+                    if (id != null) {
+                        updatePatient(id);
+                        cacheManager.getCacheNames().forEach(name -> cacheManager.getCache(name).clear());
+                    }
                 });
             } catch (Exception e) {
                 log.error("error during process: {}", e.getMessage(), e);

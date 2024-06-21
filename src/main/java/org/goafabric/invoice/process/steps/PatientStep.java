@@ -41,7 +41,7 @@ public class PatientStep {
             logChargeItems(encounters);
             logConditions(encounters);
         }
-        return patients.getFirst().id();
+        return !patients.isEmpty() ? patients.getFirst().id() : null;
     }
 
     public Patient getPatient(String id) { return patientAdapter.getById(id); }
