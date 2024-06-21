@@ -31,7 +31,7 @@ public class InvoiceProcess {
         this.authorizationStep = authorizationStep;
         this.invoiceStep = invoiceStep;
         this.patientStep = patientStep;
-        executor = Executors.newFixedThreadPool(10);
+        executor = Executors.newVirtualThreadPerTaskExecutor(); //newFixedThreadPool(10);
     }
 
     public Future<Boolean> run() {
