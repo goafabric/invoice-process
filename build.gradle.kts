@@ -6,17 +6,19 @@ java.sourceCompatibility = JavaVersion.VERSION_21
 
 val dockerRegistry = "goafabric"
 val nativeBuilder = "paketobuildpacks/java-native-image:9.5.0"
-val baseImage = "ibm-semeru-runtimes:open-21.0.1_12-jre-focal@sha256:24d43669156684f7bc28536b22537a7533ab100bf0a5a89702b987ebb53215be"
+val baseImage = "ibm-semeru-runtimes:open-21.0.3_9-jre-focal@sha256:5cb19afa9ee0daeecb7c31be8253fecbbf6b5f6dcfb06883c41f045cb893bcec"
 
 plugins {
 	java
 	jacoco
-	id("org.springframework.boot") version "3.3.0"
+	id("org.springframework.boot") version "3.3.1"
 	id("io.spring.dependency-management") version "1.1.5"
 	id("org.graalvm.buildtools.native") version "0.10.2"
 
-	id("com.google.cloud.tools.jib") version "3.4.2"
+	id("com.google.cloud.tools.jib") version "3.4.3"
 	id("net.researchgate.release") version "3.0.2"
+	id("org.sonarqube") version "5.0.0.4638"
+	id("org.owasp.dependencycheck") version "9.1.0"
 }
 
 repositories {
@@ -27,7 +29,7 @@ repositories {
 
 dependencies {
 	constraints {
-		implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
+		implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
 		implementation("org.mapstruct:mapstruct:1.5.5.Final")
 		annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
 		implementation("io.github.resilience4j:resilience4j-spring-boot3:2.1.0")
