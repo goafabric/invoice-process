@@ -42,6 +42,7 @@ public class PatientStep {
         }
     }
 
+
     private void logChargeItems(List<Encounter> encounters) {
         log.info("chargeitems");
         encounters.getFirst().medicalRecords().stream()

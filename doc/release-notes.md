@@ -1,3 +1,7 @@
+# 3.3.2
+- upgrade to spring boot 3.3.1
+- redis + s3 storage added
+
 # 3.3.1
 - basic auth with spring security added
 

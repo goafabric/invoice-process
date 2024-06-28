@@ -6,17 +6,19 @@ java.sourceCompatibility = JavaVersion.VERSION_21
 
 val dockerRegistry = "goafabric"
 val nativeBuilder = "paketobuildpacks/java-native-image:9.5.0"
-val baseImage = "ibm-semeru-runtimes:open-21.0.1_12-jre-focal@sha256:24d43669156684f7bc28536b22537a7533ab100bf0a5a89702b987ebb53215be"
+val baseImage = "ibm-semeru-runtimes:open-21.0.3_9-jre-focal@sha256:5cb19afa9ee0daeecb7c31be8253fecbbf6b5f6dcfb06883c41f045cb893bcec"
 
 plugins {
 	java
 	jacoco
-	id("org.springframework.boot") version "3.3.0"
+	id("org.springframework.boot") version "3.3.1"
 	id("io.spring.dependency-management") version "1.1.5"
 	id("org.graalvm.buildtools.native") version "0.10.2"
 
-	id("com.google.cloud.tools.jib") version "3.4.2"
+	id("com.google.cloud.tools.jib") version "3.4.3"
 	id("net.researchgate.release") version "3.0.2"
+	id("org.sonarqube") version "5.0.0.4638"
+	id("org.owasp.dependencycheck") version "9.1.0"
 }
 
 repositories {
@@ -27,7 +29,7 @@ repositories {
 
 dependencies {
 	constraints {
-		implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
+		implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
 		implementation("org.mapstruct:mapstruct:1.5.5.Final")
 		annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
 		implementation("io.github.resilience4j:resilience4j-spring-boot3:2.1.0")
@@ -46,11 +48,19 @@ dependencies {
 
 	//crosscuting
 	implementation("org.springframework.boot:spring-boot-starter-security")
-	implementation("com.github.ben-manes.caffeine:caffeine"); implementation("org.springframework.boot:spring-boot-starter-cache");
+
+	//cache
+	implementation("org.springframework.boot:spring-boot-starter-cache");
+	implementation("com.github.ben-manes.caffeine:caffeine");
+	implementation("org.springframework.boot:spring-boot-starter-data-redis");
+	implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
 	
 	//adapter
 	implementation("io.github.resilience4j:resilience4j-spring-boot3")
 	implementation("org.springframework.boot:spring-boot-starter-aop")
+
+	//s3
+	implementation("am.ik.s3:simple-s3-client:0.2.1") {exclude("org.springframework", "spring-web")}
 
 	//test
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -87,4 +97,8 @@ tasks.named<BootBuildImage>("bootBuildImage") {
 configure<net.researchgate.release.ReleaseExtension> {
 	buildTasks.set(listOf("build", "test", "jib", "dockerImageNative"))
 	tagTemplate.set("v${version}".replace("-SNAPSHOT", ""))
+}
+
+tasks.withType<org.springframework.boot.gradle.tasks.aot.ProcessAot>().configureEach {
+	args("--spring.profiles.active=redis")
 }

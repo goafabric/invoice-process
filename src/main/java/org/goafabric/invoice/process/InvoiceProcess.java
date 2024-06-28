@@ -26,7 +26,7 @@ public class InvoiceProcess {
         this.authorizationStep = authorizationStep;
         this.invoiceStep = invoiceStep;
         this.patientStep = patientStep;
-        executor = Executors.newFixedThreadPool(3);
+        executor = Executors.newVirtualThreadPerTaskExecutor(); //newFixedThreadPool(10);
     }
 
     public Future<Boolean> run() {
@@ -47,7 +47,7 @@ public class InvoiceProcess {
                                     try { Thread.sleep(1000); } catch (InterruptedException e) {}
         }
         catch (Exception e) {
-            log.error("error during process: {}", e.getMessage());
+            log.error("error during process: {}", e.getMessage(), e);
             throw e;
         }
         finally {

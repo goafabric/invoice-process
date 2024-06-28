@@ -9,6 +9,7 @@ import org.goafabric.invoice.process.adapter.catalog.ChargeItemAdapter;
 import org.goafabric.invoice.process.adapter.catalog.ConditionAdapter;
 import org.goafabric.invoice.process.adapter.patient.EncounterAdapter;
 import org.goafabric.invoice.process.adapter.patient.PatientAdapter;
+import org.goafabric.invoice.process.adapter.s3.S3Adapter;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -43,6 +44,9 @@ public class InvoiceProcessIT {
 
     @MockBean
     private ConditionAdapter conditionAdapter;
+
+    @MockBean
+    private S3Adapter s3Adapter;
 
     @Autowired
     private InvoiceProcess invoiceProcess;

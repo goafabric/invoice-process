@@ -4,6 +4,9 @@ server:
   tomcat.threads.max: 20
   forward-headers-strategy: FRAMEWORK
 
+spring.threads.virtual.enabled: "true"
+process.autostart: false
+
 #monitoring
 management:
     endpoint:
@@ -25,6 +28,10 @@ security.authentication.enabled: false
 spring.security.user.name: "admin"
 spring.security.user.password: "admin"
 
+#cache
+spring.profiles.active: "caffeine" #redis
+spring.data.redis.host: "localhost"
+spring.data.redis.port: "6379"
 
 #adapter
 adapter:
@@ -48,6 +55,7 @@ resilience4j:
         waitDurationInOpenState: 30s #Time the CircuitBreaker should wait before transitioning back from open to half-open.
         minimumNumberOfCalls: 5 #The minimum number of calls which are required before the CircuitBreaker can calculate the error rate.
         permittedNumberOfCallsInHalfOpenState: 10 #Number of permitted calls when the CircuitBreaker is half open.
+        recordExceptions: "org.springframework.web.client.ResourceAccessException"
   retry:
     configs:
       default:
@@ -55,6 +63,14 @@ resilience4j:
         waitDuration: 2s
         enableExponentialBackoff: true
         exponentialBackoffMultiplier: 2
+
+#s3
+#spring.cloud.aws.s3.endpoint: "http://localhost:9100"
+spring.cloud.aws.s3.path-style-access-enabled: "true"
+spring.cloud.aws.credentials.access-key: "minioadmin"
+spring.cloud.aws.credentials.secret-key: "minioadmin"
+spring.cloud.aws.region.static: "eu"
+multi-tenancy.schema-prefix: "invoice_"
 
 #logging
 logging.pattern.level: "%5p tenantId=%X{tenantId:-}" #"%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}] tenantId=%X{tenantId:-}"
@@ -66,8 +82,5 @@ logging.level.org.goafabric: "INFO"
 logging.level.org.flywaydb.core: "INFO"
 logging.level.org.hibernate.SQL: "INFO"
 
-#vthreads
-spring.threads.virtual.enabled: "true"
 
-process.autostart: false
 

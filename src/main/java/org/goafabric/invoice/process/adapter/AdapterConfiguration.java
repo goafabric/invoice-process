@@ -19,40 +19,35 @@ import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 public class AdapterConfiguration {
     private @Value("${adapter.coreservice.user.name:}") String userName;
     private @Value("${adapter.coreservice.user.password:}") String password;
+    private @Value("${adapter.timeout}") Long timeout;
 
     @Bean
-    public LockAdapter lockAdapter(RestClient.Builder builder,
-                                   @Value("${adapter.coreservice.url}") String url, @Value("${adapter.timeout}") Long timeout) {
+    public LockAdapter lockAdapter(RestClient.Builder builder, @Value("${adapter.coreservice.url}") String url) {
         return createAdapter(LockAdapter.class, builder, url, timeout);
     }
 
     @Bean
-    public PermissionAdapter userAdapter(RestClient.Builder builder,
-                                         @Value("${adapter.coreservice.url}") String url, @Value("${adapter.timeout}") Long timeout) {
+    public PermissionAdapter userAdapter(RestClient.Builder builder, @Value("${adapter.coreservice.url}") String url) {
         return createAdapter(PermissionAdapter.class, builder, url, timeout);
     }
 
     @Bean
-    public PatientAdapter patientAdapter(RestClient.Builder builder,
-                                         @Value("${adapter.coreservice.url}") String url, @Value("${adapter.timeout}") Long timeout) {
+    public PatientAdapter patientAdapter(RestClient.Builder builder, @Value("${adapter.coreservice.url}") String url) {
         return createAdapter(PatientAdapter.class, builder, url, timeout);
     }
 
     @Bean
-    public EncounterAdapter encounterAdapter(RestClient.Builder builder,
-                                             @Value("${adapter.coreservice.url}") String url, @Value("${adapter.timeout}") Long timeout) {
+    public EncounterAdapter encounterAdapter(RestClient.Builder builder, @Value("${adapter.coreservice.url}") String url) {
         return createAdapter(EncounterAdapter.class, builder, url, timeout);
     }
 
     @Bean
-    public ChargeItemAdapter chargeItemAdapter(RestClient.Builder builder,
-                                               @Value("${adapter.catalogservice.url:}") String url, @Value("${adapter.timeout}") Long timeout) {
+    public ChargeItemAdapter chargeItemAdapter(RestClient.Builder builder, @Value("${adapter.catalogservice.url:}") String url) {
         return createAdapter(ChargeItemAdapter.class, builder, url, timeout);
     }
 
     @Bean
-    public ConditionAdapter conditionAdapter(RestClient.Builder builder,
-                                             @Value("${adapter.catalogservice.url:}") String url, @Value("${adapter.timeout}") Long timeout) {
+    public ConditionAdapter conditionAdapter(RestClient.Builder builder, @Value("${adapter.catalogservice.url:}") String url) {
         return createAdapter(ConditionAdapter.class, builder, url, timeout);
     }
 
