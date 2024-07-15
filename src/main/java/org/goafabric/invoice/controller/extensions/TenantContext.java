@@ -22,6 +22,11 @@ public class TenantContext {
                 request.getHeader("X-Auth-Request-Preferred-Username"), request.getHeader("X-UserInfo"));
     }
 
+    public static void setContext(Map<String, String> tenantHeaderMap) {
+        setContext(tenantHeaderMap.get("X-TenantId"), tenantHeaderMap.get("X-OrganizationId"),
+                tenantHeaderMap.get("X-Auth-Request-Preferred-Username"), tenantHeaderMap.get("X-UserInfo"));
+    }
+
     static void setContext(String tenantId, String organizationId, String userName, String userInfo) {
         CONTEXT.set(new TenantContextRecord(
                 getValue(tenantId, "0"),

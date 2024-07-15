@@ -54,7 +54,10 @@ dependencies {
 	implementation("com.github.ben-manes.caffeine:caffeine");
 	implementation("org.springframework.boot:spring-boot-starter-data-redis");
 	implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
-	
+
+	//kafka
+	implementation("org.springframework.kafka:spring-kafka")
+
 	//adapter
 	implementation("io.github.resilience4j:resilience4j-spring-boot3")
 	implementation("org.springframework.boot:spring-boot-starter-aop")
