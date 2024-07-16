@@ -19,7 +19,7 @@ import java.util.stream.IntStream;
 
 @SpringBootTest
 @DisabledInAotMode
-class ProducerNRIT {
+class ProducerIT {
     @Autowired
     private KafkaTemplate kafkaTemplate;
 
@@ -63,23 +63,22 @@ class ProducerNRIT {
     }
     
     public void createMedicalRecords() {
-        var medicalRecords = Arrays.asList(
-            new MedicalRecord(UUID.randomUUID().toString(), "42", 0L, MedicalRecordType.ANAMNESIS, "shows the tendency to eat a lot of sweets with sugar", "", null),
-            new MedicalRecord(UUID.randomUUID().toString(), "42", 0L, MedicalRecordType.FINDING,  "possible indication of Diabetes", "", null),
+        var conditions = Arrays.asList(
             new MedicalRecord(UUID.randomUUID().toString(), "42", 0L, MedicalRecordType.CONDITION, "Diabetes mellitus Typ 1", "none", null),
-            new MedicalRecord(UUID.randomUUID().toString(), "42", 0L, MedicalRecordType.ANAMNESIS, "shows the behaviour to eat a lot of fatty fast food", "", null),
-            new MedicalRecord(UUID.randomUUID().toString(), "42", 0L, MedicalRecordType.FINDING,  "clear indication of Adipositas", "", null),
             new MedicalRecord(UUID.randomUUID().toString(), "42", 0L, MedicalRecordType.CONDITION, "Adipositas", "E66.00", null),
-            new MedicalRecord(UUID.randomUUID().toString(), "42", 0L, MedicalRecordType.ANAMNESIS, "hears strange voices of Michael Meyers, who tells him to set a fire", "", null),
-            new MedicalRecord(UUID.randomUUID().toString(), "42", 0L, MedicalRecordType.FINDING,  "psychological disorder", "", null),
-            new MedicalRecord(UUID.randomUUID().toString(), "42", 0L, MedicalRecordType.CONDITION, "Pyromanie", "F63.1", null),
-            new MedicalRecord(UUID.randomUUID().toString(), "42", 0L, MedicalRecordType.CHARGEITEM, "normal examination", "GOAE1", null),
-            new MedicalRecord(UUID.randomUUID().toString(), "42", 0L, MedicalRecordType.THERAPY, "We recommend a sugar and fat free diet", "", null)
+            new MedicalRecord(UUID.randomUUID().toString(), "42", 0L, MedicalRecordType.CONDITION, "Pyromanie", "F63.1", null)
         );
-        medicalRecords.forEach(medicalRecord -> send("medicalrecord", "create", medicalRecord.id(), medicalRecord));
 
-        send("medicalrecord", "update", medicalRecords.getLast().id(), medicalRecords.getLast());
-        send("medicalrecord", "delete", medicalRecords.getLast().id(), medicalRecords.getLast());
+        var chargeitems = Arrays.asList(
+                new MedicalRecord(UUID.randomUUID().toString(), "42", 0L, MedicalRecordType.CHARGEITEM, "normal examination", "GOAE1", null),
+                new MedicalRecord(UUID.randomUUID().toString(), "42", 0L, MedicalRecordType.CHARGEITEM, "normal examination", "GOAE2", null)
+            );
+
+        conditions.forEach(medicalRecord -> send("condition", "create", medicalRecord.id(), medicalRecord));
+        chargeitems.forEach(medicalRecord -> send("chargeitem", "create", medicalRecord.id(), medicalRecord));
+
+        send("chargeitem", "update", chargeitems.getLast().id(), chargeitems.getLast());
+        send("chargeitem", "delete", chargeitems.getLast().id(), chargeitems.getLast());
 
     }
 

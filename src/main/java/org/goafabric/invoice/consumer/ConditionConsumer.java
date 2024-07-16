@@ -13,17 +13,17 @@ import org.springframework.stereotype.Component;
 import static org.goafabric.invoice.consumer.config.ConsumerUtil.withTenantInfos;
 
 @Component
-public class MedicalRecordConsumer {
+public class ConditionConsumer {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
-    static final String CONSUMER_NAME = "MedicalRecord";
+    static final String CONSUMER_NAME = "condition";
 
     private final ObjectMapper objectMapper;
 
-    public MedicalRecordConsumer(ObjectMapper objectMapper) {
+    public ConditionConsumer(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
-    @KafkaListener(groupId = CONSUMER_NAME, topics = "medicalrecord")
+    @KafkaListener(groupId = CONSUMER_NAME, topics = "condition")
     public void process(@Header(KafkaHeaders.RECEIVED_TOPIC) String topic, EventData eventData) {
         withTenantInfos(() -> process(eventData));
     }
