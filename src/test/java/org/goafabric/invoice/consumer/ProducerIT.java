@@ -19,7 +19,7 @@ import java.util.stream.IntStream;
 
 @SpringBootTest
 @DisabledInAotMode
-class ProducerNRIT {
+class ProducerIT {
     @Autowired
     private KafkaTemplate kafkaTemplate;
 

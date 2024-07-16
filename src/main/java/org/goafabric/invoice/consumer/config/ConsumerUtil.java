@@ -1,4 +1,4 @@
-package org.goafabric.invoice.consumer;
+package org.goafabric.invoice.consumer.config;
 
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.context.Context;
