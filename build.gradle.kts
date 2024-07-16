@@ -48,10 +48,6 @@ dependencies {
 	//crosscuting
 	implementation("org.springframework.boot:spring-boot-starter-security")
 
-	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
-	implementation("com.h2database:h2")
-
-
 	//cache
 	implementation("org.springframework.boot:spring-boot-starter-cache");
 	implementation("com.github.ben-manes.caffeine:caffeine");

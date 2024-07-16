@@ -2,6 +2,8 @@ package org.goafabric.invoice.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.goafabric.event.EventData;
+import org.goafabric.invoice.persistence.ADTEntry;
+import org.goafabric.invoice.persistence.ADTRepository;
 import org.goafabric.invoice.process.adapter.patient.dto.MedicalRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +20,11 @@ public class ConditionConsumer {
     static final String CONSUMER_NAME = "condition";
 
     private final ObjectMapper objectMapper;
+    private final ADTRepository adtRepository;
 
-    public ConditionConsumer(ObjectMapper objectMapper) {
+    public ConditionConsumer(ObjectMapper objectMapper, ADTRepository adtRepository) {
         this.objectMapper = objectMapper;
+        this.adtRepository = adtRepository;
     }
 
     @KafkaListener(groupId = CONSUMER_NAME, topics = "condition")
@@ -29,9 +33,10 @@ public class ConditionConsumer {
     }
 
     private void process(EventData eventData) {
-        MedicalRecord medicalRecord = objectMapper.convertValue(eventData.payload(), MedicalRecord.class);
-        log.info("operation {}, id {}, object {}", eventData.operation(), eventData.referenceId(), medicalRecord.toString());
-        //todo: db insert
+        var condition = objectMapper.convertValue(eventData.payload(), MedicalRecord.class);
+        log.info("operation {}, id {}, object {}", eventData.operation(), eventData.referenceId(), condition.toString());
+        adtRepository.save(new ADTEntry("DG1", condition.id(),
+                "DG1|1|" + "I10|" + condition.code() + "^" + condition.display() + "||20230707|AD"));
     }
 
 }

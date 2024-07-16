@@ -3,8 +3,11 @@ package org.goafabric.invoice.consumer;
 import net.datafaker.Faker;
 import org.goafabric.event.EventData;
 import org.goafabric.invoice.controller.extensions.TenantContext;
+import org.goafabric.invoice.persistence.ADTRepository;
 import org.goafabric.invoice.process.adapter.patient.dto.*;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -19,27 +22,41 @@ import java.util.stream.IntStream;
 
 @SpringBootTest
 @DisabledInAotMode
-class ProducerIT {
+class ProducerNRIT {
     @Autowired
     private KafkaTemplate kafkaTemplate;
 
+    @Autowired
+    private ADTRepository adtRepository;
+
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
     @Test
-    public void produce() {
+    public void produce() throws InterruptedException {
+        log.info("producing data ...");
         createPatients();
         createMedicalRecords();
+
+        log.info("consuming data ...");
+        Thread.sleep(1000);
+
+        log.info("logging adt results");
+        adtRepository.findAll().forEach(entry -> log.info(entry.toString()));
     }
 
     private void createPatients() {
         var faker = new Faker();
-        int size = 10;
-        IntStream.range(0, size).forEach(i -> {
-                    var patient = createPatient(faker.name().firstName(), faker.name().lastName(),
-                            createAddress(faker.simpsons().location()),
-                            createContactPoint("555-520"));
-                    send("patient", i < 10 ? "create" : "delete", patient.id(), patient);
+        int size = 5;
+        List<Patient> patients = IntStream.range(0, size)
+                .mapToObj(i -> createPatient(faker.name().firstName(), faker.name().lastName(),
+                        createAddress(faker.simpsons().location()),
+                        createContactPoint("555-520")))
+                .toList();
 
-                }
-        );
+        patients.forEach(patient -> send("patient", "create", patient.id(), patient));
+        var lastPatient = patients.getLast();
+        send("patient", "update", lastPatient.id(),
+                new Patient(lastPatient.id(), null, "updated", "updated" ,"u", lastPatient.birthDate(), lastPatient.address(), lastPatient.contactPoint()));
     }
     
     private void send(String topic, String operation, String referenceId, Object payload) {

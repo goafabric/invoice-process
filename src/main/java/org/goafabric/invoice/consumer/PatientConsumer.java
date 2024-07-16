@@ -2,6 +2,8 @@ package org.goafabric.invoice.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.goafabric.event.EventData;
+import org.goafabric.invoice.persistence.ADTEntry;
+import org.goafabric.invoice.persistence.ADTRepository;
 import org.goafabric.invoice.process.adapter.patient.dto.Patient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +20,11 @@ public class PatientConsumer {
     static final String CONSUMER_NAME = "patient";
 
     private final ObjectMapper objectMapper;
+    private final ADTRepository adtRepository;
 
-    public PatientConsumer(ObjectMapper objectMapper) {
+    public PatientConsumer(ObjectMapper objectMapper, ADTRepository adtRepository) {
         this.objectMapper = objectMapper;
+        this.adtRepository = adtRepository;
     }
 
     @KafkaListener(groupId = CONSUMER_NAME, topics = "patient")
@@ -31,7 +35,9 @@ public class PatientConsumer {
     private void process(EventData eventData) {
         Patient patient = objectMapper.convertValue(eventData.payload(), Patient.class);
         log.info("operation {}, id {}, object {}", eventData.operation(), eventData.referenceId(), patient.toString());
-        //todo: db insert
+        adtRepository.save(new ADTEntry("PID", patient.id(),
+                "PID|1|" + patient.familyName() + "^" + patient.givenName() + "|"
+                        + patient.address().getFirst().street() + "^" + patient.address().getFirst().city()));
     }
 
 }
