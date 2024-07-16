@@ -1,7 +1,6 @@
 package org.goafabric.invoice.consumer;
 
 import org.goafabric.event.EventData;
-import org.goafabric.invoice.process.adapter.patient.dto.MedicalRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -23,8 +22,8 @@ public class MedicalRecordConsumer {
     }
 
     private void process(EventData eventData) {
-        var medicalRecord = (MedicalRecord) eventData.payload();
-        log.info(medicalRecord.toString());
+        //var medicalRecord = (MedicalRecord) eventData.payload();
+        //log.info(medicalRecord.toString());
         //todo: db insert
     }
 

@@ -56,6 +56,7 @@ dependencies {
 
 	//kafka
 	implementation("org.springframework.kafka:spring-kafka")
+	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
 	//adapter
 	implementation("io.github.resilience4j:resilience4j-spring-boot3")

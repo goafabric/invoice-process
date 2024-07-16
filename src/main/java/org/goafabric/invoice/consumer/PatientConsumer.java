@@ -1,5 +1,7 @@
 package org.goafabric.invoice.consumer;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.goafabric.event.EventData;
 import org.goafabric.invoice.process.adapter.patient.dto.Patient;
 import org.slf4j.Logger;
@@ -19,12 +21,15 @@ public class PatientConsumer {
 
     @KafkaListener(groupId = CONSUMER_NAME, topics = "patient")
     public void process(@Header(KafkaHeaders.RECEIVED_TOPIC) String topic, EventData eventData) {
+        log.info(topic);
         withTenantInfos(() -> process(eventData));
     }
 
     private void process(EventData eventData) {
-        var patient = (Patient) eventData.payload();
-        log.info(eventData.toString());
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        Patient patient = objectMapper.convertValue(eventData.payload(), Patient.class);
+        log.info(patient.toString());
         //todo: db insert
     }
 

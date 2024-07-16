@@ -19,7 +19,7 @@ import java.util.stream.IntStream;
 
 @SpringBootTest
 @DisabledInAotMode
-class ProducerIT {
+class ProducerNRIT {
     @Autowired
     private KafkaTemplate kafkaTemplate;
 
@@ -41,7 +41,7 @@ class ProducerIT {
         );
     }
     private void send(String topic, String operation, String referenceId, Object payload) {
-        kafkaTemplate.send(topic, referenceId, new EventData(TenantContext.getAdapterHeaderMap(), referenceId, operation, null));
+        kafkaTemplate.send(topic, referenceId, new EventData(TenantContext.getAdapterHeaderMap(), referenceId, operation, payload));
     }
 
 
