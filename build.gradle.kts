@@ -66,6 +66,7 @@ dependencies {
 
 	//test
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("net.datafaker:datafaker:1.8.1") { exclude("org.yaml", "snakeyaml") }
 }
 
 tasks.withType<Test> {
