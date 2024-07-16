@@ -30,7 +30,7 @@ public class MedicalRecordConsumer {
 
     private void process(EventData eventData) {
         MedicalRecord medicalRecord = objectMapper.convertValue(eventData.payload(), MedicalRecord.class);
-        log.info(medicalRecord.toString());
+        log.info("operation {}, id {}, object {}", eventData.operation(), eventData.referenceId(), medicalRecord.toString());
         //todo: db insert
     }
 

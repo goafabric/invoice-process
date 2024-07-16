@@ -31,7 +31,7 @@ public class PatientConsumer {
 
     private void process(EventData eventData) {
         Patient patient = objectMapper.convertValue(eventData.payload(), Patient.class);
-        log.info(patient.toString());
+        log.info("operation {}, id {}, object {}", eventData.operation(), eventData.referenceId(), patient.toString());
         //todo: db insert
     }
 
