@@ -35,7 +35,7 @@ public class ConditionConsumer {
     private void process(EventData eventData) {
         var condition = objectMapper.convertValue(eventData.payload(), MedicalRecord.class);
         log.info("operation {}, id {}, object {}", eventData.operation(), eventData.referenceId(), condition.toString());
-        adtRepository.save(new ADTEntry("DG1", condition.id(),
+        adtRepository.save(new ADTEntry("condition", condition.id(),
                 "DG1|1|" + "I10|" + condition.code() + "^" + condition.display() + "||20230707|AD"));
     }
 

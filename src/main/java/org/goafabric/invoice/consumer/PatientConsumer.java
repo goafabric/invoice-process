@@ -35,7 +35,7 @@ public class PatientConsumer {
     private void process(EventData eventData) {
         Patient patient = objectMapper.convertValue(eventData.payload(), Patient.class);
         log.info("operation {}, id {}, object {}", eventData.operation(), eventData.referenceId(), patient.toString());
-        adtRepository.save(new ADTEntry("PID", patient.id(),
+        adtRepository.save(new ADTEntry("patient", patient.id(),
                 "PID|1|" + patient.familyName() + "^" + patient.givenName() + "|"
                         + patient.address().getFirst().street() + "^" + patient.address().getFirst().city()));
     }

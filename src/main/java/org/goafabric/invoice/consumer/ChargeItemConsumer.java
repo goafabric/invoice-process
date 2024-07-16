@@ -2,6 +2,8 @@ package org.goafabric.invoice.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.goafabric.event.EventData;
+import org.goafabric.invoice.persistence.ADTEntry;
+import org.goafabric.invoice.persistence.ADTRepository;
 import org.goafabric.invoice.process.adapter.patient.dto.MedicalRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +20,11 @@ public class ChargeItemConsumer {
     static final String CONSUMER_NAME = "chargeitem";
 
     private final ObjectMapper objectMapper;
+    private final ADTRepository adtRepository;
 
-    public ChargeItemConsumer(ObjectMapper objectMapper) {
+    public ChargeItemConsumer(ObjectMapper objectMapper, ADTRepository adtRepository) {
         this.objectMapper = objectMapper;
+        this.adtRepository = adtRepository;
     }
 
     @KafkaListener(groupId = CONSUMER_NAME, topics = "chargeitem")
@@ -29,9 +33,11 @@ public class ChargeItemConsumer {
     }
 
     private void process(EventData eventData) {
-        MedicalRecord medicalRecord = objectMapper.convertValue(eventData.payload(), MedicalRecord.class);
-        log.info("operation {}, id {}, object {}", eventData.operation(), eventData.referenceId(), medicalRecord.toString());
-        //todo: db insert
+        var chargeItem = objectMapper.convertValue(eventData.payload(), MedicalRecord.class);
+        log.info("operation {}, id {}, object {}", eventData.operation(), eventData.referenceId(), chargeItem.toString());
+        adtRepository.save(new ADTEntry("chargeitem", chargeItem.id(),
+                "FT1|1|" + "I10|" + chargeItem.code() + "^" + chargeItem.display()));
     }
+
 
 }
