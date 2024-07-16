@@ -24,7 +24,7 @@ public class PatientConsumer {
 
     private void process(EventData eventData) {
         var patient = (Patient) eventData.payload();
-        log.info(patient.toString());
+        log.info(eventData.toString());
         //todo: db insert
     }
 

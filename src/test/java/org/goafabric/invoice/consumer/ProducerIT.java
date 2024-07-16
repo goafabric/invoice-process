@@ -6,11 +6,9 @@ import org.goafabric.invoice.controller.extensions.TenantContext;
 import org.goafabric.invoice.process.adapter.patient.dto.Address;
 import org.goafabric.invoice.process.adapter.patient.dto.ContactPoint;
 import org.goafabric.invoice.process.adapter.patient.dto.Patient;
-import org.goafabric.invoice.process.adapter.s3.S3Adapter;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.test.context.aot.DisabledInAotMode;
 
@@ -25,8 +23,6 @@ class ProducerIT {
     @Autowired
     private KafkaTemplate kafkaTemplate;
 
-    @MockBean
-    private S3Adapter s3Adapter;
 
     @Test
     public void produce() {
@@ -45,7 +41,7 @@ class ProducerIT {
         );
     }
     private void send(String topic, String operation, String referenceId, Object payload) {
-        kafkaTemplate.send(topic, referenceId, new EventData(TenantContext.getAdapterHeaderMap(), referenceId, operation, payload));
+        kafkaTemplate.send(topic, referenceId, new EventData(TenantContext.getAdapterHeaderMap(), referenceId, operation, null));
     }
 
 
