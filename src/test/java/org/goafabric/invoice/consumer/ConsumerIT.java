@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.goafabric.invoice.util.TestDataCreator.createChargeItems;
+import static org.goafabric.invoice.util.TestDataCreator.createConditions;
 
 @SpringBootTest
 @EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:9092", "port=9092" })
@@ -40,8 +42,8 @@ class ConsumerIT {
         log.info("producing data ...");
 
         createPatients();
-        TestDataCreator.createConditions().forEach(medicalRecord -> send("condition", "create", medicalRecord.id(), medicalRecord));
-        TestDataCreator.createChargeItems().forEach(medicalRecord -> send("chargeitem", "create", medicalRecord.id(), medicalRecord));
+        createConditions().forEach(medicalRecord -> send("condition", "create", medicalRecord.id(), medicalRecord));
+        createChargeItems().forEach(medicalRecord -> send("chargeitem", "create", medicalRecord.id(), medicalRecord));
 
         log.info("consuming data ...");
 
@@ -54,15 +56,16 @@ class ConsumerIT {
         adtRepository.findAll().forEach(entry -> log.info(entry.toString()));
     }
 
-    private void send(String topic, String operation, String referenceId, Object payload) {
-        kafkaTemplate.send(topic, referenceId, new EventData(TenantContext.getAdapterHeaderMap(), referenceId, operation, payload));
-    }
-
-    private void createPatients() {
+    private List<Patient> createPatients() {
         var patients = TestDataCreator.createPatients();
         patients.forEach(patient -> send("patient", "create", patient.id(), patient));
         var lastPatient = patients.getLast();
         send("patient", "update", lastPatient.id(), new Patient(lastPatient.id(), null, "updated", "updated" ,"u", lastPatient.birthDate(), lastPatient.address(), lastPatient.contactPoint()));
+        return patients;
+    }
+
+    private void send(String topic, String operation, String referenceId, Object payload) {
+        kafkaTemplate.send(topic, referenceId, new EventData(TenantContext.getAdapterHeaderMap(), referenceId, operation, payload));
     }
 
 }

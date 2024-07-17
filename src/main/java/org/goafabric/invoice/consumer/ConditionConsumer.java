@@ -2,7 +2,7 @@ package org.goafabric.invoice.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.goafabric.event.EventData;
-import org.goafabric.invoice.persistence.ADTEntry;
+import org.goafabric.invoice.persistence.ADTCreator;
 import org.goafabric.invoice.persistence.ADTRepository;
 import org.goafabric.invoice.process.adapter.patient.dto.MedicalRecord;
 import org.slf4j.Logger;
@@ -38,8 +38,7 @@ public class ConditionConsumer implements LatchConsumer {
     private void process(EventData eventData) {
         var condition = objectMapper.convertValue(eventData.payload(), MedicalRecord.class);
         log.info("operation {}, id {}, object {}", eventData.operation(), eventData.referenceId(), condition.toString());
-        adtRepository.save(new ADTEntry("condition", condition.id(),
-                "DG1|1|" + "I10|" + condition.code() + "^" + condition.display() + "||20230707|AD"));
+        adtRepository.save(ADTCreator.createCondition(condition));
         latch.countDown();
     }
 

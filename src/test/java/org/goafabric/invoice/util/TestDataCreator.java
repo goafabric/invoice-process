@@ -1,6 +1,5 @@
 package org.goafabric.invoice.util;
 
-import net.datafaker.Faker;
 import org.goafabric.invoice.controller.extensions.TenantContext;
 import org.goafabric.invoice.process.adapter.patient.dto.*;
 
@@ -9,19 +8,20 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.IntStream;
 
 public class TestDataCreator {
 
     public static List<Patient> createPatients() {
-        var faker = new Faker();
-        int size = 5;
-        List<Patient> patients = IntStream.range(0, size)
-                .mapToObj(i -> createPatient(faker.name().firstName(), faker.name().lastName(),
-                        createAddress(faker.simpsons().location()),
-                        createContactPoint("555-520")))
-                .toList();
-        return patients;
+
+        return Arrays.asList(
+            createPatient("Homer", "Simpson",
+                    createAddress("Evergreen Terrace 702"), createContactPoint("555-520")),
+            createPatient("Bart", "Simpson",
+                    createAddress("Evergreen Terrace 703"), createContactPoint("555-521")),
+            createPatient("Monty", "Burns",
+                    createAddress("Evergreen Terrace 703"), createContactPoint("555-720"))
+        );
+
     }
 
 

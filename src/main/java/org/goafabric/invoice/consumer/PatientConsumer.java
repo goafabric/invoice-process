@@ -2,7 +2,7 @@ package org.goafabric.invoice.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.goafabric.event.EventData;
-import org.goafabric.invoice.persistence.ADTEntry;
+import org.goafabric.invoice.persistence.ADTCreator;
 import org.goafabric.invoice.persistence.ADTRepository;
 import org.goafabric.invoice.process.adapter.patient.dto.Patient;
 import org.slf4j.Logger;
@@ -39,9 +39,7 @@ public class PatientConsumer implements LatchConsumer {
     private void process(EventData eventData) {
         Patient patient = objectMapper.convertValue(eventData.payload(), Patient.class);
         log.info("operation {}, id {}, object {}", eventData.operation(), eventData.referenceId(), patient.toString());
-        adtRepository.save(new ADTEntry("patient", patient.id(),
-                "PID|1|" + patient.familyName() + "^" + patient.givenName() + "|"
-                        + patient.address().getFirst().street() + "^" + patient.address().getFirst().city()));
+        adtRepository.save(ADTCreator.createPatient(patient));
         latch.countDown();
     }
 
