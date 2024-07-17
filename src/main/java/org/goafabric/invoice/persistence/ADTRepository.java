@@ -10,17 +10,12 @@ import java.util.List;
 public class ADTRepository {
     private List<ADTEntry> adtEntries = new ArrayList<>();
 
-    public List<ADTEntry> findAll() {
-        return Collections.unmodifiableList(adtEntries);
-    }
+    public List<ADTEntry> findAll() { return Collections.unmodifiableList(adtEntries); }
 
     public void save(ADTEntry entry) {
         if (adtEntries.stream().anyMatch(e -> e.entryId().equals(entry.entryId()))) { delete(entry); } //update
         adtEntries.add(entry);
     }
 
-    public void delete(ADTEntry entry) {
-        adtEntries.remove(entry);
-    }
-
+    public void delete(ADTEntry entry) { adtEntries.remove(entry); }
 }
