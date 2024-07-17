@@ -21,7 +21,7 @@ public class ADTCreator {
 
     public static ADTEntry createChargeItem(MedicalRecord chargeItem) {
         return new ADTEntry("chargeitem", chargeItem.id(),
-                "FT1|1|" + "I10|" + chargeItem.code() + "^" + chargeItem.display());
+                "FT1|1|" + chargeItem.code() + "^" + chargeItem.display());
     }
 }
 
