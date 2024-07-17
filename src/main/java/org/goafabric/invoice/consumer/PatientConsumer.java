@@ -18,7 +18,7 @@ import static org.goafabric.invoice.consumer.config.ConsumerUtil.withTenantInfos
 
 @Component
 public class PatientConsumer implements LatchConsumer {
-    static final String CONSUMER_NAME = "patient";
+    static final String CONSUMER_NAME = "invoice-patient";
     private final CountDownLatch latch = new CountDownLatch(1);
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 

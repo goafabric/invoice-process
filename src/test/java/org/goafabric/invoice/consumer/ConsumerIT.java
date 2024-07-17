@@ -107,7 +107,6 @@ class ConsumerIT {
 
         send("chargeitem", "update", chargeitems.getLast().id(), chargeitems.getLast());
         send("chargeitem", "delete", chargeitems.getLast().id(), chargeitems.getLast());
-
     }
 
 }

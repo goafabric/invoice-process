@@ -1,4 +1,6 @@
 # Todo
-- fluent api
-- web socket notification
-- authorization implementation + aspect
+- fluent api, web socket notification
+
+- Testdata Creator
+- ADT Creator
+- Episode und Patient Repository
