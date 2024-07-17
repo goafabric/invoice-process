@@ -67,6 +67,7 @@ dependencies {
 
 	//test
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.kafka:spring-kafka-test")
 	testImplementation("net.datafaker:datafaker:1.8.1") { exclude("org.yaml", "snakeyaml") }
 }
 

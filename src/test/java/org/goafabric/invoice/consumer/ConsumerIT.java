@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.test.context.aot.DisabledInAotMode;
+import org.springframework.kafka.test.context.EmbeddedKafka;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -24,8 +24,8 @@ import java.util.stream.IntStream;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@DisabledInAotMode
-class ProducerIT {
+@EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:9092", "port=9092" })
+class ConsumerIT {
     @Autowired
     private KafkaTemplate kafkaTemplate;
 
@@ -54,6 +54,10 @@ class ProducerIT {
         adtRepository.findAll().forEach(entry -> log.info(entry.toString()));
     }
 
+    private void send(String topic, String operation, String referenceId, Object payload) {
+        kafkaTemplate.send(topic, referenceId, new EventData(TenantContext.getAdapterHeaderMap(), referenceId, operation, payload));
+    }
+
     private void createPatients() {
         var faker = new Faker();
         int size = 5;
@@ -69,10 +73,7 @@ class ProducerIT {
                 new Patient(lastPatient.id(), null, "updated", "updated" ,"u", lastPatient.birthDate(), lastPatient.address(), lastPatient.contactPoint()));
     }
     
-    private void send(String topic, String operation, String referenceId, Object payload) {
-        kafkaTemplate.send(topic, referenceId, new EventData(TenantContext.getAdapterHeaderMap(), referenceId, operation, payload));
-    }
-    
+
     public static Patient createPatient(String givenName, String familyName, List<Address> addresses, List<ContactPoint> contactPoints) {
         return new Patient(UUID.randomUUID().toString(), 0L, givenName, familyName, "male", LocalDate.of(2020, 1, 8),
                 addresses, contactPoints
