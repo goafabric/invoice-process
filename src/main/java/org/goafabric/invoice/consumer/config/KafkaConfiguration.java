@@ -16,6 +16,7 @@ public class KafkaConfiguration {
         return objectMapper;
     }
 
+    //creating topics should be done on producer side, also we are just using defaults here for partition and replica
     @Bean
     public NewTopic patient() {
         return TopicBuilder.name("patient").build();
