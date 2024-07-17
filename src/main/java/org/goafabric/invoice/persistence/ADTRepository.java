@@ -15,10 +15,7 @@ public class ADTRepository {
     }
 
     public void save(ADTEntry entry) {
-        var foundEntry = adtEntries.stream().filter(e -> e.entryId().equals(entry.entryId())).findFirst();
-        if (foundEntry.isPresent()) {
-            delete(entry);
-        }
+        if (adtEntries.stream().anyMatch(e -> e.entryId().equals(entry.entryId()))) { delete(entry); } //update
         adtEntries.add(entry);
     }
 
