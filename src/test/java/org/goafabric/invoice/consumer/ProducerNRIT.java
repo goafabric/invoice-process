@@ -18,16 +18,22 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @DisabledInAotMode
-class ProducerNRIT {
+class ProducerIT {
     @Autowired
     private KafkaTemplate kafkaTemplate;
 
     @Autowired
     private ADTRepository adtRepository;
+
+    @Autowired
+    private List<LatchConsumer> consumers;
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -38,7 +44,11 @@ class ProducerNRIT {
         createMedicalRecords();
 
         log.info("consuming data ...");
-        Thread.sleep(1000);
+
+        consumers.forEach(consumer -> {
+            try { assertThat(consumer.getLatch().await(10, TimeUnit.SECONDS)).isTrue();
+            } catch (InterruptedException e) { throw new RuntimeException(e);}
+        });
 
         log.info("logging adt results");
         adtRepository.findAll().forEach(entry -> log.info(entry.toString()));

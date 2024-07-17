@@ -12,12 +12,15 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.CountDownLatch;
+
 import static org.goafabric.invoice.consumer.config.ConsumerUtil.withTenantInfos;
 
 @Component
-public class ChargeItemConsumer {
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
+public class ChargeItemConsumer implements LatchConsumer {
     static final String CONSUMER_NAME = "chargeitem";
+    private final CountDownLatch latch = new CountDownLatch(1);
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final ObjectMapper objectMapper;
     private final ADTRepository adtRepository;
@@ -37,7 +40,8 @@ public class ChargeItemConsumer {
         log.info("operation {}, id {}, object {}", eventData.operation(), eventData.referenceId(), chargeItem.toString());
         adtRepository.save(new ADTEntry("chargeitem", chargeItem.id(),
                 "FT1|1|" + "I10|" + chargeItem.code() + "^" + chargeItem.display()));
+        latch.countDown();
     }
 
-
+    public CountDownLatch getLatch() { return latch; }
 }

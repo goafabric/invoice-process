@@ -12,12 +12,16 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.CountDownLatch;
+
 import static org.goafabric.invoice.consumer.config.ConsumerUtil.withTenantInfos;
 
 @Component
-public class PatientConsumer {
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
+public class PatientConsumer implements LatchConsumer {
     static final String CONSUMER_NAME = "patient";
+    private final CountDownLatch latch = new CountDownLatch(1);
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
+
 
     private final ObjectMapper objectMapper;
     private final ADTRepository adtRepository;
@@ -38,6 +42,9 @@ public class PatientConsumer {
         adtRepository.save(new ADTEntry("patient", patient.id(),
                 "PID|1|" + patient.familyName() + "^" + patient.givenName() + "|"
                         + patient.address().getFirst().street() + "^" + patient.address().getFirst().city()));
+        latch.countDown();
     }
+
+    public CountDownLatch getLatch() { return latch; }
 
 }

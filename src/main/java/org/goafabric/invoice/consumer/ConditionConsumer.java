@@ -12,12 +12,15 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.CountDownLatch;
+
 import static org.goafabric.invoice.consumer.config.ConsumerUtil.withTenantInfos;
 
 @Component
-public class ConditionConsumer {
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
+public class ConditionConsumer implements LatchConsumer {
     static final String CONSUMER_NAME = "condition";
+    private final CountDownLatch latch = new CountDownLatch(1);
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final ObjectMapper objectMapper;
     private final ADTRepository adtRepository;
@@ -37,6 +40,8 @@ public class ConditionConsumer {
         log.info("operation {}, id {}, object {}", eventData.operation(), eventData.referenceId(), condition.toString());
         adtRepository.save(new ADTEntry("condition", condition.id(),
                 "DG1|1|" + "I10|" + condition.code() + "^" + condition.display() + "||20230707|AD"));
+        latch.countDown();
     }
 
+    public CountDownLatch getLatch() { return latch; }
 }
