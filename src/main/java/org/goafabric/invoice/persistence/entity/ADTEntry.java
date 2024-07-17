@@ -1,4 +1,4 @@
-package org.goafabric.invoice.persistence;
+package org.goafabric.invoice.persistence.entity;
 
 import java.util.UUID;
 

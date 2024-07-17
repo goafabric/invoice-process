@@ -1,5 +1,6 @@
 package org.goafabric.invoice.persistence;
 
+import org.goafabric.invoice.persistence.entity.ADTEntry;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

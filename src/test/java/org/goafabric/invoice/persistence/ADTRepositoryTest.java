@@ -1,10 +1,10 @@
 package org.goafabric.invoice.persistence;
 
+import org.goafabric.invoice.persistence.entity.ADTEntry;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class ADTRepositoryTest {
     @Autowired

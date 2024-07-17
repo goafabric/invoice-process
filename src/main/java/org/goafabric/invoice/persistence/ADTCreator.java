@@ -1,5 +1,6 @@
 package org.goafabric.invoice.persistence;
 
+import org.goafabric.invoice.persistence.entity.ADTEntry;
 import org.goafabric.invoice.process.adapter.patient.dto.MedicalRecord;
 import org.goafabric.invoice.process.adapter.patient.dto.Patient;
 
