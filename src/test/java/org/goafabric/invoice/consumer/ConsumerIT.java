@@ -1,6 +1,7 @@
 package org.goafabric.invoice.consumer;
 
 import org.goafabric.event.EventData;
+import org.goafabric.invoice.consumer.config.LatchConsumer;
 import org.goafabric.invoice.controller.extensions.TenantContext;
 import org.goafabric.invoice.persistence.ADTCreator;
 import org.goafabric.invoice.persistence.EpisodeDetailsRepository;

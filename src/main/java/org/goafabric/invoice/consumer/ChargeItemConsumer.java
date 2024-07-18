@@ -2,6 +2,7 @@ package org.goafabric.invoice.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.goafabric.event.EventData;
+import org.goafabric.invoice.consumer.config.LatchConsumer;
 import org.goafabric.invoice.persistence.EpisodeDetailsRepository;
 import org.goafabric.invoice.persistence.entity.EpisodeDetails;
 import org.goafabric.invoice.process.adapter.patient.dto.MedicalRecord;

@@ -18,14 +18,12 @@ public class ProcessController {
     }
 
     @GetMapping("start")
-    //@RolesAllowed("INVOICE")
     public String start() {
         invoiceProcess.run();
         return "launched";
     }
 
     @GetMapping("loop")
-    //@RolesAllowed("INVOICE")
     public String loop() {
         IntStream.range(0, 10).forEach(i -> {
             try { invoiceProcess.run().get(); } catch (Exception e) { throw new RuntimeException(e);}
