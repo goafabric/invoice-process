@@ -1,6 +1,5 @@
 package org.goafabric.invoice.process.adapter.invoice;
 
-import org.goafabric.invoice.process.adapter.invoice.dto.Invoice;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.Cacheable;

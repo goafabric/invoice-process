@@ -1,6 +1,6 @@
-package org.goafabric.invoice.process.adapter.catalog.dto;
+package org.goafabric.invoice.process.adapter.catalog;
 
-public record ConditionEo (
+public record Condition (
     String id,
     Long version,
     String code,

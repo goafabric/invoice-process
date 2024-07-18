@@ -1,7 +1,7 @@
 package org.goafabric.invoice.process.steps;
 
 import org.goafabric.invoice.process.adapter.invoice.InvoiceMockAdapter;
-import org.goafabric.invoice.process.adapter.invoice.dto.Invoice;
+import org.goafabric.invoice.process.adapter.invoice.Invoice;
 import org.goafabric.invoice.process.adapter.s3.S3Adapter;
 import org.goafabric.invoice.process.adapter.s3.dto.ObjectEntry;
 import org.slf4j.Logger;
