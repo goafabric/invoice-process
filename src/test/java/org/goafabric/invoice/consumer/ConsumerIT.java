@@ -4,6 +4,7 @@ import org.goafabric.event.EventData;
 import org.goafabric.invoice.controller.extensions.TenantContext;
 import org.goafabric.invoice.persistence.ADTCreator;
 import org.goafabric.invoice.persistence.EpisodeDetailsRepository;
+import org.goafabric.invoice.persistence.EpisodeRepository;
 import org.goafabric.invoice.process.adapter.patient.dto.Patient;
 import org.goafabric.invoice.util.TestDataCreator;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,9 @@ class ConsumerIT {
     private KafkaTemplate kafkaTemplate;
 
     @Autowired
+    private EpisodeRepository episodeRepository;
+
+    @Autowired
     private EpisodeDetailsRepository episodeDetailsRepository;
 
     @Autowired
@@ -42,7 +46,7 @@ class ConsumerIT {
     public void produce() throws InterruptedException {
         log.info("producing data ...");
 
-        createPatients();
+        createPatientsAndEpisodes();
         createConditions().forEach(medicalRecord -> send("condition", "create", medicalRecord.id(), medicalRecord));
         createChargeItems().forEach(medicalRecord -> send("chargeitem", "create", medicalRecord.id(), medicalRecord));
 
@@ -53,15 +57,20 @@ class ConsumerIT {
             } catch (InterruptedException e) { throw new RuntimeException(e);}
         });
 
+        String episodeId = "1";
+
         log.info("logging episode details");
-        episodeDetailsRepository.findAll().forEach(entry -> log.info(entry.toString()));
+        episodeDetailsRepository.findAll(episodeId).forEach(entry -> log.info(entry.toString()));
 
         log.info("logging adt");
-        episodeDetailsRepository.findAll().forEach(entry -> log.info(ADTCreator.fromEpisodeDetails(entry)));
+        episodeDetailsRepository.findAll(episodeId).forEach(entry -> log.info(ADTCreator.fromEpisodeDetails(entry)));
     }
 
-    private List<Patient> createPatients() {
+    private List<Patient> createPatientsAndEpisodes() {
         var patients = TestDataCreator.createPatients();
+
+        //patients.forEach(patient -> episodeRepository.save(new Episode(patient.id(), 2024, 2)));
+
         patients.forEach(patient -> send("patient", "create", patient.id(), patient));
         var lastPatient = patients.getLast();
         send("patient", "update", lastPatient.id(), new Patient(lastPatient.id(), null, "updated", "updated" ,"u", lastPatient.birthDate(), lastPatient.address(), lastPatient.contactPoint()));
