@@ -1,27 +1,38 @@
 package org.goafabric.invoice.persistence;
 
-import org.goafabric.invoice.persistence.entity.ADTEntry;
-import org.goafabric.invoice.process.adapter.patient.dto.MedicalRecord;
-import org.goafabric.invoice.process.adapter.patient.dto.Patient;
+import org.goafabric.invoice.persistence.entity.EpisodeDetails;
 
 public class ADTCreator {
     private ADTCreator() {
     }
 
-    public static ADTEntry createPatient(Patient patient) {
-        return new ADTEntry("patient", patient.id(),
-                "PID|1|" + patient.familyName() + "^" + patient.givenName() + "|"
-                        + patient.address().getFirst().street() + "^" + patient.address().getFirst().city());
+    public static String createCondition(String code, String display) {
+        return "DG1|1|" + "I10|" + code + "^" + display;
     }
 
-    public static ADTEntry createCondition(MedicalRecord condition) {
-        return new ADTEntry("condition", condition.id(),
-                "DG1|1|" + "I10|" + condition.code() + "^" + condition.display() + "||20230707|AD");
+    public static String createChargeItem(String code, String display) {
+        return "FT1|1|" + code + "^" + display;
     }
 
-    public static ADTEntry createChargeItem(MedicalRecord chargeItem) {
-        return new ADTEntry("chargeitem", chargeItem.id(),
-                "FT1|1|" + chargeItem.code() + "^" + chargeItem.display());
+    public static String createPatient(String familyName, String givenName, String city, String street) {
+        return "PID|1|" + familyName + "^" + givenName + "|" + city + "^" + street;
+    }
+
+    public static String fromEpisodeDetails(EpisodeDetails episodeDetails) {
+        switch (episodeDetails.type()) {
+            case "condition" -> {
+                return createCondition(episodeDetails.code(), episodeDetails.display());
+            }
+            case "chargeitem" -> {
+                return createChargeItem(episodeDetails.code(), episodeDetails.display());
+            }
+            case "patient" -> {
+                return createPatient(episodeDetails.patientName().split(" ")[0], episodeDetails.patientName().split(" ")[1], episodeDetails.city(), episodeDetails.street());
+            }
+            default -> {
+                return null;
+            }
+        }
     }
 }
 

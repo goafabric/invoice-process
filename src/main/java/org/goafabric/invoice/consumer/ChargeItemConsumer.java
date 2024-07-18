@@ -2,8 +2,8 @@ package org.goafabric.invoice.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.goafabric.event.EventData;
-import org.goafabric.invoice.persistence.ADTCreator;
-import org.goafabric.invoice.persistence.ADTRepository;
+import org.goafabric.invoice.persistence.EpisodeDetailsRepository;
+import org.goafabric.invoice.persistence.entity.EpisodeDetails;
 import org.goafabric.invoice.process.adapter.patient.dto.MedicalRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +12,7 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 
 import static org.goafabric.invoice.consumer.config.ConsumerUtil.withTenantInfos;
@@ -23,11 +24,11 @@ public class ChargeItemConsumer implements LatchConsumer {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final ObjectMapper objectMapper;
-    private final ADTRepository adtRepository;
+    private final EpisodeDetailsRepository episodeDetailsRepository;
 
-    public ChargeItemConsumer(ObjectMapper objectMapper, ADTRepository adtRepository) {
+    public ChargeItemConsumer(ObjectMapper objectMapper, EpisodeDetailsRepository episodeDetailsRepository) {
         this.objectMapper = objectMapper;
-        this.adtRepository = adtRepository;
+        this.episodeDetailsRepository = episodeDetailsRepository;
     }
 
     @KafkaListener(groupId = CONSUMER_NAME, topics = "chargeitem")
@@ -38,7 +39,10 @@ public class ChargeItemConsumer implements LatchConsumer {
     private void process(EventData eventData) {
         var chargeItem = objectMapper.convertValue(eventData.payload(), MedicalRecord.class);
         log.info("operation {}, id {}, object {}", eventData.operation(), eventData.referenceId(), chargeItem.toString());
-        adtRepository.save(ADTCreator.createChargeItem(chargeItem));
+        String episodeId = "1";
+        episodeDetailsRepository.save(
+                new EpisodeDetails(UUID.randomUUID().toString(), episodeId, chargeItem.id(), "chargeitem", chargeItem.code(), chargeItem.display(), null, null, null)
+        );
         latch.countDown();
     }
 

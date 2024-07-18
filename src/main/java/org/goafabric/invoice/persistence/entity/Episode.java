@@ -4,6 +4,5 @@ public record Episode (
     String id,
     String patientId,
     Integer creationYear,
-    Integer creationQuarter,
-    String[] diagnoses
+    Integer creationQuarter
 ) {}

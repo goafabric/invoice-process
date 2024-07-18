@@ -2,7 +2,8 @@ package org.goafabric.invoice.consumer;
 
 import org.goafabric.event.EventData;
 import org.goafabric.invoice.controller.extensions.TenantContext;
-import org.goafabric.invoice.persistence.ADTRepository;
+import org.goafabric.invoice.persistence.ADTCreator;
+import org.goafabric.invoice.persistence.EpisodeDetailsRepository;
 import org.goafabric.invoice.process.adapter.patient.dto.Patient;
 import org.goafabric.invoice.util.TestDataCreator;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,7 @@ class ConsumerIT {
     private KafkaTemplate kafkaTemplate;
 
     @Autowired
-    private ADTRepository adtRepository;
+    private EpisodeDetailsRepository episodeDetailsRepository;
 
     @Autowired
     private List<LatchConsumer> consumers;
@@ -52,8 +53,11 @@ class ConsumerIT {
             } catch (InterruptedException e) { throw new RuntimeException(e);}
         });
 
-        log.info("logging adt results");
-        adtRepository.findAll().forEach(entry -> log.info(entry.toString()));
+        log.info("logging episode details");
+        episodeDetailsRepository.findAll().forEach(entry -> log.info(entry.toString()));
+
+        log.info("logging adt");
+        episodeDetailsRepository.findAll().forEach(entry -> log.info(ADTCreator.fromEpisodeDetails(entry)));
     }
 
     private List<Patient> createPatients() {
