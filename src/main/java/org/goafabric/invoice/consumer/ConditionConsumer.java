@@ -41,7 +41,7 @@ public class ConditionConsumer implements LatchConsumer {
         log.info("operation {}, id {}, object {}", eventData.operation(), eventData.referenceId(), condition.toString());
         String episodeId = "1";
         episodeDetailsRepository.save(
-                new EpisodeDetails(UUID.randomUUID().toString(), episodeId, condition.id(), "condition", condition.code(), condition.display(), null, null, null)
+                new EpisodeDetails(UUID.randomUUID().toString(), episodeId, condition.id(), "condition", condition.code(), condition.display(), null, null, null, null)
         );
 
         latch.countDown();

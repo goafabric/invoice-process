@@ -43,7 +43,7 @@ public class PatientConsumer implements LatchConsumer {
 
         String episodeId = "1";
         episodeDetailsRepository.save(
-                new EpisodeDetails(UUID.randomUUID().toString(), episodeId, patient.id(), "patient", null, null, patient.familyName() + " " + patient.givenName(), patient.address().getFirst().city(), patient.address().getFirst().street())
+                new EpisodeDetails(UUID.randomUUID().toString(), episodeId, patient.id(), "patient", null, null, patient.familyName(), patient.givenName(), patient.address().getFirst().city(), patient.address().getFirst().street())
         );
 
         latch.countDown();

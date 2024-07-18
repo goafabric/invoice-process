@@ -7,7 +7,10 @@ public record EpisodeDetails(
         String type,
         String code,
         String display,
-        String patientName,
-        String city,
-        String street
+
+        //patient could also be stored in seperate table if episode:patient is 1:1
+        String patientFamily,
+        String patientGiven,
+        String patientCity,
+        String patientStreet
 ) {}

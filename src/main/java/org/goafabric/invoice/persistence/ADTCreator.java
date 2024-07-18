@@ -27,7 +27,7 @@ public class ADTCreator {
                 return createChargeItem(episodeDetails.code(), episodeDetails.display());
             }
             case "patient" -> {
-                return createPatient(episodeDetails.patientName().split(" ")[0], episodeDetails.patientName().split(" ")[1], episodeDetails.city(), episodeDetails.street());
+                return createPatient(episodeDetails.patientFamily(), episodeDetails.patientGiven(), episodeDetails.patientCity(), episodeDetails.patientStreet());
             }
             default -> {
                 return null;

@@ -41,7 +41,7 @@ public class ChargeItemConsumer implements LatchConsumer {
         log.info("operation {}, id {}, object {}", eventData.operation(), eventData.referenceId(), chargeItem.toString());
         String episodeId = "1";
         episodeDetailsRepository.save(
-                new EpisodeDetails(UUID.randomUUID().toString(), episodeId, chargeItem.id(), "chargeitem", chargeItem.code(), chargeItem.display(), null, null, null)
+                new EpisodeDetails(UUID.randomUUID().toString(), episodeId, chargeItem.id(), "chargeitem", chargeItem.code(), chargeItem.display(), null, null,  null, null)
         );
         latch.countDown();
     }
