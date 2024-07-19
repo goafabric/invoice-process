@@ -1,7 +1,7 @@
 package org.goafabric.invoice.process;
 
 import jakarta.annotation.PreDestroy;
-import org.goafabric.invoice.process.adapter.authorization.dto.Lock;
+import org.goafabric.invoice.process.adapter.authorization.Lock;
 import org.goafabric.invoice.process.steps.AuthorizationStep;
 import org.goafabric.invoice.process.steps.InvoiceStep;
 import org.goafabric.invoice.process.steps.PatientStep;

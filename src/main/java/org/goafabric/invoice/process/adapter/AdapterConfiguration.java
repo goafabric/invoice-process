@@ -1,12 +1,10 @@
 package org.goafabric.invoice.process.adapter;
 
+import org.goafabric.invoice.controller.extensions.TenantContext;
 import org.goafabric.invoice.process.adapter.authorization.LockAdapter;
-import org.goafabric.invoice.process.adapter.authorization.PermissionAdapter;
-import org.goafabric.invoice.process.adapter.catalog.ChargeItemAdapter;
 import org.goafabric.invoice.process.adapter.catalog.ConditionAdapter;
 import org.goafabric.invoice.process.adapter.patient.EncounterAdapter;
 import org.goafabric.invoice.process.adapter.patient.PatientAdapter;
-import org.goafabric.invoice.controller.extensions.TenantContext;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,11 +25,6 @@ public class AdapterConfiguration {
     }
 
     @Bean
-    public PermissionAdapter userAdapter(RestClient.Builder builder, @Value("${adapter.coreservice.url}") String url) {
-        return createAdapter(PermissionAdapter.class, builder, url, timeout);
-    }
-
-    @Bean
     public PatientAdapter patientAdapter(RestClient.Builder builder, @Value("${adapter.coreservice.url}") String url) {
         return createAdapter(PatientAdapter.class, builder, url, timeout);
     }
@@ -39,11 +32,6 @@ public class AdapterConfiguration {
     @Bean
     public EncounterAdapter encounterAdapter(RestClient.Builder builder, @Value("${adapter.coreservice.url}") String url) {
         return createAdapter(EncounterAdapter.class, builder, url, timeout);
-    }
-
-    @Bean
-    public ChargeItemAdapter chargeItemAdapter(RestClient.Builder builder, @Value("${adapter.catalogservice.url:}") String url) {
-        return createAdapter(ChargeItemAdapter.class, builder, url, timeout);
     }
 
     @Bean

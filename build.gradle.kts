@@ -18,7 +18,6 @@ plugins {
 	id("com.google.cloud.tools.jib") version "3.4.3"
 	id("net.researchgate.release") version "3.0.2"
 	id("org.sonarqube") version "5.0.0.4638"
-	id("org.owasp.dependencycheck") version "9.1.0"
 }
 
 repositories {
@@ -54,7 +53,11 @@ dependencies {
 	implementation("com.github.ben-manes.caffeine:caffeine");
 	implementation("org.springframework.boot:spring-boot-starter-data-redis");
 	implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
-	
+
+	//kafka
+	implementation("org.springframework.kafka:spring-kafka")
+	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+
 	//adapter
 	implementation("io.github.resilience4j:resilience4j-spring-boot3")
 	implementation("org.springframework.boot:spring-boot-starter-aop")
@@ -64,6 +67,7 @@ dependencies {
 
 	//test
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.kafka:spring-kafka-test")
 }
 
 tasks.withType<Test> {

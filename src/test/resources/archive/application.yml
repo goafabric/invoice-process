@@ -1,8 +1,10 @@
 #adapter
 adapter:
   timeout: 10000
-  organization-service:
+  coreservice:
     url: http://localhost:0
+    user.name: "admin"
+    user.password: "admin"
 
 process.autostart: false
 spring.profiles.active: "caffeine" #redis

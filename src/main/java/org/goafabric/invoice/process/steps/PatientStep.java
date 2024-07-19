@@ -1,6 +1,5 @@
 package org.goafabric.invoice.process.steps;
 
-import org.goafabric.invoice.process.adapter.catalog.ChargeItemAdapter;
 import org.goafabric.invoice.process.adapter.catalog.ConditionAdapter;
 import org.goafabric.invoice.process.adapter.patient.EncounterAdapter;
 import org.goafabric.invoice.process.adapter.patient.PatientAdapter;
@@ -20,15 +19,13 @@ public class PatientStep {
     private final PatientAdapter    patientAdapter;
     private final EncounterAdapter  encounterAdapter;
     private final ConditionAdapter  conditionAdapter;
-    private final ChargeItemAdapter chargeItemAdapter;
 
     @Value("${adapter.catalogservice.url:}")
     private String catalogServiceUrl;
 
-    public PatientStep(PatientAdapter patientAdapter, EncounterAdapter encounterAdapter, ChargeItemAdapter chargeItemAdapter, ConditionAdapter conditionAdapter) {
+    public PatientStep(PatientAdapter patientAdapter, EncounterAdapter encounterAdapter, ConditionAdapter conditionAdapter) {
         this.patientAdapter = patientAdapter;
         this.encounterAdapter = encounterAdapter;
-        this.chargeItemAdapter = chargeItemAdapter;
         this.conditionAdapter = conditionAdapter;
     }
 
@@ -49,7 +46,6 @@ public class PatientStep {
                 .filter(record -> record.type().equals(MedicalRecordType.CHARGEITEM))
                 .forEach(chargeItem -> {
                     log.info(chargeItem.toString());
-                    log.info(!catalogServiceUrl.isEmpty() ? chargeItemAdapter.findByCode(chargeItem.code()).toString() : "");
                 });
     }
 

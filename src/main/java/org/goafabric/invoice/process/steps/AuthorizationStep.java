@@ -1,11 +1,8 @@
 package org.goafabric.invoice.process.steps;
 
-import org.goafabric.invoice.process.adapter.authorization.LockAdapter;
-import org.goafabric.invoice.process.adapter.authorization.PermissionAdapter;
-import org.goafabric.invoice.process.adapter.authorization.dto.Lock;
-import org.goafabric.invoice.process.adapter.authorization.dto.PermissionCategory;
-import org.goafabric.invoice.process.adapter.authorization.dto.PermissionType;
 import org.goafabric.invoice.controller.extensions.TenantContext;
+import org.goafabric.invoice.process.adapter.authorization.Lock;
+import org.goafabric.invoice.process.adapter.authorization.LockAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -16,11 +13,9 @@ public class AuthorizationStep {
 
     private final LockAdapter lockAdapter;
 
-    private final PermissionAdapter permissionAdapter;
 
-    public AuthorizationStep(LockAdapter lockAdapter, PermissionAdapter permissionAdapter) {
+    public AuthorizationStep(LockAdapter lockAdapter) {
         this.lockAdapter = lockAdapter;
-        this.permissionAdapter = permissionAdapter;
     }
 
     public Lock acquireLock() {
@@ -35,13 +30,5 @@ public class AuthorizationStep {
             lockAdapter.removeLockById(lock.id());
         }
     }
-
-    public void checkAuthorization() {
-        log.info("check authorization");
-        if (!permissionAdapter.hasPermission(TenantContext.getUserName(), PermissionCategory.PROCESS, PermissionType.INVOICE)) {
-            throw new IllegalStateException("User " + TenantContext.getUserName() + " is not allowed to execute process");
-        }
-    }
-
 
 }

@@ -1,9 +1,6 @@
 package org.goafabric.invoice.process.adapter.invoice;
 
-import org.goafabric.invoice.process.adapter.invoice.dto.Invoice;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
@@ -11,7 +8,6 @@ import java.util.Base64;
 import java.util.UUID;
 
 @Component
-@CacheConfig(cacheNames = "invoiceAdapter")
 @RegisterReflectionForBinding(Invoice.class)
 public class InvoiceMockAdapter  {
 
@@ -35,7 +31,6 @@ public class InvoiceMockAdapter  {
 
     }
 
-    @Cacheable
     public Invoice store(Invoice invoice) {
         return invoice;
     }
