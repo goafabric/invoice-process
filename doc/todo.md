@@ -1,7 +1,7 @@
 # Todo
 
 - Combination of consumer and rest call way
-- Core Service Kafka Producer with better topics
+- Core Service Kafka Producer with better topics, patiendId inside records
 - PDF Renderer
 
 - fluent api, web socket notification

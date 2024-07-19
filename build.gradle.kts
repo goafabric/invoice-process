@@ -104,5 +104,5 @@ configure<net.researchgate.release.ReleaseExtension> {
 }
 
 tasks.withType<org.springframework.boot.gradle.tasks.aot.ProcessAot>().configureEach {
-	args("--spring.profiles.active=redis,kafka")
+	args("--spring.profiles.active=redis")
 }

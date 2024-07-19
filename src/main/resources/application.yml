@@ -29,7 +29,7 @@ spring.security.user.name: "admin"
 spring.security.user.password: "admin"
 
 #cache
-spring.profiles.active: "caffeine" #redis
+spring.profiles.active: "caffeine" #redis #,kafka
 spring.data.redis.host: "localhost"
 spring.data.redis.port: "6379"
 
