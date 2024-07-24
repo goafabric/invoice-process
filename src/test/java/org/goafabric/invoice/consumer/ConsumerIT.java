@@ -6,6 +6,7 @@ import org.goafabric.invoice.controller.extensions.TenantContext;
 import org.goafabric.invoice.persistence.ADTCreator;
 import org.goafabric.invoice.persistence.EpisodeDetailsRepository;
 import org.goafabric.invoice.persistence.EpisodeRepository;
+import org.goafabric.invoice.persistence.entity.Episode;
 import org.goafabric.invoice.process.adapter.patient.dto.Patient;
 import org.goafabric.invoice.util.TestDataCreator;
 import org.junit.jupiter.api.Test;
@@ -71,7 +72,7 @@ class ConsumerIT {
     private List<Patient> createPatients() {
         var patients = TestDataCreator.createPatients();
 
-        //patients.forEach(patient -> episodeRepository.save(new Episode(patient.id(), 2024, 2)));
+        patients.forEach(patient -> episodeRepository.save(new Episode(patient.id(), 2024, 2)));
         patients.forEach(patient -> send("patient", "create", patient.id(), patient));
         var lastPatient = patients.getLast();
         send("patient", "update", lastPatient.id(), new Patient(lastPatient.id(), null, "updated", "updated" ,"u", lastPatient.birthDate(), lastPatient.address(), lastPatient.contactPoint()));
