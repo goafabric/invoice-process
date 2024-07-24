@@ -61,7 +61,7 @@ class ConsumerIT {
         var episodeDetails = episodeDetailsRepository.findAll("1");
         assertThat(episodeDetails).isNotNull().isNotEmpty();
 
-    log.info("logging episode details");
+        log.info("logging episode details");
         episodeDetails.forEach(entry -> log.info(entry.toString()));
 
         log.info("logging adt");

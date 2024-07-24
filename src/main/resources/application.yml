@@ -5,7 +5,7 @@ server:
   forward-headers-strategy: FRAMEWORK
 
 spring.threads.virtual.enabled: "true"
-process.autostart: false
+process.autostart: true
 
 #monitoring
 management:

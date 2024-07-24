@@ -1,5 +1,7 @@
 package org.goafabric.invoice.process.steps;
 
+import org.goafabric.invoice.persistence.ADTCreator;
+import org.goafabric.invoice.persistence.EpisodeDetailsRepository;
 import org.goafabric.invoice.process.adapter.invoice.InvoiceMockAdapter;
 import org.goafabric.invoice.process.adapter.invoice.Invoice;
 import org.goafabric.invoice.process.adapter.s3.S3Adapter;
@@ -12,24 +14,37 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 @Component
 public class InvoiceStep {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
+    private final EpisodeDetailsRepository episodeDetailsRepository;
     private final InvoiceMockAdapter invoiceAdapter;
     private final S3Adapter s3Adapter;
 
     @Value("${spring.cloud.aws.s3.endpoint:}")
     private String s3Endpoint;
 
-    public InvoiceStep(InvoiceMockAdapter invoiceAdapter, S3Adapter s3Adapter) {
+    public InvoiceStep(EpisodeDetailsRepository episodeDetailsRepository, InvoiceMockAdapter invoiceAdapter, S3Adapter s3Adapter) {
+        this.episodeDetailsRepository = episodeDetailsRepository;
         this.invoiceAdapter = invoiceAdapter;
         this.s3Adapter = s3Adapter;
     }
 
     public Invoice create() {
-        return invoiceAdapter.create();
+        var episodeDetails = episodeDetailsRepository.findAll("1");
+
+        log.info("logging episode details");
+        episodeDetails.forEach(entry -> log.info(entry.toString()));
+
+        log.info("logging adt");
+        final StringBuilder content = new StringBuilder();
+        episodeDetails.forEach(entry -> content.append(ADTCreator.fromEpisodeDetails(entry)).append("\n"));
+
+        log.info("\n" + content);
+        return new Invoice(UUID.randomUUID().toString(), content.toString());
     }
 
     public void check(Invoice invoice) {

@@ -13,7 +13,6 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 
 import static org.goafabric.invoice.consumer.config.ConsumerUtil.withTenantInfos;
@@ -42,7 +41,7 @@ public class ChargeItemConsumer implements LatchConsumer {
         log.info("operation {}, id {}, object {}", eventData.operation(), eventData.referenceId(), chargeItem.toString());
         String episodeId = "1";
         episodeDetailsRepository.save(
-                new EpisodeDetails(UUID.randomUUID().toString(), episodeId, chargeItem.id(), "chargeitem", chargeItem.code(), chargeItem.display(), null, null,  null, null)
+                new EpisodeDetails(episodeId, chargeItem.id(), "chargeitem", chargeItem.code(), chargeItem.display(), null, null,  null, null)
         );
         latch.countDown();
     }

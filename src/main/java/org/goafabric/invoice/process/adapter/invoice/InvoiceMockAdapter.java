@@ -5,20 +5,17 @@ import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.UUID;
 
 @Component
 @RegisterReflectionForBinding(Invoice.class)
 public class InvoiceMockAdapter  {
 
-    public Invoice create() {
-        return new Invoice(UUID.randomUUID().toString(), "Example Content");
-    }
-
     public void check(Invoice invoice) {
+        /*
         if (invoice.content().isEmpty()) {
             throw new IllegalStateException("Validation failed");
         }
+        */
     }
 
     public Invoice encrypt(Invoice invoice) {
