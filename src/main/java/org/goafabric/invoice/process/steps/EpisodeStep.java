@@ -6,7 +6,7 @@ import org.goafabric.invoice.process.adapter.catalog.ConditionAdapter;
 import org.goafabric.invoice.process.adapter.patient.EncounterAdapter;
 import org.goafabric.invoice.process.adapter.patient.PatientAdapter;
 import org.goafabric.invoice.process.adapter.patient.dto.Encounter;
-import org.goafabric.invoice.process.adapter.patient.dto.MedicalRecordType;
+import org.goafabric.invoice.process.adapter.patient.type.MedicalRecordType;
 import org.goafabric.invoice.process.adapter.patient.dto.Patient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

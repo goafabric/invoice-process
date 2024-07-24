@@ -2,6 +2,7 @@ package org.goafabric.invoice.util;
 
 import org.goafabric.invoice.controller.extensions.TenantContext;
 import org.goafabric.invoice.process.adapter.patient.dto.*;
+import org.goafabric.invoice.process.adapter.patient.type.MedicalRecordType;
 
 import java.time.LocalDate;
 import java.util.Arrays;

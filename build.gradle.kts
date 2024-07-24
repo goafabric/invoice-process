@@ -32,6 +32,7 @@ dependencies {
 		implementation("org.mapstruct:mapstruct:1.5.5.Final")
 		annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
 		implementation("io.github.resilience4j:resilience4j-spring-boot3:2.1.0")
+		testImplementation("com.tngtech.archunit:archunit-junit5:1.2.1")
 	}
 }
 
@@ -68,6 +69,7 @@ dependencies {
 	//test
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.kafka:spring-kafka-test")
+	testImplementation("com.tngtech.archunit:archunit-junit5")
 }
 
 tasks.withType<Test> {

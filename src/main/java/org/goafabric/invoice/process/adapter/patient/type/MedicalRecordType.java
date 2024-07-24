@@ -1,4 +1,4 @@
-package org.goafabric.invoice.process.adapter.patient.dto;
+package org.goafabric.invoice.process.adapter.patient.type;
 
 public enum MedicalRecordType {
 

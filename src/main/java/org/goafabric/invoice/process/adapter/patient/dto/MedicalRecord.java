@@ -1,5 +1,7 @@
 package org.goafabric.invoice.process.adapter.patient.dto;
 
+import org.goafabric.invoice.process.adapter.patient.type.MedicalRecordType;
+
 public record MedicalRecord(
         String id,
         String encounterId,
