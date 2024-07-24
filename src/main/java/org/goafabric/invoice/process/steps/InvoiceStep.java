@@ -36,14 +36,11 @@ public class InvoiceStep {
     public Invoice create() {
         var episodeDetails = episodeDetailsRepository.findAll("1");
 
-        log.info("logging episode details");
-        episodeDetails.forEach(entry -> log.info(entry.toString()));
-
         log.info("logging adt");
         final StringBuilder content = new StringBuilder();
         episodeDetails.forEach(entry -> content.append(ADTCreator.fromEpisodeDetails(entry)).append("\n"));
 
-        log.info("\n" + content);
+        log.info("\n {}", content);
         return new Invoice(UUID.randomUUID().toString(), content.toString());
     }
 
