@@ -27,6 +27,9 @@ public class EpisodeStep {
     @Value("${adapter.catalogservice.url:}")
     private String catalogServiceUrl;
 
+    @Value("${spring.profiles.active:}")
+    private String profiles;
+
     public EpisodeStep(PatientAdapter patientAdapter, EncounterAdapter encounterAdapter, ConditionAdapter conditionAdapter, EpisodeDetailsRepository episodeDetailsRepository) {
         this.patientAdapter = patientAdapter;
         this.encounterAdapter = encounterAdapter;
@@ -35,7 +38,12 @@ public class EpisodeStep {
     }
 
     public void retrieveRecords(String familyName) {
-        log.info("retrieve records");
+        if (profiles.contains("kafka")) {
+            log.info("skipping episode creation, due to kafka consumer");
+            return;
+        }
+
+        log.info("creating episodes from records");
         var patients = patientAdapter.findPatientNamesByFamilyName(familyName);
         if (!patients.isEmpty()) {
             var patient = patients.getFirst();
