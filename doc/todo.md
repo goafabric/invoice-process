@@ -1,5 +1,4 @@
 # Todo
-
-- Core Service Kafka Producer with better topics, patiendId inside records
-- PDF Renderer
+- Billing PDF Renderer as Test
+- Billing Logger Renderer as Implementation
 
