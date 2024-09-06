@@ -38,8 +38,6 @@ adapter:
   timeout: 10000
   coreservice:
     url: http://localhost:50800
-    user.name: "admin"
-    user.password: "admin"
   catalogservice:
 #    url: http://localhost:50600
 

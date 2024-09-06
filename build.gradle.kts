@@ -46,9 +46,6 @@ dependencies {
 	implementation("io.micrometer:micrometer-tracing-bridge-otel")
 	implementation("io.opentelemetry:opentelemetry-exporter-otlp")
 
-	//crosscuting
-	implementation("org.springframework.boot:spring-boot-starter-security")
-
 	//cache
 	implementation("org.springframework.boot:spring-boot-starter-cache");
 	implementation("com.github.ben-manes.caffeine:caffeine");
