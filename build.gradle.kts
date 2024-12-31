@@ -29,11 +29,11 @@ repositories {
 
 dependencies {
 	constraints {
-		implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
-		implementation("org.mapstruct:mapstruct:1.5.5.Final")
-		annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
-		implementation("io.github.resilience4j:resilience4j-spring-boot3:2.1.0")
-		testImplementation("com.tngtech.archunit:archunit-junit5:1.2.1")
+		implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0")
+		implementation("org.mapstruct:mapstruct:1.6.3")
+		annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
+		implementation("io.github.resilience4j:resilience4j-spring-boot3:2.2.0")
+		testImplementation("com.tngtech.archunit:archunit-junit5:1.3.0")
 	}
 }
 
@@ -62,7 +62,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-aop")
 
 	//s3
-	implementation("am.ik.s3:simple-s3-client:0.2.1") {exclude("org.springframework", "spring-web")}
+	implementation("am.ik.s3:simple-s3-client:0.2.2") {exclude("org.springframework", "spring-web")}
 
 	//test
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
