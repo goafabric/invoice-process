@@ -33,7 +33,7 @@ dependencies {
 		implementation("org.mapstruct:mapstruct:1.6.3")
 		annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
 		implementation("io.github.resilience4j:resilience4j-spring-boot3:2.3.0")
-		testImplementation("com.tngtech.archunit:archunit-junit5:1.3.0")
+		testImplementation("com.tngtech.archunit:archunit-junit5:1.4.0")
 	}
 }
 
