@@ -1,4 +1,4 @@
-package org.goafabric.invoice.process.adapter.authorization.dto;
+package org.goafabric.invoice.process.adapter.authorization;
 
 import java.time.LocalDateTime;
 

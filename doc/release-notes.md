@@ -1,3 +1,10 @@
+# 3.4.3
+- upgrade of Spring Boot
+
+# 3.3.3
+- upgrade to spring boot 3.3.4
+- spring security removed
+
 # 3.3.2
 - upgrade to spring boot 3.3.1
 - redis + s3 storage added

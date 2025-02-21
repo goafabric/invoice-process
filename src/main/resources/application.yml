@@ -1,6 +1,6 @@
 #application
 server:
-  port: 50500
+  port: 50400
   tomcat.threads.max: 20
   forward-headers-strategy: FRAMEWORK
 
@@ -29,7 +29,7 @@ spring.security.user.name: "admin"
 spring.security.user.password: "admin"
 
 #cache
-spring.profiles.active: "caffeine" #redis
+spring.profiles.active: "caffeine" #redis #,kafka
 spring.data.redis.host: "localhost"
 spring.data.redis.port: "6379"
 
@@ -38,8 +38,6 @@ adapter:
   timeout: 10000
   coreservice:
     url: http://localhost:50800
-    user.name: "admin"
-    user.password: "admin"
   catalogservice:
 #    url: http://localhost:50600
 
@@ -71,6 +69,20 @@ spring.cloud.aws.credentials.access-key: "minioadmin"
 spring.cloud.aws.credentials.secret-key: "minioadmin"
 spring.cloud.aws.region.static: "eu"
 multi-tenancy.schema-prefix: "invoice_"
+
+spring:
+  kafka:
+    bootstrap-servers: "localhost:9092"
+    producer:
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      properties.spring.json.trusted.packages: "*"
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    template:
+      observation-enabled: true
+    listener:
+      observation-enabled: true
+
 
 #logging
 logging.pattern.level: "%5p tenantId=%X{tenantId:-}" #"%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}] tenantId=%X{tenantId:-}"

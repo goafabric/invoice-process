@@ -1,10 +1,10 @@
 package org.goafabric.invoice.process;
 
 import jakarta.annotation.PreDestroy;
-import org.goafabric.invoice.process.adapter.authorization.dto.Lock;
+import org.goafabric.invoice.process.adapter.authorization.Lock;
 import org.goafabric.invoice.process.steps.AuthorizationStep;
 import org.goafabric.invoice.process.steps.InvoiceStep;
-import org.goafabric.invoice.process.steps.PatientStep;
+import org.goafabric.invoice.process.steps.EpisodeStep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -19,13 +19,13 @@ public class InvoiceProcess {
 
     private final AuthorizationStep authorizationStep;
     private final InvoiceStep invoiceStep;
-    private final PatientStep patientStep;
+    private final EpisodeStep episodeStep;
     private final ExecutorService executor;
 
-    public InvoiceProcess(AuthorizationStep authorizationStep, InvoiceStep invoiceStep, PatientStep patientStep) {
+    public InvoiceProcess(AuthorizationStep authorizationStep, InvoiceStep invoiceStep, EpisodeStep episodeStep) {
         this.authorizationStep = authorizationStep;
         this.invoiceStep = invoiceStep;
-        this.patientStep = patientStep;
+        this.episodeStep = episodeStep;
         executor = Executors.newVirtualThreadPerTaskExecutor(); //newFixedThreadPool(10);
     }
 
@@ -37,7 +37,7 @@ public class InvoiceProcess {
         Lock lock = null;
         try {
             lock = authorizationStep.acquireLock();
-            patientStep.retrieveRecords("Burns");
+            episodeStep.retrieveRecords("Burns");
                 var invoice = invoiceStep.create();
                     invoiceStep.check(invoice);
                         var encryptedInvoice = invoiceStep.encrypt(invoice);

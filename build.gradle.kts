@@ -5,20 +5,20 @@ val version: String by project
 java.sourceCompatibility = JavaVersion.VERSION_21
 
 val dockerRegistry = "goafabric"
-val nativeBuilder = "paketobuildpacks/java-native-image:9.5.0"
-val baseImage = "ibm-semeru-runtimes:open-21.0.3_9-jre-focal@sha256:5cb19afa9ee0daeecb7c31be8253fecbbf6b5f6dcfb06883c41f045cb893bcec"
+val baseImage = "ibm-semeru-runtimes:open-21.0.4.1_7-jre-focal@sha256:8b94f8b14fd1d4660f9dc777b1ad3630f847b8e3dc371203bcb857a5e74d6c39" //"ibm-semeru-runtimes:open-23_37-jre-focal@sha256:04534a98d0e521948b7525c665f9f8871aba56155de9e70d23b14c905a28a052"
 
 plugins {
 	java
 	jacoco
-	id("org.springframework.boot") version "3.3.1"
-	id("io.spring.dependency-management") version "1.1.5"
-	id("org.graalvm.buildtools.native") version "0.10.2"
+	id("org.springframework.boot") version "3.4.3"
+	id("io.spring.dependency-management") version "1.1.7"
+	id("org.graalvm.buildtools.native") version "0.10.5"
 
-	id("com.google.cloud.tools.jib") version "3.4.3"
-	id("net.researchgate.release") version "3.0.2"
-	id("org.sonarqube") version "5.0.0.4638"
-	id("org.owasp.dependencycheck") version "9.1.0"
+	id("com.google.cloud.tools.jib") version "3.4.4"
+	id("net.researchgate.release") version "3.1.0"
+	id("org.sonarqube") version "6.0.1.5171"
+
+	id("org.cyclonedx.bom") version "2.1.0"
 }
 
 repositories {
@@ -29,10 +29,11 @@ repositories {
 
 dependencies {
 	constraints {
-		implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
-		implementation("org.mapstruct:mapstruct:1.5.5.Final")
-		annotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
-		implementation("io.github.resilience4j:resilience4j-spring-boot3:2.1.0")
+		implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5")
+		implementation("org.mapstruct:mapstruct:1.6.3")
+		annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
+		implementation("io.github.resilience4j:resilience4j-spring-boot3:2.3.0")
+		testImplementation("com.tngtech.archunit:archunit-junit5:1.4.0")
 	}
 }
 
@@ -46,24 +47,27 @@ dependencies {
 	implementation("io.micrometer:micrometer-tracing-bridge-otel")
 	implementation("io.opentelemetry:opentelemetry-exporter-otlp")
 
-	//crosscuting
-	implementation("org.springframework.boot:spring-boot-starter-security")
-
 	//cache
 	implementation("org.springframework.boot:spring-boot-starter-cache");
 	implementation("com.github.ben-manes.caffeine:caffeine");
 	implementation("org.springframework.boot:spring-boot-starter-data-redis");
 	implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
-	
+
+	//kafka
+	implementation("org.springframework.kafka:spring-kafka")
+	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+
 	//adapter
 	implementation("io.github.resilience4j:resilience4j-spring-boot3")
 	implementation("org.springframework.boot:spring-boot-starter-aop")
 
 	//s3
-	implementation("am.ik.s3:simple-s3-client:0.2.1") {exclude("org.springframework", "spring-web")}
+	implementation("am.ik.s3:simple-s3-client:0.2.2") {exclude("org.springframework", "spring-web")}
 
 	//test
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.kafka:spring-kafka-test")
+	testImplementation("com.tngtech.archunit:archunit-junit5")
 }
 
 tasks.withType<Test> {
@@ -84,8 +88,6 @@ jib {
 tasks.register("dockerImageNative") { group = "build"; dependsOn("bootBuildImage") }
 tasks.named<BootBuildImage>("bootBuildImage") {
 	val nativeImageName = "${dockerRegistry}/${project.name}-native" + (if (System.getProperty("os.arch").equals("aarch64")) "-arm64v8" else "") + ":${project.version}"
-	builder.set("paketobuildpacks/builder-jammy-buildpackless-tiny")
-	buildpacks.add(nativeBuilder)
 	imageName.set(nativeImageName)
 	environment.set(mapOf("BP_NATIVE_IMAGE" to "true", "BP_JVM_VERSION" to "21", "BP_NATIVE_IMAGE_BUILD_ARGUMENTS" to "-J-Xmx5000m -march=compatibility"))
 	doLast {
