@@ -106,7 +106,7 @@ tasks.withType<org.springframework.boot.gradle.tasks.aot.ProcessAot>().configure
 	args("--spring.profiles.active=redis")
 }
 
-tasks.cyclonedxBom { destination = file("doc/generated") }
+//tasks.cyclonedxBom { destination = file("doc/generated") }
 openApi {
 	outputDir.set(file("doc/generated"))
 	customBootRun { args.set(listOf("--server.port=8080")) }
