@@ -19,6 +19,7 @@ plugins {
 	id("org.sonarqube") version "6.1.0.5360"
 
 	id("org.cyclonedx.bom") version "2.3.0"
+	id("org.springdoc.openapi-gradle-plugin") version "1.9.0"
 }
 
 repositories {
@@ -104,3 +105,11 @@ configure<net.researchgate.release.ReleaseExtension> {
 tasks.withType<org.springframework.boot.gradle.tasks.aot.ProcessAot>().configureEach {
 	args("--spring.profiles.active=redis")
 }
+
+tasks.cyclonedxBom { destination = file("doc/generated") }
+openApi {
+	outputDir.set(file("doc/generated"))
+	customBootRun { args.set(listOf("--server.port=8080")) }
+	tasks.forkedSpringBootRun { dependsOn("compileAotJava", "processAotResources") }
+}
+
