@@ -26,7 +26,7 @@ public class InvoiceProcess {
         this.authorizationStep = authorizationStep;
         this.invoiceStep = invoiceStep;
         this.episodeStep = episodeStep;
-        executor = Executors.newVirtualThreadPerTaskExecutor(); //newFixedThreadPool(10);
+        executor = Executors.newVirtualThreadPerTaskExecutor();
     }
 
     public Future<Boolean> run() {
@@ -43,8 +43,7 @@ public class InvoiceProcess {
                         var encryptedInvoice = invoiceStep.encrypt(invoice);
                             invoiceStep.send(encryptedInvoice);
                                 invoiceStep.store(encryptedInvoice);
-                                    log.info("sleeping");
-                                    try { Thread.sleep(1000); } catch (InterruptedException e) {}
+                                    doSleep();
         }
         catch (Exception e) {
             log.error("error during process: {}", e.getMessage(), e);
@@ -55,6 +54,12 @@ public class InvoiceProcess {
             log.info("finished ...");
         }
         return true;
+    }
+
+    private void doSleep() {
+        log.info("sleeping");
+        try { Thread.sleep(1000); } catch (InterruptedException e) { // no need for exception
+        }
     }
 
     @PreDestroy

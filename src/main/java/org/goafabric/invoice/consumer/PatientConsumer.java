@@ -39,7 +39,7 @@ public class PatientConsumer implements LatchConsumer {
 
     private void process(EventData eventData) {
         Patient patient = objectMapper.convertValue(eventData.payload(), Patient.class);
-        log.info("operation {}, id {}, object {}", eventData.operation(), eventData.referenceId(), patient.toString());
+        log.info("operation {}, id {}, object {}", eventData.operation(), eventData.referenceId(), patient);
 
         String episodeId = "1";
         episodeDetailsRepository.save(
