@@ -49,7 +49,7 @@ class InvoiceProcessIT {
     }
 
     @Test
-    void alreadyLocked() throws Exception{
+    void alreadyLocked() {
         when(lockAdapter.acquireLockByKey("invoice-0"))
                 .thenReturn(new Lock("0", true, "key", LocalDateTime.now(), "user"));
 

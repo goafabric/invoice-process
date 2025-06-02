@@ -7,10 +7,10 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.service.annotation.GetExchange;
 
+@SuppressWarnings("java:S7180")
 @Retry(name = "conditionAdapter")
 @CircuitBreaker(name = "conditionAdapter")
 @CacheConfig(cacheNames = "conditionAdapter")
-//@RegisterReflectionForBinding(ConditionEo.class)
 public interface ConditionAdapter {
     @Cacheable
     @GetExchange("conditions/findByCode")
