@@ -1,6 +1,6 @@
 package org.goafabric.invoice.util;
 
-import org.goafabric.invoice.controller.extensions.TenantContext;
+import org.goafabric.invoice.controller.extensions.UserContext;
 import org.goafabric.invoice.process.adapter.patient.dto.*;
 import org.goafabric.invoice.process.adapter.patient.type.MedicalRecordType;
 
@@ -34,7 +34,7 @@ public class TestDataCreator {
 
     public static List<Address> createAddress(String street) {
         return Collections.singletonList(
-                new Address(UUID.randomUUID().toString(), 0L,  "home", street, "Springfield " + TenantContext.getTenantId()
+                new Address(UUID.randomUUID().toString(), 0L,  "home", street, "Springfield " + UserContext.getTenantId()
                         , "555", "Florida", "US"));
     }
 

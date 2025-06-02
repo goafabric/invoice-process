@@ -1,6 +1,6 @@
 package org.goafabric.invoice.process.adapter;
 
-import org.goafabric.invoice.controller.extensions.TenantContext;
+import org.goafabric.invoice.controller.extensions.UserContext;
 import org.goafabric.invoice.process.adapter.authorization.LockAdapter;
 import org.goafabric.invoice.process.adapter.catalog.ConditionAdapter;
 import org.goafabric.invoice.process.adapter.patient.EncounterAdapter;
@@ -45,7 +45,7 @@ public class AdapterConfiguration {
         requestFactory.setReadTimeout(timeout.intValue());
         builder.baseUrl(url)
                 .requestInterceptor((request, body, execution) -> {
-                    TenantContext.getAdapterHeaderMap().forEach((key, value) -> request.getHeaders().set(key, value));
+                    UserContext.getAdapterHeaderMap().forEach((key, value) -> request.getHeaders().set(key, value));
                     return execution.execute(request, body);
                 })
                 .requestFactory(requestFactory);

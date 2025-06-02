@@ -1,7 +1,7 @@
 package org.goafabric.invoice.process.adapter;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
-import org.goafabric.invoice.controller.extensions.TenantContext;
+import org.goafabric.invoice.controller.extensions.UserContext;
 import org.springframework.aot.hint.MemberCategory;
 import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
@@ -51,7 +51,7 @@ public class MyCacheConfiguration implements CachingConfigurer {
     @Bean
     public KeyGenerator keyGenerator() {
         return (target, method, params) ->
-                new SimpleKey(TenantContext.getTenantId(), TenantContext.getOrganizationId(), method.getName(), params);
+                new SimpleKey(UserContext.getTenantId(), UserContext.getOrganizationId(), method.getName(), params);
     }
 
     static class CacheRuntimeHints implements RuntimeHintsRegistrar {

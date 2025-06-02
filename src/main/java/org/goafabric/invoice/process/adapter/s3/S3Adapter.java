@@ -4,7 +4,7 @@ import am.ik.s3.ListBucketResult;
 import am.ik.s3.ListBucketsResult;
 import am.ik.s3.S3Content;
 import am.ik.s3.S3RequestBuilders;
-import org.goafabric.invoice.controller.extensions.TenantContext;
+import org.goafabric.invoice.controller.extensions.UserContext;
 import org.goafabric.invoice.process.adapter.s3.dto.ObjectEntry;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.beans.factory.annotation.Value;
@@ -90,7 +90,7 @@ public class S3Adapter {
     }
 
     private String getBucketName() {
-        return schemaPrefix.replaceAll("_", "-") + TenantContext.getTenantId();
+        return schemaPrefix.replaceAll("_", "-") + UserContext.getTenantId();
     }
 
 }

@@ -2,7 +2,7 @@ package org.goafabric.invoice.consumer;
 
 import org.goafabric.event.EventData;
 import org.goafabric.invoice.consumer.config.LatchConsumer;
-import org.goafabric.invoice.controller.extensions.TenantContext;
+import org.goafabric.invoice.controller.extensions.UserContext;
 import org.goafabric.invoice.persistence.ADTCreator;
 import org.goafabric.invoice.persistence.EpisodeDetailsRepository;
 import org.goafabric.invoice.persistence.EpisodeRepository;
@@ -80,7 +80,7 @@ class ConsumerIT {
     }
 
     private void send(String topic, String operation, String referenceId, Object payload) {
-        kafkaTemplate.send(topic, referenceId, new EventData(TenantContext.getAdapterHeaderMap(), referenceId, operation, payload));
+        kafkaTemplate.send(topic, referenceId, new EventData(UserContext.getAdapterHeaderMap(), referenceId, operation, payload));
     }
 
 }

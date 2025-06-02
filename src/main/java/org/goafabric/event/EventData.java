@@ -1,6 +1,6 @@
 package org.goafabric.event;
 
-import org.goafabric.invoice.controller.extensions.TenantContext;
+import org.goafabric.invoice.controller.extensions.UserContext;
 
 import java.util.Map;
 
@@ -11,6 +11,6 @@ public record EventData(
     Object payload
 ) {
     public EventData {
-        TenantContext.setContext(tenantInfos); //little hacky, if the object is created on deserialization the tenantcontext will be set
+        UserContext.setContext(tenantInfos); //little hacky, if the object is created on deserialization the tenantcontext will be set
     }
 }

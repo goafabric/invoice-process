@@ -30,10 +30,11 @@ repositories {
 
 dependencies {
 	constraints {
-		implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.8")
-		implementation("org.mapstruct:mapstruct:1.6.3")
 		annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
+		implementation("org.mapstruct:mapstruct:1.6.3")
+		implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.8")
 		implementation("io.github.resilience4j:resilience4j-spring-boot3:2.3.0")
+		implementation("net.ttddyy.observation:datasource-micrometer-spring-boot:1.1.1")
 		testImplementation("com.tngtech.archunit:archunit-junit5:1.4.1")
 	}
 }
@@ -89,14 +90,15 @@ jib {
 	from.platforms.set(listOf(amd64, arm64))
 }
 
-tasks.register("dockerImageNative") { group = "build"; dependsOn("bootBuildImage") }
+interface InjectedExecOps { @get:Inject val execOps: ExecOperations }
+tasks.register("dockerImageNative") { description= "Native Image"; group = "build"; dependsOn("bootBuildImage") }
 tasks.named<BootBuildImage>("bootBuildImage") {
 	val nativeImageName = "${dockerRegistry}/${project.name}-native" + (if (System.getProperty("os.arch").equals("aarch64")) "-arm64v8" else "") + ":${project.version}"
 	imageName.set(nativeImageName)
 	environment.set(mapOf("BP_NATIVE_IMAGE" to "true", "BP_JVM_VERSION" to "21", "BP_NATIVE_IMAGE_BUILD_ARGUMENTS" to "-J-Xmx5000m -march=compatibility"))
 	doLast {
-		exec { commandLine("/bin/sh", "-c", "docker run --rm $nativeImageName -check-integrity") }
-		exec { commandLine("/bin/sh", "-c", "docker push $nativeImageName") }
+		project.objects.newInstance<InjectedExecOps>().execOps.exec { commandLine("/bin/sh", "-c", "docker run --rm $nativeImageName -check-integrity") }
+		project.objects.newInstance<InjectedExecOps>().execOps.exec { commandLine("/bin/sh", "-c", "docker push $nativeImageName") }
 	}
 }
 
