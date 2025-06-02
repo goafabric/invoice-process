@@ -1,4 +1,4 @@
-package org.goafabric.eventdispatcher.service.extensions;
+package org.goafabric.invoice.controller.extensions;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
