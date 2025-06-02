@@ -26,7 +26,7 @@ public class ProcessController {
     @GetMapping("loop")
     public String loop() {
         IntStream.range(0, 10).forEach(i -> {
-            try { invoiceProcess.run().get(); } catch (Exception e) { throw new RuntimeException(e);}
+            try { invoiceProcess.run().get(); } catch (Exception e) { throw new IllegalStateException(e);}
         });
         return "launched";
     }

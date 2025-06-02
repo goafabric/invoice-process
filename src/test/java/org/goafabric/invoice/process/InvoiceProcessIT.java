@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @DisabledInAotMode
-public class InvoiceProcessIT {
+class InvoiceProcessIT {
     @MockitoBean
     private LockAdapter lockAdapter;
 
@@ -40,7 +40,7 @@ public class InvoiceProcessIT {
     private InvoiceProcess invoiceProcess;
 
     @Test
-    public void run() throws Exception {
+    void run() throws Exception {
 
         when(lockAdapter.acquireLockByKey("invoice-0"))
                 .thenReturn(new Lock("0", false, "key", LocalDateTime.now(), "user"));
@@ -49,7 +49,7 @@ public class InvoiceProcessIT {
     }
 
     @Test
-    public void alreadyLocked() throws Exception{
+    void alreadyLocked() throws Exception{
         when(lockAdapter.acquireLockByKey("invoice-0"))
                 .thenReturn(new Lock("0", true, "key", LocalDateTime.now(), "user"));
 

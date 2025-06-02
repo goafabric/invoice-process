@@ -45,7 +45,7 @@ class ConsumerIT {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Test
-    public void produce() throws InterruptedException {
+    void produce() {
         log.info("producing data ...");
 
         createPatients();

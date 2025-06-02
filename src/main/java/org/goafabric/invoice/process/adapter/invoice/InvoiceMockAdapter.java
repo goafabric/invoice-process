@@ -11,6 +11,7 @@ import java.util.Base64;
 public class InvoiceMockAdapter  {
 
     public void check(Invoice invoice) {
+        // just empty
     }
 
     public Invoice encrypt(Invoice invoice) {

@@ -6,6 +6,9 @@ import org.goafabric.invoice.controller.extensions.UserContext;
 import org.slf4j.MDC;
 
 public class ConsumerUtil {
+    private ConsumerUtil() {
+    }
+
     public static void withTenantInfos(Runnable runnable) {
         Span.fromContext(Context.current()).setAttribute("tenant.id", UserContext.getTenantId());
         MDC.put("tenantId", UserContext.getTenantId());

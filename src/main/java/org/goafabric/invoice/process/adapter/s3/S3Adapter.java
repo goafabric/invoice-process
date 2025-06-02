@@ -46,7 +46,7 @@ public class S3Adapter {
     public ObjectEntry getById(String id) {
         var request = s3RequestPath(HttpMethod.GET, id).build();
         var response = restClient.get().uri(request.uri()).headers(request.headers()).retrieve().toEntity(byte[].class);
-        return new ObjectEntry(id, response.getHeaders().getFirst("Content-Type"), (long) response.getBody().length, response.getBody());
+        return new ObjectEntry(id, response.getHeaders().getFirst("Content-Type"),  response.getBody() == null ? 0 : (long) response.getBody().length, response.getBody());
     }
 
     public void save(ObjectEntry objectEntry) {

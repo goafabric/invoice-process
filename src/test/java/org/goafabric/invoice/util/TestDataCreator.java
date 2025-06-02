@@ -44,19 +44,17 @@ public class TestDataCreator {
 
 
     public static List<MedicalRecord> createChargeItems() {
-        var chargeitems = Arrays.asList(
+        return Arrays.asList(
                 new MedicalRecord(UUID.randomUUID().toString(), "42", 0L, MedicalRecordType.CHARGEITEM, "normal examination", "GOAE1", null),
                 new MedicalRecord(UUID.randomUUID().toString(), "42", 0L, MedicalRecordType.CHARGEITEM, "normal examination", "GOAE2", null)
         );
-        return chargeitems;
     }
 
     public static List<MedicalRecord> createConditions() {
-        var conditions = Arrays.asList(
+        return Arrays.asList(
                 new MedicalRecord(UUID.randomUUID().toString(), "42", 0L, MedicalRecordType.CONDITION, "Diabetes mellitus Typ 1", "none", null),
                 new MedicalRecord(UUID.randomUUID().toString(), "42", 0L, MedicalRecordType.CONDITION, "Adipositas", "E66.00", null),
                 new MedicalRecord(UUID.randomUUID().toString(), "42", 0L, MedicalRecordType.CONDITION, "Pyromanie", "F63.1", null)
         );
-        return conditions;
     }
 }
