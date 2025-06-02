@@ -11,11 +11,6 @@ import java.util.Base64;
 public class InvoiceMockAdapter  {
 
     public void check(Invoice invoice) {
-        /*
-        if (invoice.content().isEmpty()) {
-            throw new IllegalStateException("Validation failed");
-        }
-        */
     }
 
     public Invoice encrypt(Invoice invoice) {
@@ -25,7 +20,7 @@ public class InvoiceMockAdapter  {
     }
 
     public void send(Invoice invoice) {
-
+        // just empty
     }
 
     public Invoice store(Invoice invoice) {

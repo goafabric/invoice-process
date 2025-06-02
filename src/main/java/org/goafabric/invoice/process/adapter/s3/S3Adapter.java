@@ -85,12 +85,12 @@ public class S3Adapter {
                     .secretAccessKey(secretKey)
                     .method(httpMethod);
         } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         }
     }
 
     private String getBucketName() {
-        return schemaPrefix.replaceAll("_", "-") + UserContext.getTenantId();
+        return schemaPrefix.replace("_", "-") + UserContext.getTenantId();
     }
 
 }

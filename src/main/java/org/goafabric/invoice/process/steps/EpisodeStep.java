@@ -65,7 +65,7 @@ public class EpisodeStep {
     private void createChargeItems(List<Encounter> encounters) {
         log.info("chargeitems");
         encounters.getFirst().medicalRecords().stream()
-                .filter(record -> record.type().equals(MedicalRecordType.CHARGEITEM))
+                .filter(medicalRecord -> medicalRecord.type().equals(MedicalRecordType.CHARGEITEM))
                 .forEach(chargeItem -> {
                     String episodeId = "1";
                     episodeDetailsRepository.save(
@@ -79,8 +79,8 @@ public class EpisodeStep {
     private void createConditions(List<Encounter> encounters) {
         log.info("conditions");
         encounters.getFirst().medicalRecords().stream()
-                .filter(record -> record.type().equals(MedicalRecordType.CONDITION))
-                .filter(record -> !record.code().equals("none"))
+                .filter(medicalRecord -> medicalRecord.type().equals(MedicalRecordType.CONDITION))
+                .filter(medicalRecord -> !medicalRecord.code().equals("none"))
                 .forEach(condition -> {
                     String episodeId = "1";
                     episodeDetailsRepository.save(

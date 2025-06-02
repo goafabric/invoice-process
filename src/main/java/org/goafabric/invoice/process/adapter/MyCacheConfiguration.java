@@ -32,6 +32,7 @@ public class MyCacheConfiguration implements CachingConfigurer {
 
     @Bean
     @Profile("caffeine")
+    @Override
     public CacheManager cacheManager() {
         final CaffeineCacheManager cacheManager = new CaffeineCacheManager();
         cacheManager.setCaffeine(Caffeine.newBuilder()
@@ -49,6 +50,7 @@ public class MyCacheConfiguration implements CachingConfigurer {
     }
 
     @Bean
+    @Override
     public KeyGenerator keyGenerator() {
         return (target, method, params) ->
                 new SimpleKey(UserContext.getTenantId(), UserContext.getOrganizationId(), method.getName(), params);
