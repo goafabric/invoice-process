@@ -53,7 +53,9 @@ class InvoiceProcessIT {
         when(lockAdapter.acquireLockByKey("invoice-0"))
                 .thenReturn(new Lock("0", true, "key", LocalDateTime.now(), "user"));
 
-        assertThatThrownBy(() -> invoiceProcess.run().get()).cause().isInstanceOf(IllegalStateException.class);
+        var process = invoiceProcess.run();
+
+        assertThatThrownBy(process::get).cause().isInstanceOf(IllegalStateException.class);
     }
 
 
