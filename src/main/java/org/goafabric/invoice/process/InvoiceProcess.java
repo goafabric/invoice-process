@@ -33,7 +33,7 @@ public class InvoiceProcess {
         return executor.submit(this::innerLoop);
     }
 
-    private Boolean innerLoop() {
+    private Boolean innerLoop() throws InterruptedException {
         Lock lock = null;
         try {
             lock = authorizationStep.acquireLock();
@@ -43,7 +43,6 @@ public class InvoiceProcess {
                         var encryptedInvoice = invoiceStep.encrypt(invoice);
                             invoiceStep.send(encryptedInvoice);
                                 invoiceStep.store(encryptedInvoice);
-                                    doSleep();
         }
         catch (Exception e) {
             throw new IllegalStateException("error during process: " + e.getMessage(), e);
@@ -52,6 +51,7 @@ public class InvoiceProcess {
             authorizationStep.releaseLock(lock);
             log.info("finished ...");
         }
+        doSleep();
         return true;
     }
 

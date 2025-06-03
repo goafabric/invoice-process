@@ -47,9 +47,9 @@ public class S3Adapter {
         var request = s3RequestPath(HttpMethod.GET, id).build();
         var response = restClient.get().uri(request.uri()).headers(request.headers()).retrieve().toEntity(byte[].class);
         if (response.getBody() == null) {
-            throw new IllegalStateException("S3 Client Response is null");
+            throw new IllegalStateException("S3 Client Body is null");
         }
-        return new ObjectEntry(id, response.getHeaders().getFirst("Content-Type"),   (long) response.getBody().length, response.getBody());
+        return new ObjectEntry(id, response.getHeaders().getFirst("Content-Type"), (long) response.getBody().length, response.getBody());
     }
 
     public void save(ObjectEntry objectEntry) {
