@@ -46,7 +46,10 @@ public class S3Adapter {
     public ObjectEntry getById(String id) {
         var request = s3RequestPath(HttpMethod.GET, id).build();
         var response = restClient.get().uri(request.uri()).headers(request.headers()).retrieve().toEntity(byte[].class);
-        return new ObjectEntry(id, response.getHeaders().getFirst("Content-Type"),  response.getBody() == null ? 0 : (long) response.getBody().length, response.getBody());
+        if (response.getBody() == null) {
+            throw new IllegalStateException("S3 Client Response is null");
+        }
+        return new ObjectEntry(id, response.getHeaders().getFirst("Content-Type"),   (long) response.getBody().length, response.getBody());
     }
 
     public void save(ObjectEntry objectEntry) {
@@ -67,7 +70,7 @@ public class S3Adapter {
         var response = restClient.get().uri(request.uri()).headers(request.headers()).retrieve()
                 .toEntity(ListBucketsResult.class).getBody();
 
-        if (response.buckets().stream().noneMatch(b -> b.name().equals(bucket))) { //this could be slow
+        if (response != null && response.buckets().stream().noneMatch(b -> b.name().equals(bucket))) { //this could be slow
             var request2 = s3RequestPath(HttpMethod.PUT, null).build();
             restClient.put().uri(request2.uri()).headers(request2.headers()).retrieve().toBodilessEntity();
         }
