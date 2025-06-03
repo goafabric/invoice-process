@@ -44,9 +44,6 @@ public class InvoiceProcess {
                             invoiceStep.send(encryptedInvoice);
                                 invoiceStep.store(encryptedInvoice);
         }
-        catch (Exception e) {
-            throw new IllegalStateException("error during process: " + e.getMessage(), e);
-        }
         finally {
             authorizationStep.releaseLock(lock);
             log.info("finished ...");
