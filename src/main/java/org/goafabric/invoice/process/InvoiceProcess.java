@@ -46,8 +46,7 @@ public class InvoiceProcess {
                                     doSleep();
         }
         catch (Exception e) {
-            log.error("error during process: {}", e.getMessage(), e);
-            throw e;
+            throw new IllegalStateException("error during process: " + e.getMessage(), e);
         }
         finally {
             authorizationStep.releaseLock(lock);
@@ -56,10 +55,9 @@ public class InvoiceProcess {
         return true;
     }
 
-    private void doSleep() {
+    private void doSleep() throws InterruptedException {
         log.info("sleeping");
-        try { Thread.sleep(1000); } catch (InterruptedException e) { // no need for exception
-        }
+        Thread.sleep(1000);
     }
 
     @PreDestroy
