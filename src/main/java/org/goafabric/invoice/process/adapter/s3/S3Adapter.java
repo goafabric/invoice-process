@@ -4,7 +4,7 @@ import am.ik.s3.ListBucketResult;
 import am.ik.s3.ListBucketsResult;
 import am.ik.s3.S3Content;
 import am.ik.s3.S3RequestBuilders;
-import org.goafabric.invoice.controller.extensions.TenantContext;
+import org.goafabric.invoice.controller.extensions.UserContext;
 import org.goafabric.invoice.process.adapter.s3.dto.ObjectEntry;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,7 +46,11 @@ public class S3Adapter {
     public ObjectEntry getById(String id) {
         var request = s3RequestPath(HttpMethod.GET, id).build();
         var response = restClient.get().uri(request.uri()).headers(request.headers()).retrieve().toEntity(byte[].class);
-        return new ObjectEntry(id, response.getHeaders().getFirst("Content-Type"), (long) response.getBody().length, response.getBody());
+        var body = response.getBody();
+        if (body == null) {
+            throw new IllegalStateException("S3 Client Body is null");
+        }
+        return new ObjectEntry(id, response.getHeaders().getFirst("Content-Type"), (long) body.length, body);
     }
 
     public void save(ObjectEntry objectEntry) {
@@ -67,7 +71,7 @@ public class S3Adapter {
         var response = restClient.get().uri(request.uri()).headers(request.headers()).retrieve()
                 .toEntity(ListBucketsResult.class).getBody();
 
-        if (response.buckets().stream().noneMatch(b -> b.name().equals(bucket))) { //this could be slow
+        if (response != null && response.buckets().stream().noneMatch(b -> b.name().equals(bucket))) { //this could be slow
             var request2 = s3RequestPath(HttpMethod.PUT, null).build();
             restClient.put().uri(request2.uri()).headers(request2.headers()).retrieve().toBodilessEntity();
         }
@@ -85,12 +89,12 @@ public class S3Adapter {
                     .secretAccessKey(secretKey)
                     .method(httpMethod);
         } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException(e);
         }
     }
 
     private String getBucketName() {
-        return schemaPrefix.replaceAll("_", "-") + TenantContext.getTenantId();
+        return schemaPrefix.replace("_", "-") + UserContext.getTenantId();
     }
 
 }

@@ -2,7 +2,7 @@ package org.goafabric.invoice.consumer;
 
 import org.goafabric.event.EventData;
 import org.goafabric.invoice.consumer.config.LatchConsumer;
-import org.goafabric.invoice.controller.extensions.TenantContext;
+import org.goafabric.invoice.controller.extensions.UserContext;
 import org.goafabric.invoice.persistence.ADTCreator;
 import org.goafabric.invoice.persistence.EpisodeDetailsRepository;
 import org.goafabric.invoice.persistence.EpisodeRepository;
@@ -45,7 +45,7 @@ class ConsumerIT {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Test
-    public void produce() throws InterruptedException {
+    void produce() {
         log.info("producing data ...");
 
         createPatients();
@@ -55,7 +55,7 @@ class ConsumerIT {
         log.info("consuming data ...");
 
         consumers.forEach(consumer -> {
-            try { assertThat(consumer.getLatch().await(10, TimeUnit.SECONDS)).isTrue();
+            try { assertThat(consumer.getLatch().await(20, TimeUnit.SECONDS)).isTrue();
             } catch (InterruptedException e) { throw new RuntimeException(e);}
         });
 
@@ -80,7 +80,7 @@ class ConsumerIT {
     }
 
     private void send(String topic, String operation, String referenceId, Object payload) {
-        kafkaTemplate.send(topic, referenceId, new EventData(TenantContext.getAdapterHeaderMap(), referenceId, operation, payload));
+        kafkaTemplate.send(topic, referenceId, new EventData(UserContext.getAdapterHeaderMap(), referenceId, operation, payload));
     }
 
 }

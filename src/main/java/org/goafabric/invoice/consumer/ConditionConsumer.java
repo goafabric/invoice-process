@@ -38,7 +38,7 @@ public class ConditionConsumer implements LatchConsumer {
 
     private void process(EventData eventData) {
         var condition = objectMapper.convertValue(eventData.payload(), MedicalRecord.class);
-        log.info("operation {}, id {}, object {}", eventData.operation(), eventData.referenceId(), condition.toString());
+        log.info("operation {}, id {}, object {}", eventData.operation(), eventData.referenceId(), condition);
         String episodeId = "1";
         episodeDetailsRepository.save(
                 new EpisodeDetails(episodeId, condition.id(), "condition", condition.code(), condition.display(), null, null, null, null)

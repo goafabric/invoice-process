@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.stream.IntStream;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping(value = "processes", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -24,10 +24,10 @@ public class ProcessController {
     }
 
     @GetMapping("loop")
-    public String loop() {
-        IntStream.range(0, 10).forEach(i -> {
-            try { invoiceProcess.run().get(); } catch (Exception e) { throw new RuntimeException(e);}
-        });
+    public String loop() throws ExecutionException, InterruptedException {
+        for (int i = 0; i < 10; i++) {
+            invoiceProcess.run().get();
+        }
         return "launched";
     }
 

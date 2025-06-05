@@ -26,14 +26,14 @@ public class InvoiceProcess {
         this.authorizationStep = authorizationStep;
         this.invoiceStep = invoiceStep;
         this.episodeStep = episodeStep;
-        executor = Executors.newVirtualThreadPerTaskExecutor(); //newFixedThreadPool(10);
+        executor = Executors.newVirtualThreadPerTaskExecutor();
     }
 
     public Future<Boolean> run() {
         return executor.submit(this::innerLoop);
     }
 
-    private Boolean innerLoop() {
+    private Boolean innerLoop() throws InterruptedException {
         Lock lock = null;
         try {
             lock = authorizationStep.acquireLock();
@@ -43,18 +43,18 @@ public class InvoiceProcess {
                         var encryptedInvoice = invoiceStep.encrypt(invoice);
                             invoiceStep.send(encryptedInvoice);
                                 invoiceStep.store(encryptedInvoice);
-                                    log.info("sleeping");
-                                    try { Thread.sleep(1000); } catch (InterruptedException e) {}
-        }
-        catch (Exception e) {
-            log.error("error during process: {}", e.getMessage(), e);
-            throw e;
         }
         finally {
             authorizationStep.releaseLock(lock);
             log.info("finished ...");
         }
+        doSleep();
         return true;
+    }
+
+    private void doSleep() throws InterruptedException {
+        log.info("sleeping");
+        Thread.sleep(1000);
     }
 
     @PreDestroy

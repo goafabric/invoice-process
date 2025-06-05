@@ -38,7 +38,7 @@ public class ChargeItemConsumer implements LatchConsumer {
 
     private void process(EventData eventData) {
         var chargeItem = objectMapper.convertValue(eventData.payload(), MedicalRecord.class);
-        log.info("operation {}, id {}, object {}", eventData.operation(), eventData.referenceId(), chargeItem.toString());
+        log.info("operation {}, id {}, object {}", eventData.operation(), eventData.referenceId(), chargeItem);
         String episodeId = "1";
         episodeDetailsRepository.save(
                 new EpisodeDetails(episodeId, chargeItem.id(), "chargeitem", chargeItem.code(), chargeItem.display(), null, null,  null, null)

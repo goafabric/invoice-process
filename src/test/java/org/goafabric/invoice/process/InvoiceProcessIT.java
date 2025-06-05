@@ -9,8 +9,8 @@ import org.goafabric.invoice.process.adapter.s3.S3Adapter;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.aot.DisabledInAotMode;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.time.LocalDateTime;
 
@@ -20,27 +20,27 @@ import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @DisabledInAotMode
-public class InvoiceProcessIT {
-    @MockBean
+class InvoiceProcessIT {
+    @MockitoBean
     private LockAdapter lockAdapter;
 
-    @MockBean
+    @MockitoBean
     private PatientAdapter patientAdapter;
 
-    @MockBean
+    @MockitoBean
     private EncounterAdapter encounterAdapter;
 
-    @MockBean
+    @MockitoBean
     private ConditionAdapter conditionAdapter;
 
-    @MockBean
+    @MockitoBean
     private S3Adapter s3Adapter;
 
     @Autowired
     private InvoiceProcess invoiceProcess;
 
     @Test
-    public void run() throws Exception {
+    void run() throws Exception {
 
         when(lockAdapter.acquireLockByKey("invoice-0"))
                 .thenReturn(new Lock("0", false, "key", LocalDateTime.now(), "user"));
@@ -49,11 +49,13 @@ public class InvoiceProcessIT {
     }
 
     @Test
-    public void alreadyLocked() throws Exception{
+    void alreadyLocked() {
         when(lockAdapter.acquireLockByKey("invoice-0"))
                 .thenReturn(new Lock("0", true, "key", LocalDateTime.now(), "user"));
 
-        assertThatThrownBy(() -> invoiceProcess.run().get()).cause().isInstanceOf(IllegalStateException.class);
+        var process = invoiceProcess.run();
+
+        assertThatThrownBy(process::get).cause().isInstanceOf(IllegalStateException.class);
     }
 
 

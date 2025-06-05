@@ -1,6 +1,6 @@
 package org.goafabric.invoice.process.steps;
 
-import org.goafabric.invoice.controller.extensions.TenantContext;
+import org.goafabric.invoice.controller.extensions.UserContext;
 import org.goafabric.invoice.process.adapter.authorization.Lock;
 import org.goafabric.invoice.process.adapter.authorization.LockAdapter;
 import org.slf4j.Logger;
@@ -20,7 +20,7 @@ public class AuthorizationStep {
 
     public Lock acquireLock() {
         log.info("acquire lock");
-        var lock = lockAdapter.acquireLockByKey("invoice-" + TenantContext.getTenantId());
+        var lock = lockAdapter.acquireLockByKey("invoice-" + UserContext.getTenantId());
         if (lock.isLocked()) { throw new IllegalStateException("process is already locked"); } else { return lock; }
     }
 
