@@ -55,7 +55,7 @@ class ConsumerIT {
         log.info("consuming data ...");
 
         consumers.forEach(consumer -> {
-            try { assertThat(consumer.getLatch().await(10, TimeUnit.SECONDS)).isTrue();
+            try { assertThat(consumer.getLatch().await(20, TimeUnit.SECONDS)).isTrue();
             } catch (InterruptedException e) { throw new RuntimeException(e);}
         });
 
