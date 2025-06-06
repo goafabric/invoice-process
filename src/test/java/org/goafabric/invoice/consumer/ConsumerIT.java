@@ -20,6 +20,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.goafabric.invoice.util.TestDataCreator.createChargeItems;
@@ -53,13 +54,10 @@ class ConsumerIT {
 
         log.info("consuming data ...");
 
-        /*
         consumers.forEach(consumer -> {
             try { assertThat(consumer.getLatch().await(20, TimeUnit.SECONDS)).isTrue();
             } catch (InterruptedException e) { throw new RuntimeException(e);}
         });
-
-         */
 
         var episodeDetails = episodeDetailsRepository.findAll("1");
         assertThat(episodeDetails).isNotNull().isNotEmpty();
