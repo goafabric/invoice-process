@@ -9,7 +9,6 @@ import org.goafabric.invoice.persistence.EpisodeRepository;
 import org.goafabric.invoice.persistence.entity.Episode;
 import org.goafabric.invoice.process.adapter.patient.dto.Patient;
 import org.goafabric.invoice.util.TestDataCreator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,12 +43,6 @@ class ConsumerIT {
     private List<LatchConsumer> consumers;
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
-
-    @BeforeEach
-    void setup() throws Exception {
-        // Give Kafka a moment to fully start up and create the topic
-        Thread.sleep(1000);
-    }
 
     @Test
     void produce() {
