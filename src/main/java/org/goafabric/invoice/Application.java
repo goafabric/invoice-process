@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication(exclude = KafkaAutoConfiguration.class)
 @RegisterReflectionForBinding(org.springframework.web.client.ResourceAccessException.class)
-@RegisterReflection(classes = {java.security.AccessController.class, javax.security.auth.Subject.class}, memberCategories = {MemberCategory.DECLARED_CLASSES, MemberCategory.INVOKE_DECLARED_METHODS}) @SuppressWarnings(" java:S5738")
+@RegisterReflection(classes = {java.security.AccessController.class, javax.security.auth.Subject.class}, memberCategories = {MemberCategory.DECLARED_CLASSES, MemberCategory.INVOKE_DECLARED_METHODS}) @SuppressWarnings("java:S5738")
 public class Application {
 
     public static void main(String[] args){
