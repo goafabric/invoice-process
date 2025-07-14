@@ -9,13 +9,15 @@ process.autostart: false
 
 #monitoring
 management:
-    endpoint:
-      health:
-        show-details: never
-    endpoints:
-      web:
-        exposure:
-          include: "health,prometheus,heapdump,circuitbreakers"
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: never
+  endpoints:
+    web:
+      exposure:
+        include: "health,prometheus,heapdump"
 
 #tracing
 spring.application.name: invoice-process
