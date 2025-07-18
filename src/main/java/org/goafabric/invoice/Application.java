@@ -1,7 +1,8 @@
 package org.goafabric.invoice;
 
 import org.goafabric.invoice.process.InvoiceProcess;
-import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
+import org.springframework.aot.hint.MemberCategory;
+import org.springframework.aot.hint.annotation.RegisterReflection;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -16,7 +17,7 @@ import org.springframework.context.annotation.Bean;
  */
 
 @SpringBootApplication(exclude = KafkaAutoConfiguration.class)
-@RegisterReflectionForBinding(org.springframework.web.client.ResourceAccessException.class)
+@RegisterReflection(classes = {java.security.AccessController.class, javax.security.auth.Subject.class, org.springframework.web.client.ResourceAccessException.class}, memberCategories = {MemberCategory.DECLARED_CLASSES, MemberCategory.INVOKE_DECLARED_METHODS}) @SuppressWarnings("java:S5738")
 public class Application {
 
     public static void main(String[] args){
