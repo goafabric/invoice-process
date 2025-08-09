@@ -61,7 +61,7 @@ public class InvoiceStep {
             log.info("storing invoice");
             var objectEntry = new ObjectEntry(
                     "invoice.txt", MediaType.TEXT_PLAIN_VALUE, (long) invoice.content().length(), invoice.content().getBytes(StandardCharsets.UTF_8));
-            s3Adapter.save(objectEntry);
+            //s3Adapter.save(objectEntry);
         }
     }
 }
