@@ -1,14 +1,13 @@
 package org.goafabric.invoice.consumer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import tools.jackson.databind.json.JsonMapper;
 
 @Configuration
-@Deprecated
-public class ObjectMapperConfiguration {
+public class JsonMapperConfig {
     @Bean
-    public ObjectMapper objectMapper() {
-        return new ObjectMapper();
+    JsonMapper jsonMapper() {
+        return JsonMapper.builder().build();
     }
 }
