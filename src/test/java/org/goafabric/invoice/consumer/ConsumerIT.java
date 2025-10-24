@@ -18,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.test.context.EmbeddedKafka;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -27,6 +28,7 @@ import static org.goafabric.invoice.util.TestDataCreator.createChargeItems;
 import static org.goafabric.invoice.util.TestDataCreator.createConditions;
 
 @SpringBootTest
+@DirtiesContext
 @EmbeddedKafka(partitions = 1, brokerProperties = { "listeners=PLAINTEXT://localhost:9092", "port=9092" })
 @Import(KafkaAutoConfiguration.class)
 class ConsumerIT {
