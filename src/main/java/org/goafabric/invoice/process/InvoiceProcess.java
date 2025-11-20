@@ -32,7 +32,6 @@ public class InvoiceProcess {
     }
 
     public Future<Boolean> run() {
-        log.info("##tenantid outside thread {} ", UserContext.getTenantId());
         var userContextMap = UserContext.getAdapterHeaderMap();
         return executor.submit(() -> {
             try {
@@ -47,9 +46,7 @@ public class InvoiceProcess {
     private Boolean innerLoop(Map<String, String> userContextMap) throws InterruptedException {
         UserContext.setContext(userContextMap);
         log.info("##tenantid inside thread {} ", UserContext.getTenantId());
-        if (true) {
-            throw new IllegalStateException("yo baby");
-        }
+        //if (true) { throw new IllegalStateException("yo baby"); }
         Lock lock = null;
         try {
             lock = authorizationStep.acquireLock();
