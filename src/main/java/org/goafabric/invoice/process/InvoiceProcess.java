@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -31,14 +32,21 @@ public class InvoiceProcess {
     }
 
     public Future<Boolean> run() {
-        System.err.println("##tenantid outside thread + " + UserContext.getTenantId());
-        final String tenantId = UserContext.getTenantId();
-        return executor.submit(() -> innerLoop(tenantId));
+        log.info("##tenantid outside thread {} ", UserContext.getTenantId());
+        var userContextMap = UserContext.getAdapterHeaderMap();
+        return executor.submit(() -> {
+            try {
+                return innerLoop(userContextMap);
+            } catch (Exception e) { //Todo this is just a mitigation of lost exceptions in threads
+                log.error(e.getMessage(), e);
+                throw e;
+            }
+        });
     }
 
-    private Boolean innerLoop(String tenantId) throws InterruptedException {
-        UserContext.setTenantId(tenantId);
-        System.err.println("##tenantid inside thread + " + UserContext.getTenantId());
+    private Boolean innerLoop(Map<String, String> userContextMap) throws InterruptedException {
+        UserContext.setContext(userContextMap);
+        log.info("##tenantid inside thread {} ", UserContext.getTenantId());
         if (true) {
             throw new IllegalStateException("yo baby");
         }
