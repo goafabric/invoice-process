@@ -44,6 +44,14 @@ public class InvoiceProcess {
         });
     }
 
+    /*
+    @Async //Also needs @EnableAsync, Exceptionhandling not possibe here, beeds Impl of AsyncUncaughtExceptionHandler
+    public Future<Boolean> run() {
+        try { innerLoop(UserContext.getAdapterHeaderMap()); } catch (InterruptedException e) { throw new RuntimeException(e);}
+        return CompletableFuture.completedFuture(Boolean.TRUE);
+    }
+    */
+
     private Boolean innerLoop(Map<String, String> userContextMap) throws InterruptedException {
         UserContext.setContext(userContextMap);
         log.info("##tenantid inside thread {} ", UserContext.getTenantId());
