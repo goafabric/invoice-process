@@ -14,7 +14,7 @@ public class UserContext {
     public static final String X_AUTH_REQUEST_PREFERRED_USERNAME = "X-Auth-Request-Preferred-Username";
     public static final String X_USER_INFO = "X-UserInfo";
 
-    record TenantContextRecord(String tenantId, String organizationId, String userName) {
+    public record TenantContextRecord(String tenantId, String organizationId, String userName) {
         public Map<String, String> toAdapterHeaderMap() {
             return Map.of(X_TENANT_ID, tenantId, X_ORGANIZATION_ID, organizationId, X_AUTH_REQUEST_PREFERRED_USERNAME, userName);
         }
@@ -76,4 +76,10 @@ public class UserContext {
             throw new IllegalStateException(e);
         }
     }
+
+    public static TenantContextRecord getContext() {
+        return CONTEXT.get();
+    }
+
+
 }

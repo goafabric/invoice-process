@@ -1,10 +1,11 @@
 package org.goafabric.invoice.process;
 
 import jakarta.annotation.PreDestroy;
+import org.goafabric.invoice.controller.extensions.UserContext;
 import org.goafabric.invoice.process.adapter.authorization.Lock;
 import org.goafabric.invoice.process.steps.AuthorizationStep;
-import org.goafabric.invoice.process.steps.InvoiceStep;
 import org.goafabric.invoice.process.steps.EpisodeStep;
+import org.goafabric.invoice.process.steps.InvoiceStep;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -30,10 +31,17 @@ public class InvoiceProcess {
     }
 
     public Future<Boolean> run() {
-        return executor.submit(this::innerLoop);
+        System.err.println("##tenantid outside thread + " + UserContext.getTenantId());
+        final String tenantId = UserContext.getTenantId();
+        return executor.submit(() -> innerLoop(tenantId));
     }
 
-    private Boolean innerLoop() throws InterruptedException {
+    private Boolean innerLoop(String tenantId) throws InterruptedException {
+        UserContext.setTenantId(tenantId);
+        System.err.println("##tenantid inside thread + " + UserContext.getTenantId());
+        if (true) {
+            throw new IllegalStateException("yo baby");
+        }
         Lock lock = null;
         try {
             lock = authorizationStep.acquireLock();
