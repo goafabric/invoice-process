@@ -37,7 +37,7 @@ public class InvoiceProcess {
         return executor.submit(() -> {
             try {
                 return innerLoop(userContextMap);
-            } catch (Exception e) { //Todo this is just a mitigation of lost exceptions in threads
+            } catch (Exception e) { //Todo this is just a mitigation of lost exceptions in threads, they are still only logged but not handled by main exception handler
                 log.error(e.getMessage(), e);
                 throw e;
             }
