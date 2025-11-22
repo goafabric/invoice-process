@@ -1,8 +1,6 @@
 package org.goafabric.invoice;
 
 import org.goafabric.invoice.process.InvoiceProcess;
-import org.springframework.aot.hint.MemberCategory;
-import org.springframework.aot.hint.annotation.RegisterReflection;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -17,10 +15,6 @@ import org.springframework.context.annotation.Bean;
  */
 
 @SpringBootApplication(exclude = KafkaAutoConfiguration.class)
-@RegisterReflection(classes = {
-        java.security.AccessController.class, javax.security.auth.Subject.class,
-        org.apache.kafka.common.security.oauthbearer.DefaultJwtRetriever.class, org.apache.kafka.common.security.oauthbearer.DefaultJwtValidator.class,
-}, memberCategories = { MemberCategory.INVOKE_DECLARED_METHODS}) @SuppressWarnings("java:S5738")
 public class Application {
 
     public static void main(String[] args){
