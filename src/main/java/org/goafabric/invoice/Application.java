@@ -17,8 +17,9 @@ import org.springframework.context.annotation.Bean;
  */
 
 @SpringBootApplication(exclude = KafkaAutoConfiguration.class)
-@RegisterReflection(classes = {java.security.AccessController.class, javax.security.auth.Subject.class, org.springframework.web.client.ResourceAccessException.class,
-        tools.jackson.databind.jsontype.NamedType.class,  org.apache.kafka.common.security.oauthbearer.DefaultJwtRetriever.class, org.apache.kafka.common.security.oauthbearer.DefaultJwtValidator.class,
+@RegisterReflection(classes = {
+        java.security.AccessController.class, javax.security.auth.Subject.class,
+        org.apache.kafka.common.security.oauthbearer.DefaultJwtRetriever.class, org.apache.kafka.common.security.oauthbearer.DefaultJwtValidator.class,
 }, memberCategories = { MemberCategory.INVOKE_DECLARED_METHODS}) @SuppressWarnings("java:S5738")
 public class Application {
 
