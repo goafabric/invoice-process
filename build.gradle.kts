@@ -32,9 +32,9 @@ dependencies {
 	constraints {
 		annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
 		implementation("org.mapstruct:mapstruct:1.6.3")
-        implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.14")
+        implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.0")
 		implementation("io.github.resilience4j:resilience4j-spring-boot3:2.3.0")
-		//implementation("net.ttddyy.observation:datasource-micrometer-spring-boot:1.1.2")
+		implementation("net.ttddyy.observation:datasource-micrometer-spring-boot:2.0.0")
 		testImplementation("com.tngtech.archunit:archunit-junit5:1.4.1")
 	}
 }
@@ -57,7 +57,7 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
 
 	//openapi
-	//implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui")
 
 	//kafka
 	implementation("org.springframework.boot:spring-boot-starter-kafka")
@@ -112,7 +112,6 @@ tasks.withType<org.springframework.boot.gradle.tasks.aot.ProcessAot>().configure
 	args("--spring.profiles.active=redis")
 }
 
-//tasks.cyclonedxBom { destination = file("doc/generated") }
 openApi {
 	outputDir.set(file("doc/generated"))
 	customBootRun { args.set(listOf("--server.port=8080")) }
