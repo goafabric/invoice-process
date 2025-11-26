@@ -98,3 +98,6 @@ logging.level.org.hibernate.SQL: "INFO"
 
 
 
+
+springdoc.enable-kotlin: false
+logging.level.io.micrometer.registry.otlp: "OFF"
