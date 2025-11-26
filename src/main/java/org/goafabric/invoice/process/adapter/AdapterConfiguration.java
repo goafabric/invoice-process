@@ -5,6 +5,8 @@ import org.goafabric.invoice.process.adapter.authorization.LockAdapter;
 import org.goafabric.invoice.process.adapter.catalog.ConditionAdapter;
 import org.goafabric.invoice.process.adapter.patient.EncounterAdapter;
 import org.goafabric.invoice.process.adapter.patient.PatientAdapter;
+import org.springframework.aot.hint.MemberCategory;
+import org.springframework.aot.hint.annotation.RegisterReflection;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +16,7 @@ import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
 @Configuration
+@RegisterReflection(classes = org.springframework.web.client.ResourceAccessException.class, memberCategories = MemberCategory.INVOKE_DECLARED_METHODS)
 public class AdapterConfiguration {
     private @Value("${adapter.coreservice.user.name:}") String userName;
     private @Value("${adapter.coreservice.user.password:}") String password;

@@ -1,6 +1,5 @@
 package org.goafabric.invoice.consumer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.goafabric.event.EventData;
 import org.goafabric.invoice.consumer.config.LatchConsumer;
 import org.goafabric.invoice.persistence.EpisodeDetailsRepository;
@@ -12,6 +11,7 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -23,10 +23,10 @@ public class ConditionConsumer implements LatchConsumer {
     private final CountDownLatch latch = new CountDownLatch(1);
     private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-    private final ObjectMapper objectMapper;
+    private final JsonMapper objectMapper;
     private final EpisodeDetailsRepository episodeDetailsRepository;
 
-    public ConditionConsumer(ObjectMapper objectMapper, EpisodeDetailsRepository episodeDetailsRepository) {
+    public ConditionConsumer(JsonMapper objectMapper, EpisodeDetailsRepository episodeDetailsRepository) {
         this.objectMapper = objectMapper;
         this.episodeDetailsRepository = episodeDetailsRepository;
     }

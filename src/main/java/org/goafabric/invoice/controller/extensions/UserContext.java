@@ -1,45 +1,41 @@
 package org.goafabric.invoice.controller.extensions;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
+import tools.jackson.databind.json.JsonMapper;
 
-import java.io.IOException;
 import java.util.Base64;
 import java.util.Map;
 
 public class UserContext {
+    private static final JsonMapper jsonMapper = JsonMapper.builder().build();
 
-    public static final String X_TENANT_ID = "X-TenantId";
-    public static final String X_ORGANIZATION_ID = "X-OrganizationId";
-    public static final String X_AUTH_REQUEST_PREFERRED_USERNAME = "X-Auth-Request-Preferred-Username";
-    public static final String X_USER_INFO = "X-UserInfo";
-
-    record TenantContextRecord(String tenantId, String organizationId, String userName) {
+    record UserContextRecord(String tenantId, String organizationId, String userName) {
         public Map<String, String> toAdapterHeaderMap() {
-            return Map.of(X_TENANT_ID, tenantId, X_ORGANIZATION_ID, organizationId, X_AUTH_REQUEST_PREFERRED_USERNAME, userName);
+            return Map.of("X-TenantId", tenantId, "X-OrganizationId", organizationId, "X-Auth-Request-Preferred-Username", userName);
         }
     }
 
-    private static final ThreadLocal<TenantContextRecord> CONTEXT =
-            ThreadLocal.withInitial(() -> new TenantContextRecord("0", "0", "anonymous"));
+    private static final ThreadLocal<UserContextRecord> CONTEXT =
+            ThreadLocal.withInitial(() -> new UserContextRecord("0", "0", "anonymous"));
 
     public static void setContext(HttpServletRequest request) {
-        setContext(request.getHeader(X_TENANT_ID), request.getHeader(X_ORGANIZATION_ID),
-                request.getHeader(X_AUTH_REQUEST_PREFERRED_USERNAME), request.getHeader(X_USER_INFO));
-    }
-
-    public static void setContext(Map<String, String> tenantHeaderMap) {
-        setContext(tenantHeaderMap.get(X_TENANT_ID), tenantHeaderMap.get(X_ORGANIZATION_ID),
-                tenantHeaderMap.get(X_AUTH_REQUEST_PREFERRED_USERNAME), tenantHeaderMap.get(X_USER_INFO));
+        setContext(request.getHeader("X-TenantId"), request.getHeader("X-OrganizationId"),
+                request.getHeader("X-Auth-Request-Preferred-Username"), request.getHeader("X-UserInfo"));
     }
 
     static void setContext(String tenantId, String organizationId, String userName, String userInfo) {
-        CONTEXT.set(new TenantContextRecord(
+        CONTEXT.set(new UserContextRecord(
                 getValue(tenantId, "0"),
                 getValue(organizationId, "0"),
                 getValue(getUserNameFromUserInfo(userInfo), getValue(userName, "anonymous"))
         ));
     }
+
+    public static void setContext(Map<String, String> tenantHeaderMap) {
+        setContext(tenantHeaderMap.get("X-TenantId"), tenantHeaderMap.get("X-OrganizationId"),
+                tenantHeaderMap.get("X-Auth-Request-Preferred-Username"), tenantHeaderMap.get("X-UserInfo"));
+    }
+
 
     public static void removeContext() {
         CONTEXT.remove();
@@ -66,14 +62,10 @@ public class UserContext {
     }
 
     public static void setTenantId(String tenant) {
-        CONTEXT.set(new TenantContextRecord(tenant, CONTEXT.get().organizationId, CONTEXT.get().userName));
+        CONTEXT.set(new UserContextRecord(tenant, CONTEXT.get().organizationId, CONTEXT.get().userName));
     }
 
     private static String getUserNameFromUserInfo(String userInfo) {
-        try {
-            return userInfo != null ? (String) new ObjectMapper().readValue(Base64.getUrlDecoder().decode(userInfo), Map.class).get("preferred_username") : null;
-        } catch (IOException e) {
-            throw new IllegalStateException(e);
-        }
+        return userInfo != null ? (String) jsonMapper.readValue(Base64.getUrlDecoder().decode(userInfo), Map.class).get("preferred_username") : null;
     }
 }

@@ -1,24 +1,24 @@
 import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 
-val group: String by project
 val version: String by project
-java.sourceCompatibility = JavaVersion.VERSION_21
+val javaVersion = "25"
+java.sourceCompatibility = JavaVersion.toVersion(javaVersion)
 
 val dockerRegistry = "goafabric"
-val baseImage = "ibm-semeru-runtimes:open-21.0.4.1_7-jre-focal@sha256:8b94f8b14fd1d4660f9dc777b1ad3630f847b8e3dc371203bcb857a5e74d6c39" //"ibm-semeru-runtimes:open-23_37-jre-focal@sha256:04534a98d0e521948b7525c665f9f8871aba56155de9e70d23b14c905a28a052"
+val baseImage = "eclipse-temurin:25-jre@sha256:74d5c631e5db5a44e7f5a2dd49f93f0c6f7b8c22c1dc1b8e1caec7009872c5c3"
 
 plugins {
 	java
 	jacoco
-	id("org.springframework.boot") version "3.5.3"
+	id("org.springframework.boot") version "4.0.0"
 	id("io.spring.dependency-management") version "1.1.7"
-	id("org.graalvm.buildtools.native") version "0.10.6"
+	id("org.graalvm.buildtools.native") version "0.11.3"
 
-	id("com.google.cloud.tools.jib") version "3.4.5"
+	id("com.google.cloud.tools.jib") version "3.5.1"
 	id("net.researchgate.release") version "3.1.0"
-	id("org.sonarqube") version "6.2.0.5505"
+	id("org.sonarqube") version "7.0.1.6134"
 
-	id("org.cyclonedx.bom") version "2.3.1"
+	id("org.cyclonedx.bom") version "3.0.2"
 	id("org.springdoc.openapi-gradle-plugin") version "1.9.0"
 }
 
@@ -32,9 +32,9 @@ dependencies {
 	constraints {
 		annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
 		implementation("org.mapstruct:mapstruct:1.6.3")
-		implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9")
+        implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.0")
 		implementation("io.github.resilience4j:resilience4j-spring-boot3:2.3.0")
-		implementation("net.ttddyy.observation:datasource-micrometer-spring-boot:1.1.2")
+		implementation("net.ttddyy.observation:datasource-micrometer-spring-boot:2.0.0")
 		testImplementation("com.tngtech.archunit:archunit-junit5:1.4.1")
 	}
 }
@@ -44,27 +44,28 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 
 	//monitoring
-	implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-opentelemetry")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("io.micrometer:micrometer-registry-prometheus")
-	implementation("io.micrometer:micrometer-tracing-bridge-otel")
-	implementation("io.opentelemetry:opentelemetry-exporter-otlp")
 
 	//cache
 	implementation("org.springframework.boot:spring-boot-starter-cache");
 	implementation("com.github.ben-manes.caffeine:caffeine");
 	implementation("org.springframework.boot:spring-boot-starter-data-redis");
-	implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
+	implementation("org.springframework.boot:spring-boot-starter-opentelemetry")
+    implementation("org.springframework.boot:spring-boot-starter-restclient")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
 
 	//openapi
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui")
 
 	//kafka
-	implementation("org.springframework.kafka:spring-kafka")
+	implementation("org.springframework.boot:spring-boot-starter-kafka")
 	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
 	//adapter
 	implementation("io.github.resilience4j:resilience4j-spring-boot3")
-	implementation("org.springframework.boot:spring-boot-starter-aop")
+	implementation("org.springframework.boot:spring-boot-starter-aspectj")
 
 	//s3
 	implementation("am.ik.s3:simple-s3-client:0.2.2") {exclude("org.springframework", "spring-web")}
@@ -95,9 +96,9 @@ tasks.register("dockerImageNative") { description= "Native Image"; group = "buil
 tasks.named<BootBuildImage>("bootBuildImage") {
 	val nativeImageName = "${dockerRegistry}/${project.name}-native:${project.version}"
 	imageName.set(nativeImageName)
-	environment.set(mapOf("BP_NATIVE_IMAGE" to "true", "BP_JVM_VERSION" to "21", "BP_NATIVE_IMAGE_BUILD_ARGUMENTS" to "-J-Xmx5000m -march=compatibility"))
+	environment.set(mapOf("BP_NATIVE_IMAGE" to "true", "BP_JVM_VERSION" to javaVersion, "BP_NATIVE_IMAGE_BUILD_ARGUMENTS" to "-J-Xmx6000m -march=compatibility"))
 	doLast {
-		project.objects.newInstance<InjectedExecOps>().execOps.exec { commandLine("/bin/sh", "-c", "docker run --rm $nativeImageName -check-integrity") }
+		project.objects.newInstance<InjectedExecOps>().execOps.exec { commandLine("/bin/sh", "-c", "docker run --rm $nativeImageName -Dspring.context.exit=onRefresh") }
 		project.objects.newInstance<InjectedExecOps>().execOps.exec { commandLine("/bin/sh", "-c", "docker push $nativeImageName") }
 	}
 }
@@ -111,10 +112,8 @@ tasks.withType<org.springframework.boot.gradle.tasks.aot.ProcessAot>().configure
 	args("--spring.profiles.active=redis")
 }
 
-//tasks.cyclonedxBom { destination = file("doc/generated") }
 openApi {
 	outputDir.set(file("doc/generated"))
 	customBootRun { args.set(listOf("--server.port=8080")) }
 	tasks.forkedSpringBootRun { dependsOn("compileAotJava", "processAotResources") }
 }
-
