@@ -27,7 +27,7 @@ public class Application {
     @Bean
     public CommandLineRunner init(ApplicationContext context, @Value("${process.autostart:false}") boolean processAutoStart, ConditionAdapter conditionAdapter) {
         return _ -> {
-            //conditionAdapter.findByCode("E66.00").toString(); conditionAdapter.findByCode("E66.00").toString();
+            conditionAdapter.findByCode("E66.00").toString(); conditionAdapter.findByCode("E66.00").toString();
 
             if (processAutoStart) {
                 context.getBean(InvoiceProcess.class).run().get();
