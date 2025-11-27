@@ -47,7 +47,7 @@ public class MyCacheConfiguration implements CachingConfigurer {
                 .entryTtl(Duration.ofMinutes(cacheExpiry))
                 .disableCachingNullValues()
                 //.serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(GenericJacksonJsonRedisSerializer.builder().build()));
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(GenericJacksonJsonRedisSerializer.builder().enableUnsafeDefaultTyping().build()));
     }
 
     @Bean
