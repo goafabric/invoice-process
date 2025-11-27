@@ -46,7 +46,7 @@ public class MyCacheConfiguration implements CachingConfigurer {
         return org.springframework.data.redis.cache.RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofMinutes(cacheExpiry))
                 .disableCachingNullValues()
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())); //do NOT dare to upgrade this to new Jackson3 Serizalizer or everything will go to hell !
     }
 
     @Bean
