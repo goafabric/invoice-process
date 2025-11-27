@@ -1,6 +1,7 @@
 package org.goafabric.invoice;
 
 import org.goafabric.invoice.process.InvoiceProcess;
+import org.goafabric.invoice.process.adapter.catalog.ConditionAdapter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -21,9 +22,13 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
+
+
     @Bean
-    public CommandLineRunner init(ApplicationContext context, @Value("${process.autostart:false}") boolean processAutoStart) {
+    public CommandLineRunner init(ApplicationContext context, @Value("${process.autostart:false}") boolean processAutoStart, ConditionAdapter conditionAdapter) {
         return _ -> {
+            //conditionAdapter.findByCode("E66.00").toString(); conditionAdapter.findByCode("E66.00").toString();
+
             if (processAutoStart) {
                 context.getBean(InvoiceProcess.class).run().get();
                 SpringApplication.exit(context, () -> 0);

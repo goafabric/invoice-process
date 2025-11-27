@@ -35,6 +35,7 @@ public class InvoiceProcess {
         var userContextMap = UserContext.getAdapterHeaderMap();
         return executor.submit(() -> {
             try {
+
                 return innerLoop(userContextMap);
             } catch (Exception e) {
                 //Todo this is just a mitigation of lost exceptions in threads, they are still only logged but not handled by main exception handler - @CircuitBreaker inside the submit block seem to work though
