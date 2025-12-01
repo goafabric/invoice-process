@@ -1,79 +1,103 @@
 package org.goafabric.invoice.process.adapter.s3;
 
-import am.ik.s3.ListBucketResult;
-import am.ik.s3.ListBucketsResult;
-import am.ik.s3.S3Content;
-import am.ik.s3.S3RequestBuilders;
+import am.ik.s3.*;
 import org.goafabric.invoice.controller.extensions.UserContext;
 import org.goafabric.invoice.process.adapter.s3.dto.ObjectEntry;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
+import java.lang.reflect.Field;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 import static am.ik.s3.S3RequestBuilder.s3Request;
 
 @Component
-@RegisterReflectionForBinding({ListBucketResult.class, ListBucketsResult.class})
+@RegisterReflectionForBinding({ListBucketResult.class, ListBucketsResult.class, S3Request.class})
 public class S3Adapter {
 
+    private final boolean    s3Enabled;
     private final String     schemaPrefix;
     private final RestClient restClient;
     private final String     endPoint;
     private final String     region;
     private final String     accessKey;
     private final String     secretKey;
+    private final List<ObjectEntry> objectEntriesInMem = new ArrayList<>();
 
-    public S3Adapter(@Value("${multi-tenancy.schema-prefix:}") String schemaPrefix,
-                     @Value("${spring.cloud.aws.s3.endpoint:}") String endPoint,
+    public S3Adapter(@Value("${spring.cloud.aws.s3.enabled}") boolean s3Enabled,
+                     @Value("${multi-tenancy.schema-prefix:}") String schemaPrefix,
+                     @Value("${spring.cloud.aws.s3.endpoint}") String endPoint,
                      @Value("${spring.cloud.aws.region.static}") String region,
                      @Value("${spring.cloud.aws.credentials.access-key}") String accessKey,
                      @Value("${spring.cloud.aws.credentials.secret-key}") String secretKey) {
+        this.s3Enabled = s3Enabled;
         this.schemaPrefix = schemaPrefix;
         this.endPoint = endPoint;
         this.region = region;
         this.accessKey = accessKey;
         this.secretKey = secretKey;
-        this.restClient = RestClient.builder().messageConverters(httpMessageConverters -> httpMessageConverters.add(new MappingJackson2XmlHttpMessageConverter())).build();
+        this.restClient = RestClient.builder()
+                //.messageConverters(httpMessageConverters -> httpMessageConverters.add(new MappingJackson2XmlHttpMessageConverter()))
+                .build();
+        //this.restClient = restClientbuilder.configureMessageConverters(httpMessageConverters -> httpMessageConverters.addCustomConverter(new JacksonXmlHttpMessageConverter())).build();
     }
 
-    public ObjectEntry getById(String id) {
-        var request = s3RequestPath(HttpMethod.GET, id).build();
-        var response = restClient.get().uri(request.uri()).headers(request.headers()).retrieve().toEntity(byte[].class);
-        var body = response.getBody();
-        if (body == null) {
-            throw new IllegalStateException("S3 Client Body is null");
-        }
-        return new ObjectEntry(id, response.getHeaders().getFirst("Content-Type"), (long) body.length, body);
+    public ObjectEntry getById(String key) {
+        if (!s3Enabled) { return objectEntriesInMem.stream().filter(o -> o.objectName().equals(key)).findFirst().get(); }
+
+        var request = s3RequestPath(HttpMethod.GET, schemaPrefix + "/" + key).build();
+        var response = restClient.get().uri(request.uri()).headers(getHeaders(request)).retrieve().toEntity(byte[].class);
+        return new ObjectEntry(key, response.getHeaders().getFirst("Content-Type"), (long) response.getBody().length, response.getBody());
+    }
+
+    public List<ObjectEntry> search(String search) {
+        if (!s3Enabled) { return objectEntriesInMem.stream().filter(o -> o.objectName().startsWith(search)).toList(); }
+
+        var request = s3RequestPath(HttpMethod.GET, null).build();
+        var response = restClient.get().uri(request.uri()).headers(request.headers()).retrieve()
+                .toEntity(ListBucketResult.class).getBody();
+
+        return response.contents().stream().map(c ->
+                        new ObjectEntry(c.key(), null, c.size(), null))
+                .filter(o -> o.objectName().toLowerCase().startsWith(search.toLowerCase()))
+                .toList();
     }
 
     public void save(ObjectEntry objectEntry) {
+        if (!s3Enabled) { objectEntriesInMem.add(objectEntry); return; }
+
         createBucketIfNotExists(getBucketName());
 
-        var request = s3RequestPath(HttpMethod.PUT, objectEntry.objectName())
+        var request = s3RequestPath(HttpMethod.PUT, schemaPrefix + "/" + objectEntry.objectName())
                 .content(S3Content.of(objectEntry.data(), MediaType.valueOf(objectEntry.contentType())))
                 .build();
 
         restClient.put().uri(request.uri())
-                .headers(request.headers())
+                .headers(getHeaders(request))
                 .body(objectEntry.data())
                 .retrieve().toBodilessEntity();
     }
 
     private void createBucketIfNotExists(String bucket) {
         var request = s3Path(HttpMethod.GET).path(b -> b).build();
-        var response = restClient.get().uri(request.uri()).headers(request.headers()).retrieve()
+        var response = restClient.get().uri(request.uri()).headers(getHeaders(request)).retrieve()
                 .toEntity(ListBucketsResult.class).getBody();
 
-        if (response != null && response.buckets().stream().noneMatch(b -> b.name().equals(bucket))) { //this could be slow
+        if (response.buckets().stream().noneMatch(b -> b.name().equals(bucket))) { //this could be slow
             var request2 = s3RequestPath(HttpMethod.PUT, null).build();
-            restClient.put().uri(request2.uri()).headers(request2.headers()).retrieve().toBodilessEntity();
+
+            getHeaders(request2);
+
+            restClient.put().uri(request2.uri()).headers(getHeaders(request2)).retrieve().toBodilessEntity();
         }
     }
 
@@ -89,9 +113,21 @@ public class S3Adapter {
                     .secretAccessKey(secretKey)
                     .method(httpMethod);
         } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static Consumer<HttpHeaders> getHeaders(S3Request request2) { //ugly workaround to ensure spring boot 4.0 compatibility
+        try {
+            Field f = S3Request.class.getDeclaredField("httpHeaders");
+            f.setAccessible(true);
+            var httpHeaders = (HttpHeaders) f.get(request2);
+            return headers -> headers.addAll(httpHeaders);
+        } catch (Exception e) {
             throw new IllegalStateException(e);
         }
     }
+
 
     private String getBucketName() {
         return schemaPrefix.replace("_", "-") + UserContext.getTenantId();
