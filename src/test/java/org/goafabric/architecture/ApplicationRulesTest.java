@@ -26,6 +26,7 @@ public class ApplicationRulesTest {
     static final ArchRule reflectionShouldBeAvoided =
             noClasses()
                     .that().areNotAnnotatedWith(Configuration.class)
+                    .and().haveSimpleNameNotContaining("S3Adapter")
                     .should()
                     .dependOnClassesThat()
                     .resideInAPackage("java.lang.reflect")

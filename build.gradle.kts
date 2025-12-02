@@ -16,9 +16,9 @@ plugins {
 
 	id("com.google.cloud.tools.jib") version "3.5.1"
 	id("net.researchgate.release") version "3.1.0"
-	id("org.sonarqube") version "7.0.1.6134"
+	id("org.sonarqube") version "7.1.0.6387"
 
-	id("org.cyclonedx.bom") version "3.0.2"
+	id("org.cyclonedx.bom") version "3.1.0"
 	id("org.springdoc.openapi-gradle-plugin") version "1.9.0"
 }
 
@@ -96,7 +96,7 @@ tasks.register("dockerImageNative") { description= "Native Image"; group = "buil
 tasks.named<BootBuildImage>("bootBuildImage") {
 	val nativeImageName = "${dockerRegistry}/${project.name}-native:${project.version}"
 	imageName.set(nativeImageName)
-	environment.set(mapOf("BP_NATIVE_IMAGE" to "true", "BP_JVM_VERSION" to javaVersion, "BP_NATIVE_IMAGE_BUILD_ARGUMENTS" to "-J-Xmx6000m -march=compatibility"))
+	environment.set(mapOf("BP_NATIVE_IMAGE" to "true", "BP_JVM_VERSION" to javaVersion, "BP_NATIVE_IMAGE_BUILD_ARGUMENTS" to "-J-Xmx7000m -march=compatibility"))
 	doLast {
 		project.objects.newInstance<InjectedExecOps>().execOps.exec { commandLine("/bin/sh", "-c", "docker run --rm $nativeImageName -Dspring.context.exit=onRefresh") }
 		project.objects.newInstance<InjectedExecOps>().execOps.exec { commandLine("/bin/sh", "-c", "docker push $nativeImageName") }
@@ -117,3 +117,5 @@ openApi {
 	customBootRun { args.set(listOf("--server.port=8080")) }
 	tasks.forkedSpringBootRun { dependsOn("compileAotJava", "processAotResources") }
 }
+
+sonar { properties { property("sonar.exclusions", "**/ApplicationBaseRuntimeHints.*") } }

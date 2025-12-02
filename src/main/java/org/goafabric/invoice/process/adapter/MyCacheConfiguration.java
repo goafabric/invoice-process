@@ -46,7 +46,7 @@ public class MyCacheConfiguration implements CachingConfigurer {
         return org.springframework.data.redis.cache.RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofMinutes(cacheExpiry))
                 .disableCachingNullValues()
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(GenericJacksonJsonRedisSerializer.builder().build()));
+                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(GenericJacksonJsonRedisSerializer.builder().enableUnsafeDefaultTyping().build()));
     }
 
     @Bean
@@ -57,9 +57,18 @@ public class MyCacheConfiguration implements CachingConfigurer {
     }
 
     static class CacheRuntimeHints implements RuntimeHintsRegistrar {
+        @Override
         public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
-            hints.reflection().registerType(TypeReference.of("com.github.benmanes.caffeine.cache.SSMSA"), MemberCategory.INVOKE_DECLARED_CONSTRUCTORS);
-            hints.reflection().registerType(TypeReference.of("com.github.benmanes.caffeine.cache.PSAMS"), MemberCategory.INVOKE_DECLARED_CONSTRUCTORS);
+            hints.reflection().registerType(TypeReference.of("com.github.benmanes.caffeine.cache.PSAMS"),
+                    builder -> builder.withMembers(MemberCategory.INVOKE_DECLARED_CONSTRUCTORS));
+            hints.reflection().registerType(TypeReference.of("com.github.benmanes.caffeine.cache.SSMS"),
+                    builder -> builder.withMembers(MemberCategory.INVOKE_DECLARED_CONSTRUCTORS));
+            hints.reflection().registerType(TypeReference.of("com.github.benmanes.caffeine.cache.SSMSA"),
+                    builder -> builder.withMembers(MemberCategory.INVOKE_DECLARED_CONSTRUCTORS));
+            hints.reflection().registerType(TypeReference.of("com.github.benmanes.caffeine.cache.SSMS"),
+                    builder -> builder.withField("FACTORY"));
+            hints.reflection().registerType(TypeReference.of("com.github.benmanes.caffeine.cache.SSMSA"),
+                    builder -> builder.withField("FACTORY"));
         }
     }
 

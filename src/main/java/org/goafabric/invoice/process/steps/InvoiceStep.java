@@ -2,8 +2,8 @@ package org.goafabric.invoice.process.steps;
 
 import org.goafabric.invoice.persistence.ADTCreator;
 import org.goafabric.invoice.persistence.EpisodeDetailsRepository;
-import org.goafabric.invoice.process.adapter.invoice.InvoiceMockAdapter;
 import org.goafabric.invoice.process.adapter.invoice.Invoice;
+import org.goafabric.invoice.process.adapter.invoice.InvoiceMockAdapter;
 import org.goafabric.invoice.process.adapter.s3.S3Adapter;
 import org.goafabric.invoice.process.adapter.s3.dto.ObjectEntry;
 import org.slf4j.Logger;
@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
@@ -24,8 +23,8 @@ public class InvoiceStep {
     private final InvoiceMockAdapter invoiceAdapter;
     private final S3Adapter s3Adapter;
 
-    @Value("${spring.cloud.aws.s3.endpoint:}")
-    private String s3Endpoint;
+    @Value("${spring.cloud.aws.s3.enabled:}")
+    private Boolean s3Enabled;
 
     public InvoiceStep(EpisodeDetailsRepository episodeDetailsRepository, InvoiceMockAdapter invoiceAdapter, S3Adapter s3Adapter) {
         this.episodeDetailsRepository = episodeDetailsRepository;
@@ -57,7 +56,7 @@ public class InvoiceStep {
     }
 
     public void store(Invoice invoice) {
-        if (StringUtils.hasText(s3Endpoint)) {
+        if (s3Enabled) {
             log.info("storing invoice");
             var objectEntry = new ObjectEntry(
                     "invoice.txt", MediaType.TEXT_PLAIN_VALUE, (long) invoice.content().length(), invoice.content().getBytes(StandardCharsets.UTF_8));
