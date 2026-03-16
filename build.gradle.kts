@@ -32,8 +32,7 @@ dependencies {
 		annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
 		implementation("org.mapstruct:mapstruct:1.6.3")
         implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.2")
-		implementation("io.github.resilience4j:resilience4j-spring-boot3:2.3.0")
-		implementation("net.ttddyy.observation:datasource-micrometer-spring-boot:2.1.1")
+		implementation("io.github.resilience4j:resilience4j-spring-boot4:2.4.0")
 		testImplementation("com.tngtech.archunit:archunit-junit5:1.4.1")
 	}
 }
@@ -63,7 +62,7 @@ dependencies {
 	implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
 	//adapter
-	implementation("io.github.resilience4j:resilience4j-spring-boot3")
+	implementation("io.github.resilience4j:resilience4j-spring-boot4")
 	implementation("org.springframework.boot:spring-boot-starter-aspectj")
 
 	//s3
